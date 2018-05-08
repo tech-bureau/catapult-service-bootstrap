@@ -1,0 +1,24 @@
+version: '2'
+services:
+  pre:
+   image: alpine
+   volumes:
+    - shared:/shared
+   command: ash -c "chmod 777 /shared && touch /shared/1"
+  generate-addresses:
+    image: jenkins.nem.ninja:8443/catapult-new-server:master_release-gcc
+    command:  bash -c "/bin-mount/wait /shared/1 && /home/mijin/_build/bin/catapult.tools.address --generate=50 > /shared/raw-addresses.txt && touch /shared/2"
+    volumes:
+    - shared:/shared
+    - ./bin/bash:/bin-mount
+  ruby-alpine:
+    build: ruby-alpine
+    command: ash -c "/bin-mount/wait /shared/2 && ruby /bin/ruby/format.rb /shared/raw-addresses.txt"
+#    command: sleep 10000
+    volumes:
+    - shared:/shared
+    - ./bin/ash:/bin-mount
+    - ./bin/ruby:/bin/ruby
+
+volumes:
+  shared:

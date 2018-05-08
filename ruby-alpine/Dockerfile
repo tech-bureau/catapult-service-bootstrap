@@ -1,0 +1,4 @@
+FROM alpine:3.7
+RUN apk add --no-cache ruby ruby-bundler
+#RUN apk add --no-cache ruby-dev build-base ruby-irb
+#RUN gem install byebug --no-ri --no-rdoc

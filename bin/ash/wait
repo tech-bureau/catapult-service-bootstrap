@@ -1,0 +1,6 @@
+#!/bin/ash
+file=$1
+while [ ! -f $file ] ;
+do
+      sleep 0.1
+done
