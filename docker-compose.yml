@@ -1,24 +1,44 @@
 version: '2'
 services:
-  pre:
-   image: alpine
-   volumes:
-    - shared:/shared
-   command: ash -c "chmod 777 /shared && touch /shared/1"
-  generate-addresses:
-    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
-    command:  bash -c "/bin-mount/wait /shared/1 && /catapult/bin/catapult.tools.address --generate=50 > /shared/raw-addresses.txt && touch /shared/2"
+  init:
+    image: alpine
     volumes:
-    - shared:/shared
+    - order-sync:/order-sync
+    - ./data/mongo:/dbdata:rw
+    command: ash -c "chmod 666 /order-sync && touch /order-sync/init"
+
+  db:
+    image: mongo
+    command: bash -c "/bin-mount/wait /order-sync/initiate-db && mongod --dbpath=/dbdata --bind_ip=db"
+    stop_signal: SIGINT
+    volumes:
+    - ./data/mongo:/dbdata:rw
     - ./bin/bash:/bin-mount
-  ruby-alpine:
-    build: ruby-alpine
-    command: ash -c "/bin-mount/wait /shared/2 && ruby /bin/ruby/format.rb /shared/raw-addresses.txt"
-#    command: sleep 10000
+    - order-sync:/order-sync
+    depends_on:
+    - init
+
+  init-db:
+    image: mongo
+    command:  bash -c "/bin/bash /userconfig/mongors.sh && touch /order-sync/init-db"
     volumes:
-    - shared:/shared
+    - ./catapult-config/static/mongo/:/userconfig/:ro
+    - ./bin/bash:/bin-mount
+    - order-sync:/order-sync
+    depends_on:
+    - db
+
+  rest-gateway:
+    image: jenkins.nem.ninja:8443/catapult-rest:master
+    command: ash -c "/bin-mount/wait /order-sync/init-db && /bin/ash /userconfig/rest.sh"
+    ports:
+    - "3000:3000"
+    volumes:
+    - ./catapult-config/static/rest-gateway/:/userconfig/
     - ./bin/ash:/bin-mount
-    - ./bin/ruby:/bin/ruby
+    - order-sync:/order-sync
+    depends_on:
+    - init-db
 
 volumes:
-  shared:
+  order-sync:
