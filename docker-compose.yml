@@ -6,8 +6,8 @@ services:
     - shared:/shared
    command: ash -c "chmod 777 /shared && touch /shared/1"
   generate-addresses:
-    image: jenkins.nem.ninja:8443/catapult-new-server:master_release-gcc
-    command:  bash -c "/bin-mount/wait /shared/1 && /home/mijin/_build/bin/catapult.tools.address --generate=50 > /shared/raw-addresses.txt && touch /shared/2"
+    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    command:  bash -c "/bin-mount/wait /shared/1 && /catapult/bin/catapult.tools.address --generate=50 > /shared/raw-addresses.txt && touch /shared/2"
     volumes:
     - shared:/shared
     - ./bin/bash:/bin-mount
