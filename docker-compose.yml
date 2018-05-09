@@ -3,9 +3,9 @@ services:
   init:
     image: alpine
     volumes:
-    - order-sync:/order-sync
+    - order-sync:/order-sync:rw
     - ./data/mongo:/dbdata:rw
-    command: ash -c "chmod 666 /order-sync && touch /order-sync/init"
+    command: touch /order-sync/init
 
   db:
     image: mongo
@@ -14,7 +14,7 @@ services:
     volumes:
     - ./data/mongo:/dbdata:rw
     - ./bin/bash:/bin-mount
-    - order-sync:/order-sync
+    - order-sync:/order-sync:rw
     depends_on:
     - init
 
@@ -24,13 +24,13 @@ services:
     volumes:
     - ./catapult-config/static/mongo/:/userconfig/:ro
     - ./bin/bash:/bin-mount
-    - order-sync:/order-sync
+    - order-sync:/order-sync:rw
     depends_on:
     - db
-  peer1:
+  peer-node-0:
     image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
-    environment:
-      - LOCAL_USER_ID=1000
+#    environment:
+#      - LOCAL_USER_ID=1000
     logging:
       driver: "json-file"
       options:
@@ -41,8 +41,9 @@ services:
     stop_signal: SIGINT
     volumes:
     - ./catapult-config/static/catpult-node/:/userconfig/
-    - ./catapult-config-build/peer_node0/userconfig/resources/:/userconfig/resources/
-
+    - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
+    - ./nemesis/:/nemesis/
+    - ./data/peer-node-0:/data:rw
   rest-gateway:
     image: jenkins.nem.ninja:8443/catapult-rest:master
     command: ash -c "/bin-mount/wait /order-sync/init-db && /bin/ash /userconfig/rest.sh"
