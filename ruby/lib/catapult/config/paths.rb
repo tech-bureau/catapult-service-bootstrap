@@ -3,11 +3,11 @@ class Catapult::Config
     module ClassMixin
       # This method could be overwritten
       def config_info_dir
-        check_dir_exists("#{Catapult::Config.base_catapult_component_config_dir}/#{self.type}")
+        check_dir_exists("#{Catapult::Config.base_config_dir}/#{self.type}")
       end
       
-      def base_catapult_component_config_dir
-        Catapult.base_catapult_component_config_dir
+      def base_config_dir
+        Catapult.base_config_dir
       end
       
       def absolute_file_paths_in_directory(dir)
@@ -38,7 +38,7 @@ class Catapult::Config
       
       # file_type can be :script, :config_file
       def self.relative_path?(_file_type, _filename)      
-        DTK.fail_if_not_concrete(self)
+        fail "Method must be written for class '#{self}'"
       end
     end        
     
@@ -46,14 +46,6 @@ class Catapult::Config
       # This is both files to copy and template files
       def all_files_in_config_info_dir
         @all_files_in_config_info_dir ||= self.class.all_files_in_config_info_dir
-      end
-      
-      def all_files_in_scripts_dir
-        @all_files_in_scripts_dir ||= self.class.all_files_in_scripts_dir
-      end
-      
-      def data_dir?
-        DTK.fail_if_not_concrete(self)
       end
       
       private

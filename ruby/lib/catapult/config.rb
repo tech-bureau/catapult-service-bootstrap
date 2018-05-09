@@ -1,18 +1,18 @@
 module Catapult
   class Config
-    require_relative('config/template_attributes')
-    # simple and template_attributes must go first
+    require_relative('config/nemesis_properties_file')
     require_relative('config/keys')
     require_relative('config/paths')
     require_relative('config/source_target_pair')
     
     # child classes
     require_relative('config/catapult_node')
+
     
     include Paths::Mixin
     extend Paths::ClassMixin
     
-    def initialize(type, dtk_all_attributes, template_attributes)
+    def initialize(type, input_attributes, template_attributes)
       @type                  = type
       @config_info_dir       = self.class.config_info_dir
       @template_attributes   = template_attributes
@@ -21,18 +21,26 @@ module Catapult
     end
     
     private :initialize
+
+    CARDINALITY = {
+      api_node: 1,
+      peer_node: 2
+    }
+
+    def self.generate_nemesis_properties_file(input_attributes)
+      NemesisPropertiesFile.generate_file(input_attributes)
+    end
     
-    # Returns array that has same size as cardinality
+    def self.configure(input_attributes)
+      new(input_attributes).configure
+    end
+      
     def configure
       add_static_config_files
       add_instantiate_config_templates
       write_out_config_files
     end
 
-    CARDINALITY = {
-      api_node: 1,
-      peer_node: 2
-    }
     def self.cardinality(type)
       CARDINALITY[type] || fail("Unexpected type '#{type}'")
     end
@@ -47,7 +55,7 @@ module Catapult
         
     protected
     
-    attr_reader :type, :dtk_all_attributes, :config_info_dir, :template_attributes, :ndx_config_files
+    attr_reader :type, :input_attributes, :config_info_dir, :template_attributes, :ndx_config_files
     
     def cardinality
       @cardinality ||= self.class.cardinality(self.type)

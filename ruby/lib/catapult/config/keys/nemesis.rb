@@ -5,12 +5,12 @@ module Catapult
         GenerationInfo =  Struct.new(:network_identifier, :generation_hash, :signer_private_key)
         Info           =  Struct.new(:key_info_array, :generation_info)
         
-        def self.get_nemesis_keys_info(dtk_all_attributes)
-          new(dtk_all_attributes).get_nemesis_keys_info
+        def self.get_nemesis_keys_info(input_attributes)
+          new(input_attributes).get_nemesis_keys_info
         end
         
-        def self.get_keys_info_array_for_harvesting(dtk_all_attributes)
-          new(dtk_all_attributes).get_keys_info_array_for_harvesting
+        def self.get_keys_info_array_for_harvesting(input_attributes)
+          new(input_attributes).get_keys_info_array_for_harvesting
         end
         def get_keys_info_array_for_harvesting
           self.keys_info_array_for_harvesting
@@ -24,7 +24,7 @@ module Catapult
         
         protected
         
-        attr_reader :dtk_all_attributes
+        attr_reader :input_attributes
         
         def keys_info_array_for_accounts
           @keys_info_array_for_accounts ||= get_keys_info_array(ParsedContent::NemesisType.for_accounts)
@@ -37,16 +37,15 @@ module Catapult
         private
         
         def get_generation_info
-          hash = self.class.get_s3_file_content_hash(self.s3_bucket, file_path_with_base_dir(NEMESIS_GENERATION_INFO_FILE))
-          GenerationInfo.new(hash_value(hash, :network_identifier, file_path), hash_value(hash, :nemesis_generation_hash, file_path), hash_value(hash, :nemesis_signer_private_key, file_path))
+          GenerationInfo.new(
+            hash_value(:network_identifier), 
+            hash_value(:nemesis_generation_hash), 
+            hash_value(:nemesis_signer_private_key)
+          )
         end
         
-        def ret_s3_bucket
-          self.key_location_info[:s3_bucket] || fail("unexpected that missing key_location_info['s3_bucket']")
-        end
-        
-        def hash_value(hash, key, s3_source)
-          hash[key.to_s] || hash[key.to_sym] || fail("Missing value for key '#{key}' in S3 source '#{s3_source}'")
+        def hash_value(key)
+          self.nemesis_hash[key.to_s] || self.raw_key_info[key.to_sym] || fail("Missing value for key '#{key}'")
         end
         
       end

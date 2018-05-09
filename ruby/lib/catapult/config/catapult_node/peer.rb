@@ -14,10 +14,10 @@ module Catapult
       attr_reader :type, :index, :host, :host_address, :port, :name
       
       TYPES = [:api_node, :peer_node]
-      def self.all_peers(dtk_all_attributes)
+      def self.all_peers(input_attributes)
         peers = []
         TYPES.each do |type|
-          (0..Config.cardinality(type)).to_a.each do |index|
+          (0..Config.cardinality(type)-1).to_a.each do |index|
             peers << Peer.new(type, index)
           end
         end

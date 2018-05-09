@@ -24,5 +24,13 @@ isSupplyMutable = false
 isLevyMutable = false
 [distribution>nem:xem]
 {{#xem.distribution}}
-{{addreess}} = {{amount}}
+{{address}} = {{amount}}
 {{/xem.distribution}}
+
+[mosaic>eur:euro]
+divisibility = 2
+duration = 1234567890
+supply = 15'000'000
+isTransferable = true
+isSupplyMutable = true
+isLevyMutable = false

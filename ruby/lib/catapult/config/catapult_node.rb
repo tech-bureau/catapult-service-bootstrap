@@ -11,28 +11,20 @@ module Catapult
       CONFIG_SUBDIR    = 'userconfig'
       RESOURCES_SUBDIR = 'resources'
 
-      def initialize(dtk_all_attributes)
+      def initialize(input_attributes)
         type            = self.class.type
-        all_peers       = Peer.all_peers(dtk_all_attributes)
+        all_peers       = Peer.all_peers(input_attributes)
 
-        @component_keys = Keys::Component.new(dtk_all_attributes)
+        @component_keys = Keys::Component.new(input_attributes)
         @json_peers     = JsonPeers.new(@component_keys, all_peers)
-        super(type, dtk_all_attributes, TemplateAttributes.new(type, @component_keys, dtk_all_attributes))
+        super(type, input_attributes, TemplateAttributes.new(type, @component_keys, input_attributes))
       end
       private :initialize
 
       attr_reader :component_keys
       
-      def self.configure(dtk_all_attributes)
-        new(dtk_all_attributes).configure
-      end
-      
-      def self.scripts_dir?
-        check_dir_exists("#{Config.base_catapult_component_config_dir}/#{self.type}")
-      end
-      
       def self.json_peers_dir
-        "#{self.base_catapult_component_config_dir}/common_fragments/json_peers"
+        "#{self.base_config_dir}/common_fragments/json_peers"
       end
       
       PEER_FILE_INFO = {
@@ -51,7 +43,7 @@ module Catapult
       private
       
       def self.config_info_dir
-        check_dir_exists("#{Config.base_catapult_component_config_dir}/#{self.type}/#{RESOURCES_SUBDIR}")
+        check_dir_exists("#{Config.base_config_dir}/#{self.type}/#{RESOURCES_SUBDIR}")
       end
       
       def add_instantiate_config_templates

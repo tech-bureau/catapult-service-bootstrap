@@ -1,7 +1,7 @@
 module Catapult
   module Global
     def self.component_address(node_type, index)
-      "#{node_type}-#{index}"
+      "#{node_type.to_s.gsub('_','-')}-#{index}"
     end
 
     MONGO_HOST = 'db'

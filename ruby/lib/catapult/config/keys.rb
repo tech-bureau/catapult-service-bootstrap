@@ -7,23 +7,31 @@ module Catapult
       
       DEFAULT_BASE_DIR = 'keys'
       
-      def initialize(dtk_all_attributes)
-        @dtk_all_attributes = dtk_all_attributes
+      def initialize(input_attributes)
+        @input_attributes = input_attributes
       end
       
       # returns an array of Content::KeyInfo objects
       def get_keys_info_array(component_type)
         self.parsed_content.get_keys_info_array(component_type)
       end
-      
+
       protected
       
-      attr_reader :dtk_all_attributes
+      attr_reader :input_attributes
       
       def parsed_content
-        @parsed_content ||= ParsedContent.new(self.dtk_all_attributes[:keys] || fail("Missing :keys input"))
+        @parsed_content ||= ParsedContent.new(self.raw_key_info)
       end
-      
+
+      def raw_key_info
+        self.input_attributes[:keys] || fail("Missing :keys input")
+      end
+
+      def nemesis_hash
+        self.input_attributes[:nemesis_hash] || fail("Missing :nemesis_hash input")
+      end
+
       private
       
       def file_path_with_base_dir(file_path)
@@ -33,14 +41,6 @@ module Catapult
       # returns a matching Content::KeyInfo object or raises an error if none exist
       def get_key_info(component_type, component_index)
         self.parsed_content.get_key_info(component_type, component_index)        
-      end
-      
-      def get_s3_file_content_array
-        raise_error_if_wrong_type(get_s3_file_content_as_ruby_object, ::Array)
-      end
-      
-      def get_s3_file_content_as_ruby_object
-        ::YAML.load(S3Helper.get_file_content(self.s3_bucket, self.file_path))
       end
       
       def raise_error_if_wrong_type(object, ruby_class)
