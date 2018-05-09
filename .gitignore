@@ -1,1 +1,4 @@
-data/
+data/*
+!data/README.md
+catapult-config-build/*
+!catapult-config-build/README.md
