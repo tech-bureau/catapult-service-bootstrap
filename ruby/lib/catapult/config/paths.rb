@@ -11,7 +11,7 @@ class Catapult::Config
       end
       
       def absolute_file_paths_in_directory(dir)
-          Dir.entries(dir).map { |path| File.expand_path(path, dir) }.select { |path| File.file?(path) }
+        Dir.entries(dir).map { |path| File.expand_path(path, dir) }.select { |path| File.file?(path) }
       end
       
         # file_type can be :script, :config_file

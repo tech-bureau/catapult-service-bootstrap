@@ -1,21 +1,5 @@
 version: '2'
 services:
-  generate-raw-addresses:
-    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
-    command: /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml
-    volumes:
-    - ./bin/bash:/bin-mount
-    - addresses:/addresses:rw
-    - ./generated-catapult-addresses:/catapult-addresses:rw
-  store-addreses:
-    build: ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/raw-addresses.txt && /ruby/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml" 
-    volumes:
-    - ./bin/ash:/bin-mount
-    - ./ruby:/ruby
-    - ./generated-catapult-addresses:/catapult-addresses:rw
-    - addresses:/addresses
-
   db:
     image: mongo
     command: bash -c "/bin-mount/wait /order-sync/initiate-db && mongod --dbpath=/dbdata --bind_ip=db"
@@ -29,11 +13,51 @@ services:
     image: mongo
     command:  bash -c "/bin/bash /userconfig/mongors.sh && touch /order-sync/init-db"
     volumes:
-    - ./catapult-config/static/mongo/:/userconfig/:ro
+    - ./catapult-config/mongo/:/userconfig/:ro
     - ./bin/bash:/bin-mount
     - order-sync:/order-sync:rw
     depends_on:
     - db
+  rest-gateway:
+    image: jenkins.nem.ninja:8443/catapult-rest:master
+    command: ash -c "/bin-mount/wait /order-sync/init-db && /bin/ash /userconfig/rest.sh"
+    ports:
+    - "3000:3000"
+    volumes:
+    - ./catapult-config/rest-gateway/:/userconfig/
+    - ./bin/ash:/bin-mount
+    - order-sync:/order-sync
+    depends_on:
+    - init-db
+
+##### catapult nodes
+
+  generate-raw-addresses:
+    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    command: /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml
+    volumes:
+    - ./bin/bash:/bin-mount
+    - addresses:/addresses:rw
+    - ./generated-catapult-addresses:/catapult-addresses:rw
+
+  store-addreses:
+    build: dockerfiles/ruby-alpine
+    command: ash -c "/bin-mount/wait /addresses/raw-addresses.txt && /ruby/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml" 
+    volumes:
+    - ./bin/ash:/bin-mount
+    - ./ruby:/ruby
+    - ./generated-catapult-addresses:/catapult-addresses:rw
+    - addresses:/addresses
+
+  generate-configs:
+    build: dockerfiles/ruby-alpine
+    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build && touch /order-sync/generate-configs"
+    volumes:
+    - ./bin/ash:/bin-mount
+    - ./ruby:/ruby
+    - ./generated-catapult-addresses:/addresses
+    - ./catapult-config-build:/config-build
+    - order-sync:/order-sync:rw
 
   peer-node-0:
     image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
@@ -48,21 +72,13 @@ services:
     command: bash -c "sleep 10000"
     stop_signal: SIGINT
     volumes:
-    - ./catapult-config/static/catpult-node/:/userconfig/
+    - ./catapult-config/catpult-node/:/userconfig/
     - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
     - ./nemesis/:/nemesis/
     - ./data/peer-node-0:/data:rw
-  rest-gateway:
-    image: jenkins.nem.ninja:8443/catapult-rest:master
-    command: ash -c "/bin-mount/wait /order-sync/init-db && /bin/ash /userconfig/rest.sh"
-    ports:
-    - "3000:3000"
-    volumes:
-    - ./catapult-config/static/rest-gateway/:/userconfig/
-    - ./bin/ash:/bin-mount
-    - order-sync:/order-sync
+    - order-sync:/order-sync:rw
     depends_on:
-    - init-db
+    - generate-configs
 
 volumes:
   order-sync:

@@ -17,7 +17,7 @@ module Catapult
       @config_info_dir       = self.class.config_info_dir
       @template_attributes   = template_attributes
       # gets dynamically updated
-      @ndx_config_files = {} #@ndx_config_files is indexed by TYPE-INDEX
+      @ndx_config_files = {} #@ndx_config_files is indexed by Global.component_address(node_type, index)
     end
     
     private :initialize
@@ -26,11 +26,10 @@ module Catapult
       api_node: 1,
       peer_node: 2
     }
-
     def self.generate_and_write_configurations(keys, base_config_target_dir)
       ndx_config_files = {}
-      ndx_config_files.merge!(Catapult::Config::CatapultNode::PeerNode.generate(keys: keys))
-      ndx_config_files.merge!(Catapult::Config::CatapultNode::ApiNode.generate(keys: keys))
+      ndx_config_files.merge!(CatapultNode::PeerNode.generate(keys: keys))
+      ndx_config_files.merge!(CatapultNode::ApiNode.generate(keys: keys))
       write_out_config_files(ndx_config_files, base_config_target_dir)
     end
 
@@ -101,7 +100,7 @@ module Catapult
     end
     
     def add_config_file!(component_index, path, content)
-      ndx = "#{self.type}#{component_index}"
+      ndx = Global.component_address(self.type, component_index)
       (self.ndx_config_files[ndx] ||= {}).merge!(path => content)
     end
 
