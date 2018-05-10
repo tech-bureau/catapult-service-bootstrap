@@ -1,10 +1,16 @@
 module Catapult
   module Global
+    CATAPULT_NETWORK_IDENTIFIER = 'mijin-test'
+    MONGO_HOST                  = 'db'
+
+    def self.catapult_nework_identifier
+      CATAPULT_NETWORK_IDENTIFIER 
+    end
+
     def self.component_address(node_type, index)
       "#{node_type.to_s.gsub('_','-')}-#{index}"
     end
 
-    MONGO_HOST = 'db'
     def self.mongo_host
       MONGO_HOST
     end

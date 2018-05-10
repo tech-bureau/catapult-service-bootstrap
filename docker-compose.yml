@@ -7,6 +7,22 @@ services:
     - ./data/mongo:/dbdata:rw
     command: touch /order-sync/init
 
+  generate-raw-addresses:
+    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    command: /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml
+    volumes:
+    - ./bin/bash:/bin-mount
+    - addresses:/addresses:rw
+    - ./generated-catapult-addresses:/catapult-addresses:rw
+  store-addreses:
+    build: ruby-alpine
+    command: ash -c "/bin-mount/wait /addresses/raw-addresses.txt && /ruby/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml" 
+    volumes:
+    - ./bin/ash:/bin-mount
+    - ./ruby:/ruby
+    - ./generated-catapult-addresses:/catapult-addresses:rw
+    - addresses:/addresses
+
   db:
     image: mongo
     command: bash -c "/bin-mount/wait /order-sync/initiate-db && mongod --dbpath=/dbdata --bind_ip=db"
@@ -58,3 +74,4 @@ services:
 
 volumes:
   order-sync:
+  addresses:

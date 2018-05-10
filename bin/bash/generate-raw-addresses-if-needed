@@ -1,0 +1,9 @@
+#!/bin/bash
+num_addresses=$1
+raw_addresses_path=$2
+formatted_address_path=$3
+if [ ! -f $formatted_address_path ] ;
+then
+  exec /catapult/bin/catapult.tools.address --generate=${num_addresses} -n mijin-test > ${raw_addresses_path}
+fi
+
