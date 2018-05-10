@@ -6,10 +6,10 @@ module Catapult
   require_relative('catapult/config')
   require_relative('catapult/global')
 
-  BASE_CONFIG_DIR    = File.expand_path('../../catapult-config/templates', File.dirname(__FILE__))
+  BASE_CONFIG_SOURCE_DIR  = File.expand_path('../../catapult-config/templates', File.dirname(__FILE__))
   
-  def self.base_config_dir
-    BASE_CONFIG_DIR
+  def self.base_config_source_dir
+    BASE_CONFIG_SOURCE_DIR
   end
 
   def self.bind_mustache_variables(template, template_attributes_hash)

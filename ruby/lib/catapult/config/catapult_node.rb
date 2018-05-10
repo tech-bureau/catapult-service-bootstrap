@@ -24,7 +24,7 @@ module Catapult
       attr_reader :component_keys
       
       def self.json_peers_dir
-        "#{self.base_config_dir}/common_fragments/json_peers"
+        "#{self.base_config_source_dir}/common_fragments/json_peers"
       end
       
       PEER_FILE_INFO = {
@@ -43,15 +43,15 @@ module Catapult
       private
       
       def self.config_info_dir
-        check_dir_exists("#{Config.base_config_dir}/#{self.type}/#{RESOURCES_SUBDIR}")
+        check_dir_exists("#{Config.base_config_source_dir}/#{self.type}/#{RESOURCES_SUBDIR}")
       end
       
-      def add_instantiate_config_templates
+      def add_instantiate_config_templates!
         super
-        add_instantiate_peer_json_files
+        add_instantiate_peer_json_files!
       end
       
-      def add_instantiate_peer_json_files
+      def add_instantiate_peer_json_files!
         PEER_FILE_INFO.each_pair do |peer_type, peer_filename|
           content = self.json_peers.file_content(peer_type)
           path    = relative_path(:config_file, peer_filename)

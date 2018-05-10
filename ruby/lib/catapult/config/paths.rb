@@ -3,11 +3,11 @@ class Catapult::Config
     module ClassMixin
       # This method could be overwritten
       def config_info_dir
-        check_dir_exists("#{Catapult::Config.base_config_dir}/#{self.type}")
+        check_dir_exists("#{Catapult::Config.base_config_source_dir}/#{self.type}")
       end
       
-      def base_config_dir
-        Catapult.base_config_dir
+      def base_config_source_dir
+        Catapult.base_config_source_dir
       end
       
       def absolute_file_paths_in_directory(dir)

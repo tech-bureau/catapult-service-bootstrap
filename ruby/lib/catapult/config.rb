@@ -27,18 +27,25 @@ module Catapult
       peer_node: 2
     }
 
+    def self.generate_and_write_configurations(keys, base_config_target_dir)
+      ndx_config_files = {}
+      ndx_config_files.merge!(Catapult::Config::CatapultNode::PeerNode.generate(keys: keys))
+      ndx_config_files.merge!(Catapult::Config::CatapultNode::ApiNode.generate(keys: keys))
+      write_out_config_files(ndx_config_files, base_config_target_dir)
+    end
+
     def self.generate_nemesis_properties_file(input_attributes)
       NemesisPropertiesFile.generate_file(input_attributes)
     end
     
-    def self.configure(input_attributes)
-      new(input_attributes).configure
+    def self.generate(input_attributes)
+      new(input_attributes).generate
     end
       
-    def configure
-      add_static_config_files
-      add_instantiate_config_templates
-      write_out_config_files
+    def generate
+      add_static_config_files!
+      add_instantiate_config_templates!
+      self.ndx_config_files
     end
 
     def self.cardinality(type)
@@ -64,15 +71,15 @@ module Catapult
     def component_indexes
       @component_indexes ||= self.class.component_indexes(self.cardinality)
     end
-    
+
     private
     
-    def add_static_config_files
-      add_static_files(:config_file, self.all_files_in_config_info_dir)
+    def add_static_config_files!
+      add_static_files!(:config_file, self.all_files_in_config_info_dir)
     end
 
     # type can be :script, :config_file
-    def add_static_files(file_type, static_files)
+    def add_static_files!(file_type, static_files)
       SourceTargetPair.config_files(static_files).each do |pair|
         path    = relative_path(file_type, pair.filename)
         content = File.open(pair.source_path).read
@@ -81,7 +88,7 @@ module Catapult
     end
     
     # Can be overwritten
-    def add_instantiate_config_templates
+    def add_instantiate_config_templates!
       SourceTargetPair.config_templates(self.all_files_in_config_info_dir).each do |pair|
         template_path = pair.source_path
         template      = File.open(template_path).read
@@ -98,11 +105,9 @@ module Catapult
       (self.ndx_config_files[ndx] ||= {}).merge!(path => content)
     end
 
-    # TODO: stub for test
-    BASE_DIR = '/tmp/community'
-    def write_out_config_files
-      self.ndx_config_files.each_pair do |component_ref, info|
-        component_dir = "#{BASE_DIR}/#{component_ref}"
+    def self.write_out_config_files(ndx_config_files, base_config_target_dir)
+      ndx_config_files.each_pair do |component_ref, info|
+        component_dir = "#{base_config_target_dir}/#{component_ref}"
         info.each_pair do |path, content|
           full_path = "#{component_dir}/#{path}"
           FileUtils.mkdir_p(directory_part(full_path))
@@ -111,7 +116,7 @@ module Catapult
       end
     end
 
-    def directory_part(full_path)
+    def self.directory_part(full_path)
       split = full_path.split('/')
       split.pop
       split.join('/')

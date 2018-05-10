@@ -31,7 +31,7 @@ module Catapult
       end
       
       def template_file
-        "#{Config.base_config_dir}/nemesis/#{self.config_filename}.mt"
+        "#{Config.base_config_source_dir}/nemesis/#{self.config_filename}.mt"
       end
       
       def config_filename

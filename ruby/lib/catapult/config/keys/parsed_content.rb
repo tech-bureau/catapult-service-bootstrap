@@ -36,11 +36,15 @@ module Catapult
         module NemesisType
           ACCOUNTS = :nemesis_address_for_accounts
           HARVESTING = :nemesis_address_for_harvesting
+          GENERATION = :nemesis_address_for_generation
           def self.for_accounts
             ACCOUNTS
           end
           def self.for_harvesting
             HARVESTING
+          end
+          def self.for_generation
+            GENERATION
           end
         end
 
@@ -50,7 +54,8 @@ module Catapult
           api_nodes: :api_node,
           rest_gateways: :rest_gateway,
           nemesis_addresses: NemesisType.for_accounts,
-          nemesis_addresses_harvesting: NemesisType.for_harvesting
+          nemesis_addresses_harvesting: NemesisType.for_harvesting,
+          nemesis_generation: NemesisType.for_generation
         }
         LEGAL_COMPONENT_TYPES = LEGAL_COMPONENT_TYPES_MAPPING.keys
         
