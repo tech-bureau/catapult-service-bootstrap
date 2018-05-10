@@ -40,7 +40,7 @@ services:
     - addresses:/addresses:rw
     - ./generated-catapult-addresses:/catapult-addresses:rw
 
-  store-addreses:
+  store-addresses:
     build: dockerfiles/ruby-alpine
     command: ash -c "/bin-mount/wait /addresses/raw-addresses.txt && /ruby/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml" 
     volumes:
@@ -51,6 +51,7 @@ services:
 
   generate-configs:
     build: dockerfiles/ruby-alpine
+#    command: sleep 1000000 
     command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /order-sync/generate-configs"
     volumes:
     - ./bin/ash:/bin-mount

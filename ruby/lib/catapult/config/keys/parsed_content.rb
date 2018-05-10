@@ -9,13 +9,13 @@ module Catapult
         end
         
         # returns a matching KeyInfo object  or raises an error if none exist
-        def get_key_info(component_type, component_index)
-          get_key_info?(component_type, component_index) || fail("Unexpected that key info not found for '#{component_type}-#{component_index}'")
+        def get_key_info(parse_key, index)
+          get_key_info?(parse_key, index) || fail("Unexpected that key info not found for '#{parse_key}-#{index}'")
         end
         
         # returns an array of ParsedContent::KeyInfo objects
-        def get_keys_info_array(component_type)
-          key_info_array(component_type)
+        def get_keys_info_array(parse_key)
+          key_info_array(parse_key)
         end
         
         protected
@@ -24,47 +24,48 @@ module Catapult
         
         private
         
-        def key_info_array(component_type)
-          self.parsed_hash[component_type.to_sym] || fail("No keys for component_type '#{component_type}")
+        def key_info_array(parse_key)
+          self.parsed_hash[parse_key.to_sym] || fail("No keys for parse_key '#{parse_key}")
         end
         
         # returns a matching KeyInfo object if one exists        
-        def get_key_info?(component_type, component_index)
-          key_info_array(component_type).find { |key_info| key_info.index == component_index }
+        def get_key_info?(parse_key, index)
+          key_info_array(parse_key).find { |key_info| key_info.index == index }
         end
         
-        module NemesisType
-          ACCOUNTS = :nemesis_address_for_accounts
-          HARVESTING = :nemesis_address_for_harvesting
-          GENERATION = :nemesis_address_for_generation
+        module KeyType
           def self.for_accounts
-            ACCOUNTS
+            :accounts
           end
           def self.for_harvesting
-            HARVESTING
+            :harvesting
           end
-          def self.for_generation
-            GENERATION
+          def self.for_generation_hash
+            :generation_hash
+          end
+          def self.for_signer_private_key
+            :signer_private_key
           end
         end
 
         # Mapping from parse name to componenttype
-        LEGAL_COMPONENT_TYPES_MAPPING = {
-          peer_nodes: :peer_node,
-          api_nodes: :api_node,
-          rest_gateways: :rest_gateway,
-          nemesis_addresses: NemesisType.for_accounts,
-          nemesis_addresses_harvesting: NemesisType.for_harvesting,
-          nemesis_generation: NemesisType.for_generation
+        LEGAL_PARSE_KEYS_MAPPING = {
+          Global::ParseKey.peer_nodes                    => :peer_node,
+          Global::ParseKey.api_nodes                    => :api_node,
+          Global::ParseKey.rest_gateways                => :rest_gateway,
+          Global::ParseKey.nemesis_addresses            => KeyType.for_accounts,
+          Global::ParseKey.nemesis_addresses_harvesting => KeyType.for_harvesting,
+          Global::ParseKey.nemesis_generation_hash      => KeyType.for_generation_hash,
+          Global::ParseKey.nemesis_signer_private_key   => KeyType.for_signer_private_key
         }
-        LEGAL_COMPONENT_TYPES = LEGAL_COMPONENT_TYPES_MAPPING.keys
+        LEGAL_PARSE_KEYS = LEGAL_PARSE_KEYS_MAPPING.keys
         
         def parse(raw_hash)
-          raw_hash.inject({}) do |h, (raw_component_type, raw_key_info_array)|
-            component_type = raw_component_type.to_sym
-            component_type_index = LEGAL_COMPONENT_TYPES_MAPPING[component_type] || 
-                                   fail("Illegal component type '#{component_type}'; legal values are: #{LEGAL_COMPONENT_TYPES.join(', ')}")
-            h.merge(component_type_index => parse_key_info_array(raw_key_info_array))
+          raw_hash.inject({}) do |h, (raw_parse_key, raw_key_info_array)|
+            parse_key = raw_parse_key.to_sym
+            parse_key_index = LEGAL_PARSE_KEYS_MAPPING[parse_key] || 
+                                   fail("Illegal component type '#{parse_key}'; legal values are: #{LEGAL_PARSE_KEYS.join(', ')}")
+            h.merge(parse_key_index => parse_key_info_array(raw_key_info_array))
           end
         end
         

@@ -7,6 +7,30 @@ module Catapult
       CATAPULT_NETWORK_IDENTIFIER 
     end
 
+    module ParseKey
+      def self.peer_nodes
+        :peer_nodes
+      end
+      def self.api_nodes
+        :api_nodes
+      end
+      def self.rest_gateways
+        :rest_gateways
+      end
+      def self.nemesis_addresses
+        :nemesis_addresses
+      end
+      def self.nemesis_addresses_harvesting
+        :nemesis_addresses_harvesting
+      end
+      def self.nemesis_generation_hash
+         :nemesis_generation_hash
+      end
+      def self.nemesis_signer_private_key
+        :nemesis_signer_private_key
+      end
+    end      
+
     def self.component_address(node_type, index)
       "#{node_type.to_s.gsub('_','-')}-#{index}"
     end

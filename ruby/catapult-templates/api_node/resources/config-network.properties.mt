@@ -1,8 +1,8 @@
 [network]
 
-identifier = mijin-test
-publicKey = B4F12E7C9F6946091E2CB8B6D3A12B50D17CCBBF646386EA27CE2946A7423DCF
-generationHash = 57F7DA205008026C776CB6AED843393F04CD458E0AA2D9F1D5F31A402072B2D6
+identifier = {{network_identifier}}
+publicKey = {{network_public_key}}
+generationHash = {{network_generation_hash}}
 
 [chain]
 

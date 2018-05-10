@@ -22,43 +22,38 @@ module Catapult
           Info.new(keys_info_array, get_generation_info)
         end
 
+        def self.key_info_signer_private_key(input_attributes)
+          get_key_info(ParsedContent::KeyType.for_signer_private_key, input_attributes)
+        end
+
+        def self.key_info_generation_hash(input_attributes)
+          get_key_info(ParsedContent::KeyType.for_generation_hash, input_attributes)
+        end
+
         protected
         
         attr_reader :input_attributes
         
         def keys_info_array_for_accounts
-          @keys_info_array_for_accounts ||= get_keys_info_array(ParsedContent::NemesisType.for_accounts)
+          @keys_info_array_for_accounts ||= get_keys_info_array(ParsedContent::KeyType.for_accounts)
         end
         
         def keys_info_array_for_harvesting
-          @keys_info_array_for_harvesting ||= get_keys_info_array(ParsedContent::NemesisType.for_harvesting)
+          @keys_info_array_for_harvesting ||= get_keys_info_array(ParsedContent::KeyType.for_harvesting)
         end
 
-        def nemesis_keys
-          @nemesis_keys ||= ret_nemesis_keys
+        def generation_hash
+          get_key_info(ParsedContent::KeyType.for_generation_hash).public
+        end
+
+        def signer_private_key
+          get_key_info(ParsedContent::KeyType.for_signer_private_key).private
         end
 
         private
 
-        def ret_nemesis_keys
-          keys_array = self.raw_key_info['nemesis_generation'] || fail("Cannot compute nemesis hash")
-          case keys_array.size
-          when 1 
-          then keys_array.first
-          else
-            fail "Unexpected that keys_array.size = #{keys_array.size} and not 1"
-          end
-        end
-
         def get_generation_info
-          nemesis_generation_hash    = nemesis_keys['public'] || fail( "cannot find public address") 
-          nemesis_signer_private_key = nemesis_keys['private'] || fail( "cannot find private address")
-
-          GenerationInfo.new(
-            Global.catapult_nework_identifier,
-             nemesis_generation_hash,
-             nemesis_signer_private_key
-          )
+          GenerationInfo.new(Global.catapult_nework_identifier, self.generation_hash, self.signer_private_key)
         end
               
       end

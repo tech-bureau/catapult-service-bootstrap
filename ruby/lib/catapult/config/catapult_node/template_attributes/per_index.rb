@@ -11,6 +11,9 @@ module Catapult
         
         def hash
           {
+            network_identifier: Global.catapult_nework_identifier,
+            network_public_key: self.parent.network_public_key,
+            network_generation_hash: self.parent.network_generation_hash,
             harvesting_is_on: self.harvesting_is_on?,
             harvest_key: self.harvest_key?,
             mongo_host: self.mongo_host_for_api_node, # just used when there is an api host
@@ -40,9 +43,9 @@ module Catapult
         end
         
         def private_key
-            self.parent.component_keys.get_key(:private, self.type, self.index)
+          self.parent.component_keys.get_key(:private, self.type, self.index)
         end
-        
+
         private
         
         def harvest_key

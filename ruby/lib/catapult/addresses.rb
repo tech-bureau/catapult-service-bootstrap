@@ -1,12 +1,13 @@
 module Catapult
   module Addresses
     SECTION_SIZES = {
-      peer_nodes: 5,
-      api_nodes: 2,
-      rest_gateways: 2,
-      nemesis_addresses_harvesting: 3,
-      nemesis_generation: 1
-      # nemesis_addresses: * # dyanmically calculated using left over address
+      Global::ParseKey.peer_nodes                   => 5,
+      Global::ParseKey.api_nodes                    => 2,
+      Global::ParseKey.rest_gateways                => 2,
+      Global::ParseKey.nemesis_addresses_harvesting => 3,
+      Global::ParseKey.nemesis_generation_hash      => 1,
+      Global::ParseKey.nemesis_signer_private_key   => 1
+      # Global::ParseKey.nemesis_addresses => * # dyanmically calculated using left over address
     }
 
     # returns ruby object
