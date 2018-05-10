@@ -1,0 +1,4 @@
+#!/bin/bash
+find data/* | grep -v "README.md" | xargs rm -rf
+find catapult-config-build/* | grep -v "README.md" | xargs rm -rf
+find generated-catapult-addresses/* | grep -v "README.md" | xargs rm -rf
