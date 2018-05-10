@@ -1,5 +1,13 @@
 version: '2'
 services:
+  init:
+    build: dockerfiles/init
+    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data"
+    volumes:
+    - ./bin/ash:/bin-mount
+    - ./data/peer-node-0:/peer-node-0-data:rw
+    - ./data/peer-node-1:/peer-node-1-data:rw
+    - ./data/api-node-0:/api-node-0-data:rw
   db:
     image: mongo
     command: bash -c "/bin-mount/wait /order-sync/initiate-db && mongod --dbpath=/dbdata --bind_ip=db"
@@ -51,7 +59,6 @@ services:
 
   generate-configs:
     build: dockerfiles/ruby-alpine
-#    command: sleep 1000000 
     command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /order-sync/generate-configs"
     volumes:
     - ./bin/ash:/bin-mount
@@ -63,23 +70,62 @@ services:
 
   peer-node-0:
     image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
-#    environment:
-#      - LOCAL_USER_ID=1000
+    environment:
+    - LOCAL_USER_ID=1000
     logging:
       driver: "json-file"
       options:
         max-size: "25M"
         max-file: "10"
-#    command: bash -c "/bin/bash /userconfig/startServer.sh
-    command: bash -c "sleep 10000"
+    command: bash -c "/bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./catapult-config/catpult-node/:/userconfig/
     - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
     -  nemesis/:/nemesis/
     - ./data/peer-node-0:/data:rw
-    - order-sync:/order-sync:rw
     depends_on:
+    - init
+    - generate-configs
+
+  peer-node-1:
+    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    environment:
+    - LOCAL_USER_ID=1000
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "25M"
+        max-file: "10"
+    command: bash -c "/bin/bash /userconfig/startServer.sh"
+    stop_signal: SIGINT
+    volumes:
+    - ./catapult-config/catpult-node/:/userconfig/
+    - ./catapult-config-build/peer-node-1/userconfig/resources/:/userconfig/resources/
+    -  nemesis/:/nemesis/
+    - ./data/peer-node-1:/data:rw
+    depends_on:
+    - init
+    - generate-configs
+
+  api-node-0:
+    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    environment:
+    - LOCAL_USER_ID=1000
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "25M"
+        max-file: "10"
+    command: bash -c "/bin/bash /userconfig/startServer.sh"
+    stop_signal: SIGINT
+    volumes:
+    - ./catapult-config/catpult-node/:/userconfig/
+    - ./catapult-config-build/api-node-0/userconfig/resources/:/userconfig/resources/
+    -  nemesis/:/nemesis/
+    - ./data/api-node-0:/data:rw
+    depends_on:
+    - init
     - generate-configs
 
 volumes:

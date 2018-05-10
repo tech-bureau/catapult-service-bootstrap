@@ -12,7 +12,7 @@ if [ ! -d /data/00000 ]; then
   fi
 fi
 ls -alh /data
-sleep 10
+# sleep 10
 cd /data
 exec /catapult/bin/catapult.server /userconfig
 
