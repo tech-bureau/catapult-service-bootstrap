@@ -51,12 +51,13 @@ services:
 
   generate-configs:
     build: dockerfiles/ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build && touch /order-sync/generate-configs"
+    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /order-sync/generate-configs"
     volumes:
     - ./bin/ash:/bin-mount
     - ./ruby:/ruby
     - ./generated-catapult-addresses:/addresses
     - ./catapult-config-build:/config-build
+    - nemesis:/nemesis:rw
     - order-sync:/order-sync:rw
 
   peer-node-0:
@@ -74,7 +75,7 @@ services:
     volumes:
     - ./catapult-config/catpult-node/:/userconfig/
     - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
-    - ./nemesis/:/nemesis/
+    -  nemesis/:/nemesis/
     - ./data/peer-node-0:/data:rw
     - order-sync:/order-sync:rw
     depends_on:
@@ -83,3 +84,4 @@ services:
 volumes:
   order-sync:
   addresses:
+  nemesis:

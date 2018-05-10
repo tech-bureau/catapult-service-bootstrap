@@ -15,13 +15,13 @@ module Catapult
         def get_keys_info_array_for_harvesting
           self.keys_info_array_for_harvesting
         end
-        
+
         def get_nemesis_keys_info
           # Important that keys_info_array_for_harvesting goes first because picking keys up to limit from front of array
           keys_info_array = self.keys_info_array_for_harvesting + self.keys_info_array_for_accounts 
           Info.new(keys_info_array, get_generation_info)
         end
-        
+
         protected
         
         attr_reader :input_attributes
@@ -33,21 +33,34 @@ module Catapult
         def keys_info_array_for_harvesting
           @keys_info_array_for_harvesting ||= get_keys_info_array(ParsedContent::NemesisType.for_harvesting)
         end
-        
+
+        def nemesis_keys
+          @nemesis_keys ||= ret_nemesis_keys
+        end
+
         private
-        
+
+        def ret_nemesis_keys
+          keys_array = self.raw_key_info['nemesis_generation'] || fail("Cannot compute nemesis hash")
+          case keys_array.size
+          when 1 
+          then keys_array.first
+          else
+            fail "Unexpected that keys_array.size = #{keys_array.size} and not 1"
+          end
+        end
+
         def get_generation_info
+          nemesis_generation_hash    = nemesis_keys['public'] || fail( "cannot find public address") 
+          nemesis_signer_private_key = nemesis_keys['private'] || fail( "cannot find private address")
+
           GenerationInfo.new(
-            hash_value(:network_identifier), 
-            hash_value(:nemesis_generation_hash), 
-            hash_value(:nemesis_signer_private_key)
+            Global.catapult_nework_identifier,
+             nemesis_generation_hash,
+             nemesis_signer_private_key
           )
         end
-        
-        def hash_value(key)
-          self.nemesis_hash[key.to_s] || self.raw_key_info[key.to_sym] || fail("Missing value for key '#{key}'")
-        end
-        
+              
       end
     end
   end

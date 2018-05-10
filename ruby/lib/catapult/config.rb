@@ -26,15 +26,12 @@ module Catapult
       api_node: 1,
       peer_node: 2
     }
-    def self.generate_and_write_configurations(keys, base_config_target_dir)
+    def self.generate_and_write_configurations(keys, base_config_target_dir, nemesis_dir)
       ndx_config_files = {}
       ndx_config_files.merge!(CatapultNode::PeerNode.generate(keys: keys))
       ndx_config_files.merge!(CatapultNode::ApiNode.generate(keys: keys))
       write_out_config_files(ndx_config_files, base_config_target_dir)
-    end
-
-    def self.generate_nemesis_properties_file(input_attributes)
-      NemesisPropertiesFile.generate_file(input_attributes)
+      NemesisPropertiesFile.generate_and_write_nemesis_properties_file(keys, nemesis_dir)
     end
     
     def self.generate(input_attributes)

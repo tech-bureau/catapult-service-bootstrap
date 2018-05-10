@@ -28,10 +28,6 @@ module Catapult
         self.input_attributes[:keys] || fail("Missing :keys input")
       end
 
-      def nemesis_hash
-        self.input_attributes[:nemesis_hash] || fail("Missing :nemesis_hash input")
-      end
-
       private
       
       def file_path_with_base_dir(file_path)
