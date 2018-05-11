@@ -1,3 +1,4 @@
+
 version: '2'
 services:
   init:
@@ -42,7 +43,7 @@ services:
 ##### catapult nodes
 
   generate-raw-addresses:
-    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    build: dockerfiles/catapult
     command: /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml
     environment:
     - LOCAL_USER_ID=1000
@@ -72,7 +73,7 @@ services:
     - order-sync:/order-sync:rw
 
   peer-node-0:
-    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
     logging:
@@ -83,7 +84,6 @@ services:
     command: bash -c "/bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
-    - ./catapult-config/catpult-node/:/userconfig/
     - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
     -  nemesis/:/nemesis/
     - ./data/peer-node-0:/data:rw
@@ -92,7 +92,7 @@ services:
     - generate-configs
 
   peer-node-1:
-    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
     logging:
@@ -103,7 +103,6 @@ services:
     command: bash -c "/bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
-    - ./catapult-config/catpult-node/:/userconfig/
     - ./catapult-config-build/peer-node-1/userconfig/resources/:/userconfig/resources/
     -  nemesis/:/nemesis/
     - ./data/peer-node-1:/data:rw
@@ -112,7 +111,7 @@ services:
     - generate-configs
 
   api-node-0:
-    image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
+    build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
     logging:
@@ -123,7 +122,6 @@ services:
     command: bash -c "/bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
-    - ./catapult-config/catpult-node/:/userconfig/
     - ./catapult-config-build/api-node-0/userconfig/resources/:/userconfig/resources/
     -  nemesis/:/nemesis/
     - ./data/api-node-0:/data:rw
