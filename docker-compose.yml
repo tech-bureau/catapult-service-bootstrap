@@ -2,12 +2,13 @@ version: '2'
 services:
   init:
     build: dockerfiles/init
-    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data"
+    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses"
     volumes:
     - ./bin/ash:/bin-mount
     - ./data/peer-node-0:/peer-node-0-data:rw
     - ./data/peer-node-1:/peer-node-1-data:rw
     - ./data/api-node-0:/api-node-0-data:rw
+    - addresses:/addresses:rw
   db:
     image: mongo
     command: bash -c "/bin-mount/wait /order-sync/initiate-db && mongod --dbpath=/dbdata --bind_ip=db"
@@ -43,6 +44,8 @@ services:
   generate-raw-addresses:
     image: jenkins.nem.ninja:8443/catapult-slim-server:master_release-gcc
     command: /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml
+    environment:
+    - LOCAL_USER_ID=1000
     volumes:
     - ./bin/bash:/bin-mount
     - addresses:/addresses:rw
