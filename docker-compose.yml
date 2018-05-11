@@ -63,8 +63,9 @@ services:
     - db
 
   rest-gateway:
-    build: dockerfiles/rest-gateway
-    command: ash /userconfig/rest.sh
+    image: jenkins.nem.ninja:8443/catapult-rest:master
+#    build: dockerfiles/rest-gateway
+    command: ash -c "sleep 4 && npm start resources/rest.json /userconfig/rest.json"
     ports:
     - "3000:3000"
     volumes:
