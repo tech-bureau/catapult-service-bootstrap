@@ -3,40 +3,40 @@ version: '2'
 services:
   init:
     build: dockerfiles/init
-    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses"
+    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses /nemesis"
     volumes:
     - ./bin/ash:/bin-mount
     - ./data/peer-node-0:/peer-node-0-data:rw
     - ./data/peer-node-1:/peer-node-1-data:rw
     - ./data/api-node-0:/api-node-0-data:rw
+    - ./nemesis/:/nemesis:rw
     - addresses:/addresses:rw
   db:
     image: mongo
-    command: bash -c "/bin-mount/wait /order-sync/initiate-db && mongod --dbpath=/dbdata --bind_ip=db"
+    command: bash -c "mongod --dbpath=/dbdata --bind_ip=db"
     stop_signal: SIGINT
     volumes:
     - ./data/mongo:/dbdata:rw
     - ./bin/bash:/bin-mount
-    - order-sync:/order-sync:rw
 
   init-db:
     image: mongo
-    command:  bash -c "/bin/bash /userconfig/mongors.sh && touch /order-sync/init-db"
+    command:  bash -c "/bin/bash /userconfig/mongors.sh"
     volumes:
+    - ./data/mongo:/dbdata:rw
     - ./catapult-config/mongo/:/userconfig/:ro
     - ./bin/bash:/bin-mount
-    - order-sync:/order-sync:rw
     depends_on:
     - db
+
   rest-gateway:
     image: jenkins.nem.ninja:8443/catapult-rest:master
-    command: ash -c "/bin-mount/wait /order-sync/init-db && /bin/ash /userconfig/rest.sh"
+    command: ash /userconfig/rest.sh
     ports:
     - "3000:3000"
     volumes:
     - ./catapult-config/rest-gateway/:/userconfig/
     - ./bin/ash:/bin-mount
-    - order-sync:/order-sync
     depends_on:
     - init-db
 
@@ -63,14 +63,13 @@ services:
 
   generate-configs:
     build: dockerfiles/ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /order-sync/generate-configs"
+    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis"
     volumes:
     - ./bin/ash:/bin-mount
     - ./ruby:/ruby
     - ./generated-catapult-addresses:/addresses
     - ./catapult-config-build:/config-build
-    - nemesis:/nemesis:rw
-    - order-sync:/order-sync:rw
+    - ./nemesis:/nemesis:rw
 
   peer-node-0:
     build: dockerfiles/catapult
@@ -85,7 +84,7 @@ services:
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
-    -  nemesis/:/nemesis/
+    - ./nemesis/:/nemesis:rw
     - ./data/peer-node-0:/data:rw
     depends_on:
     - init
@@ -104,7 +103,7 @@ services:
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/peer-node-1/userconfig/resources/:/userconfig/resources/
-    -  nemesis/:/nemesis/
+    - ./nemesis/:/nemesis:rw
     - ./data/peer-node-1:/data:rw
     depends_on:
     - init
@@ -123,13 +122,12 @@ services:
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/api-node-0/userconfig/resources/:/userconfig/resources/
-    -  nemesis/:/nemesis/
+    - ./nemesis/:/nemesis:rw
     - ./data/api-node-0:/data:rw
     depends_on:
     - init
     - generate-configs
 
 volumes:
-  order-sync:
   addresses:
-  nemesis:
+#  nemesis:
