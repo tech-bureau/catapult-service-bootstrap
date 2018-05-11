@@ -34,7 +34,7 @@ services:
 
   generate-configs:
     build: dockerfiles/ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis"
+    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /nemesis/configs-generated"
     volumes:
     - ./bin/ash:/bin-mount
     - ./ruby:/ruby
@@ -64,7 +64,6 @@ services:
 
   rest-gateway:
     image: jenkins.nem.ninja:8443/catapult-rest:master
-#    build: dockerfiles/rest-gateway
     command: ash -c "sleep 4 && npm start resources/rest.json /userconfig/rest.json"
     ports:
     - "3000:3000"
@@ -78,12 +77,13 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /nemesis/configs-generated && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
     - nemesis/:/nemesis:rw
     - ./data/peer-node-0:/data:rw
+    - ./bin/bash:/bin-mount
     depends_on:
     - init
     - generate-configs
@@ -92,12 +92,13 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /nemesis/configs-generated && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/peer-node-1/userconfig/resources/:/userconfig/resources/
     - nemesis/:/nemesis:rw
     - ./data/peer-node-1:/data:rw
+    - ./bin/bash:/bin-mount
     depends_on:
     - init
     - generate-configs
@@ -106,12 +107,13 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /nemesis/configs-generated && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/api-node-0/userconfig/resources/:/userconfig/resources/
     - nemesis/:/nemesis:rw
     - ./data/api-node-0:/data:rw
+    - ./bin/bash:/bin-mount
     depends_on:
     - init
     - generate-configs
