@@ -7,7 +7,7 @@ module Catapult
     
     # child classes
     require_relative('config/catapult_node')
-
+    require_relative('config/rest_gateway')
     
     include Paths::Mixin
     extend Paths::ClassMixin
@@ -24,12 +24,15 @@ module Catapult
 
     CARDINALITY = {
       api_node: 1,
-      peer_node: 2
+      peer_node: 2,
+      rest_gateway: 1
     }
+
     def self.generate_and_write_configurations(keys, base_config_target_dir, nemesis_dir)
       ndx_config_files = {}
       ndx_config_files.merge!(CatapultNode::PeerNode.generate(keys: keys))
       ndx_config_files.merge!(CatapultNode::ApiNode.generate(keys: keys))
+      ndx_config_files.merge!(RestGateway.generate(keys: keys))
       write_out_config_files(ndx_config_files, base_config_target_dir)
       NemesisPropertiesFile.generate_and_write_nemesis_properties_file(keys, nemesis_dir)
     end

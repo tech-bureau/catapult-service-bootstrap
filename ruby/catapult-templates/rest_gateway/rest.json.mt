@@ -6,7 +6,7 @@
 
   "port": 3000,
   "crossDomainHttpMethods": ["GET", "POST", "PUT", "OPTIONS"],
-  "clientPrivateKey": "2605DD767CCAE0350483D3EFD9D8AE9DA0C66C121B521B1F9D9336DFE33266A4",
+  "clientPrivateKey": "{{rest_gateway_private_key}}",
   "extensions": ["aggregate", "multisig", "namespace", "transfer"],
 
   "db": {
@@ -20,14 +20,14 @@
   },
 
   "apiNode": {
-    "host": "peer1",
+    "host": "{{api_node_host}}",
     "port": 7900,
-    "publicKey": "D3D5874EC475E9F66E435C5323DC55193CA734BE640629907B73FA345A258BC8"
+    "publicKey": "{{api_node_public_key}}"
   },
 
   "websocket": {
     "mq": {
-      "host": "api1",
+      "host": "{{api_node_host}}",
       "port": 7902
     },
     "allowOptionalAddress": true

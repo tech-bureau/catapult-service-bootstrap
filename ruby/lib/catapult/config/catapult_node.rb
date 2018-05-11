@@ -7,7 +7,6 @@ module Catapult
       require_relative('catapult_node/peer_node')
       require_relative('catapult_node/template_attributes')
       
-      DATA_SUBDIR      = 'data'
       CONFIG_SUBDIR    = 'userconfig'
       RESOURCES_SUBDIR = 'resources'
 

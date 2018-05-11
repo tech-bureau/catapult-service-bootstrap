@@ -8,7 +8,7 @@ module Catapult
         @input_attributes = input_attributes
       end
         
-      attr_reader :type, :component_keys, :namespace
+      attr_reader :type, :component_keys
       
       def hash(index)
         PerIndex.new(self, index).hash
@@ -26,7 +26,6 @@ module Catapult
         @network_generation_hash ||= Config::Keys::Nemesis.key_info_generation_hash(self.input_attributes).public
       end
 
-      
       protected
 
       attr_reader :input_attributes

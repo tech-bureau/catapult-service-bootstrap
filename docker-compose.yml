@@ -1,6 +1,7 @@
 
 version: '2'
 services:
+  ###### initialization and dynamic configuration build services ###########
   init:
     build: dockerfiles/init
     command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses /nemesis"
@@ -9,38 +10,8 @@ services:
     - ./data/peer-node-0:/peer-node-0-data:rw
     - ./data/peer-node-1:/peer-node-1-data:rw
     - ./data/api-node-0:/api-node-0-data:rw
-    - ./nemesis/:/nemesis:rw
+    - nemesis/:/nemesis:rw
     - addresses:/addresses:rw
-  db:
-    image: mongo
-    command: bash -c "mongod --dbpath=/dbdata --bind_ip=db"
-    stop_signal: SIGINT
-    volumes:
-    - ./data/mongo:/dbdata:rw
-    - ./bin/bash:/bin-mount
-
-  init-db:
-    image: mongo
-    command:  bash -c "/bin/bash /userconfig/mongors.sh"
-    volumes:
-    - ./data/mongo:/dbdata:rw
-    - ./catapult-config/mongo/:/userconfig/:ro
-    - ./bin/bash:/bin-mount
-    depends_on:
-    - db
-
-  rest-gateway:
-    image: jenkins.nem.ninja:8443/catapult-rest:master
-    command: ash /userconfig/rest.sh
-    ports:
-    - "3000:3000"
-    volumes:
-    - ./catapult-config/rest-gateway/:/userconfig/
-    - ./bin/ash:/bin-mount
-    depends_on:
-    - init-db
-
-##### catapult nodes
 
   generate-raw-addresses:
     build: dockerfiles/catapult
@@ -69,22 +40,48 @@ services:
     - ./ruby:/ruby
     - ./generated-catapult-addresses:/addresses
     - ./catapult-config-build:/config-build
-    - ./nemesis:/nemesis:rw
+    - nemesis:/nemesis:rw
+
+  ###### running services ###########
+
+  db:
+    image: mongo
+    command: bash -c "mongod --dbpath=/dbdata --bind_ip=db"
+    stop_signal: SIGINT
+    volumes:
+    - ./data/mongo:/dbdata:rw
+    - ./bin/bash:/bin-mount
+
+  init-db:
+    image: mongo
+    command:  bash -c "/bin/bash /userconfig/mongors.sh"
+    volumes:
+    - ./data/mongo:/dbdata:rw
+    - ./catapult-config/mongo/:/userconfig/:ro
+    - ./bin/bash:/bin-mount
+    depends_on:
+    - db
+
+  rest-gateway:
+    build: dockerfiles/rest-gateway
+    command: ash /userconfig/rest.sh
+    ports:
+    - "3000:3000"
+    volumes:
+    - ./catapult-config-build/rest-gateway-0/userconfig/:/userconfig/
+    depends_on:
+    - init-db
+    - generate-configs
 
   peer-node-0:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "25M"
-        max-file: "10"
     command: bash -c "/bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
-    - ./nemesis/:/nemesis:rw
+    - nemesis/:/nemesis:rw
     - ./data/peer-node-0:/data:rw
     depends_on:
     - init
@@ -94,16 +91,11 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "25M"
-        max-file: "10"
     command: bash -c "/bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/peer-node-1/userconfig/resources/:/userconfig/resources/
-    - ./nemesis/:/nemesis:rw
+    - nemesis/:/nemesis:rw
     - ./data/peer-node-1:/data:rw
     depends_on:
     - init
@@ -113,21 +105,17 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "25M"
-        max-file: "10"
     command: bash -c "/bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./catapult-config-build/api-node-0/userconfig/resources/:/userconfig/resources/
-    - ./nemesis/:/nemesis:rw
+    - nemesis/:/nemesis:rw
     - ./data/api-node-0:/data:rw
     depends_on:
     - init
     - generate-configs
+    - init-db
 
 volumes:
   addresses:
-#  nemesis:
+  nemesis:
