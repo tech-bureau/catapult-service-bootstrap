@@ -4,3 +4,5 @@ catapult-config-build/*
 !catapult-config-build/README.md
 generated-catapult-addresses/*
 !generated-catapult-addresses/README.md
+nemesis/*
+!nemesis/README.md
