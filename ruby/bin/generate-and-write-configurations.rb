@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby
-require 'byebug'
 require_relative('../lib/catapult.rb')
 keys_file_path         = ARGV[0]
 base_config_target_dir = ARGV[1]

@@ -3,43 +3,41 @@ services:
   ###### initialization and dynamic configuration build services ###########
   init:
     build: dockerfiles/init
-    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses /nemesis"
+    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses /nemesis && touch /addresses/.init"
     volumes:
     - ./bin/ash:/bin-mount
     - ./data/peer-node-0:/peer-node-0-data:rw
     - ./data/peer-node-1:/peer-node-1-data:rw
     - ./data/api-node-0:/api-node-0-data:rw
-    - nemesis/:/nemesis:rw
-    - addresses:/addresses:rw
+    - ./build/nemesis/:/nemesis:rw
+    - ./build/generated-addresses:/addresses:rw
 
   generate-raw-addresses:
     build: dockerfiles/catapult
-    command: /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml
+    command: bash -c "/bin-mount/wait /addresses/.init && /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     environment:
     - LOCAL_USER_ID=1000
     volumes:
     - ./bin/bash:/bin-mount
-    - addresses:/addresses:rw
-    - ./generated-catapult-addresses:/catapult-addresses:rw
+    - ./build/generated-addresses:/addresses:rw
 
   store-addresses:
     build: dockerfiles/ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/raw-addresses.txt && /ruby/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /catapult-addresses/addresses.yaml" 
+    command: ash -c "/bin-mount/wait /addresses/raw-addresses.txt && /ruby/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ./bin/ash:/bin-mount
     - ./ruby:/ruby
-    - ./generated-catapult-addresses:/catapult-addresses:rw
-    - addresses:/addresses
+    - ./build/generated-addresses:/addresses:rw
 
   generate-configs:
     build: dockerfiles/ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /nemesis/configs-generated"
+    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /nemesis/.configs-generated"
     volumes:
     - ./bin/ash:/bin-mount
     - ./ruby:/ruby
-    - ./generated-catapult-addresses:/addresses
-    - ./catapult-config-build:/config-build
-    - nemesis:/nemesis:rw
+    - ./build/generated-addresses:/addresses
+    - ./build/catapult-config:/config-build
+    - ./build/nemesis:/nemesis:rw
 
   ###### running services ###########
 
@@ -56,18 +54,20 @@ services:
     command:  bash -c "/bin/bash /userconfig/mongors.sh"
     volumes:
     - ./data/mongo:/dbdata:rw
-    - ./catapult-config/mongo/:/userconfig/:ro
+    - ./static-config/mongo/:/userconfig/:ro
     - ./bin/bash:/bin-mount
     depends_on:
     - db
 
   rest-gateway:
     image: jenkins.nem.ninja:8443/catapult-rest:master
-    command: ash -c "sleep 4 && npm start resources/rest.json /userconfig/rest.json"
+    command: ash -c "/bin-mount/wait /nemesis/.configs-generated && npm start resources/rest.json /userconfig/rest.json"
     ports:
     - "3000:3000"
     volumes:
-    - ./catapult-config-build/rest-gateway-0/userconfig/:/userconfig/
+    - ./build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
+    - ./bin/ash:/bin-mount
+    - ./build/nemesis/:/nemesis
     depends_on:
     - init-db
     - generate-configs
@@ -76,11 +76,11 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin-mount/wait /nemesis/configs-generated && /bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /nemesis/.configs-generated && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
-    - ./catapult-config-build/peer-node-0/userconfig/resources/:/userconfig/resources/
-    - nemesis/:/nemesis:rw
+    - ./build/catapult-config/peer-node-0/userconfig/resources/:/userconfig/resources/
+    - ./build/nemesis/:/nemesis
     - ./data/peer-node-0:/data:rw
     - ./bin/bash:/bin-mount
     depends_on:
@@ -91,11 +91,11 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin-mount/wait /nemesis/configs-generated && /bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /nemesis/.configs-generated && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
-    - ./catapult-config-build/peer-node-1/userconfig/resources/:/userconfig/resources/
-    - nemesis/:/nemesis:rw
+    - ./build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
+    - ./build/nemesis/:/nemesis
     - ./data/peer-node-1:/data:rw
     - ./bin/bash:/bin-mount
     depends_on:
@@ -106,11 +106,11 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin-mount/wait /nemesis/configs-generated && /bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /nemesis/.configs-generated && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
-    - ./catapult-config-build/api-node-0/userconfig/resources/:/userconfig/resources/
-    - nemesis/:/nemesis:rw
+    - ./build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
+    - ./build/nemesis/:/nemesis
     - ./data/api-node-0:/data:rw
     - ./bin/bash:/bin-mount
     depends_on:
@@ -118,6 +118,3 @@ services:
     - generate-configs
     - init-db
 
-volumes:
-  addresses:
-  nemesis:

@@ -1,8 +1,8 @@
 data/*
 !data/README.md
-catapult-config-build/*
-!catapult-config-build/README.md
-generated-catapult-addresses/*
-!generated-catapult-addresses/README.md
-nemesis/*
-!nemesis/README.md
+build/catapult-config/*
+!build/catapult-config/README.md
+build/generated-addresses/*
+!build/generated-addresses/README.md
+build/nemesis/*
+!build/nemesis/README.md
