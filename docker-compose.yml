@@ -1,4 +1,3 @@
-
 version: '2'
 services:
   ###### initialization and dynamic configuration build services ###########
