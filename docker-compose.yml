@@ -3,7 +3,7 @@ services:
   ###### initialization and dynamic configuration build services ###########
   init:
     build: dockerfiles/init
-    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses /nemesis && touch /addresses/.init"
+    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses /nemesis /state && touch /state/init"
     volumes:
     - ./bin/ash:/bin-mount
     - ./data/peer-node-0:/peer-node-0-data:rw
@@ -11,15 +11,17 @@ services:
     - ./data/api-node-0:/api-node-0-data:rw
     - ./build/nemesis/:/nemesis:rw
     - ./build/generated-addresses:/addresses:rw
+    - ./build/state:/state:rw
 
   generate-raw-addresses:
-    build: dockerfiles/catapult
-    command: bash -c "/bin-mount/wait /addresses/.init && /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
+    image: jenkins.nem.ninja:8443/catapult-slim-server-v2:master_release-gcc
+    command: bash -c "/bin-mount/wait /state/init && /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     environment:
     - LOCAL_USER_ID=1000
     volumes:
     - ./bin/bash:/bin-mount
     - ./build/generated-addresses:/addresses:rw
+    - ./build/state:/state:rw
 
   store-addresses:
     build: dockerfiles/ruby-alpine
@@ -31,13 +33,14 @@ services:
 
   generate-configs:
     build: dockerfiles/ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /nemesis/.configs-generated"
+    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
     volumes:
     - ./bin/ash:/bin-mount
     - ./ruby:/ruby
     - ./build/generated-addresses:/addresses
     - ./build/catapult-config:/config-build
     - ./build/nemesis:/nemesis:rw
+    - ./build/state:/state:rw
 
   ###### running services ###########
 
@@ -61,28 +64,61 @@ services:
 
   rest-gateway:
     image: jenkins.nem.ninja:8443/catapult-rest:master
-    command: ash -c "/bin-mount/wait /nemesis/.configs-generated && npm start resources/rest.json /userconfig/rest.json"
+    command: ash -c "/bin-mount/wait /state/configs-generated && npm start resources/rest.json /userconfig/rest.json"
     ports:
     - "3000:3000"
     volumes:
     - ./build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
     - ./bin/ash:/bin-mount
-    - ./build/nemesis/:/nemesis
+    - ./build/state:/state
     depends_on:
     - init-db
+    - generate-configs
+
+  peer-node-0-nemgen:
+    build: dockerfiles/nemgen
+    image: jenkins.nem.ninja:8443/catapult-slim-nemgen:master_release-gcc
+    environment:
+    - LOCAL_USER_ID=1000
+    command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-0-nemgen"
+    stop_signal: SIGINT
+    volumes:
+    - ./build/nemesis/:/nemesis
+    - ./data/peer-node-0:/data:rw
+    - ./bin/bash:/bin-mount
+    - ./build/state:/state:rw
+    depends_on:
+    - init
     - generate-configs
 
   peer-node-0:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin-mount/wait /nemesis/.configs-generated && /bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /state/peer-node-0-nemgen && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./build/catapult-config/peer-node-0/userconfig/resources/:/userconfig/resources/
-    - ./build/nemesis/:/nemesis
     - ./data/peer-node-0:/data:rw
     - ./bin/bash:/bin-mount
+    - ./build/state:/state
+    depends_on:
+    - init
+    - generate-configs
+    - peer-node-0-nemgen
+
+  peer-node-1-nemgen:
+    build: dockerfiles/nemgen
+    image: jenkins.nem.ninja:8443/catapult-slim-nemgen:master_release-gcc
+    environment:
+    - LOCAL_USER_ID=1000
+    command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-1-nemgen"
+    stop_signal: SIGINT
+    volumes:
+    - ./build/nemesis/:/nemesis
+    - ./data/peer-node-1:/data:rw
+    - ./bin/bash:/bin-mount
+    - ./build/state:/state:rw
     depends_on:
     - init
     - generate-configs
@@ -91,13 +127,31 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin-mount/wait /nemesis/.configs-generated && /bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /state/peer-node-1-nemgen && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
-    - ./build/nemesis/:/nemesis
     - ./data/peer-node-1:/data:rw
     - ./bin/bash:/bin-mount
+    - ./build/state:/state
+    depends_on:
+    - init
+    - generate-configs
+    - peer-node-1-nemgen
+
+
+  api-node-0-nemgen:
+    build: dockerfiles/nemgen
+    image: jenkins.nem.ninja:8443/catapult-slim-nemgen:master_release-gcc
+    environment:
+    - LOCAL_USER_ID=1000
+    command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/api-node-0-nemgen"
+    stop_signal: SIGINT
+    volumes:
+    - ./build/nemesis/:/nemesis
+    - ./data/api-node-0:/data:rw
+    - ./bin/bash:/bin-mount
+    - ./build/state:/state:rw
     depends_on:
     - init
     - generate-configs
@@ -106,15 +160,15 @@ services:
     build: dockerfiles/catapult
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin-mount/wait /nemesis/.configs-generated && /bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /state/api-node-0-nemgen && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
     - ./build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
-    - ./build/nemesis/:/nemesis
     - ./data/api-node-0:/data:rw
     - ./bin/bash:/bin-mount
+    - ./build/state:/state
     depends_on:
     - init
     - generate-configs
-    - init-db
+    - api-node-0-nemgen
 

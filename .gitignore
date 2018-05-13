@@ -6,3 +6,5 @@ build/generated-addresses/*
 !build/generated-addresses/README.md
 build/nemesis/*
 !build/nemesis/README.md
+build/state/*
+!build/state/README.md

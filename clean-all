@@ -3,3 +3,4 @@ find data/* | grep -v "README.md" | xargs rm -rf
 find build/nemesis/* | grep -v "README.md" | xargs rm -rf
 find build/generated-addresses/* | grep -v "README.md" | xargs rm -rf
 find build/catapult-config/* | grep -v "README.md" | xargs rm -rf
+find build/state/* | grep -v "README.md" | xargs rm -rf
