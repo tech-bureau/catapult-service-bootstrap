@@ -77,10 +77,10 @@ services:
 
   peer-node-0-nemgen:
     build: dockerfiles/nemgen
-    image: jenkins.nem.ninja:8443/catapult-slim-nemgen:master_release-gcc
     environment:
     - LOCAL_USER_ID=1000
-    command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-0-nemgen"
+    command: sleep 10000 
+#    command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-0-nemgen"
     stop_signal: SIGINT
     volumes:
     - ./build/nemesis/:/nemesis
@@ -109,7 +109,6 @@ services:
 
   peer-node-1-nemgen:
     build: dockerfiles/nemgen
-    image: jenkins.nem.ninja:8443/catapult-slim-nemgen:master_release-gcc
     environment:
     - LOCAL_USER_ID=1000
     command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-1-nemgen"
@@ -142,7 +141,6 @@ services:
 
   api-node-0-nemgen:
     build: dockerfiles/nemgen
-    image: jenkins.nem.ninja:8443/catapult-slim-nemgen:master_release-gcc
     environment:
     - LOCAL_USER_ID=1000
     command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/api-node-0-nemgen"
