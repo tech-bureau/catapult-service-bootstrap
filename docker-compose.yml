@@ -1,23 +1,10 @@
 version: '2'
 services:
-  ###### initialization and dynamic configuration build services ###########
-  init:
-    build: dockerfiles/init
-    command: ash -c "chown -R mijin:mijin /peer-node-0-data /peer-node-1-data /api-node-0-data /addresses /nemesis /state && touch /state/init"
-    volumes:
-    - ./bin/ash:/bin-mount
-    - ./data/peer-node-0:/peer-node-0-data:rw
-    - ./data/peer-node-1:/peer-node-1-data:rw
-    - ./data/api-node-0:/api-node-0-data:rw
-    - ./build/nemesis/:/nemesis:rw
-    - ./build/generated-addresses:/addresses:rw
-    - ./build/state:/state:rw
+  ######  dynamic configuration  ###########
 
   generate-raw-addresses:
-    image: jenkins.nem.ninja:8443/catapult-slim-server-v2:master_release-gcc
-    command: bash -c "/bin-mount/wait /state/init && /bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
-    environment:
-    - LOCAL_USER_ID=1000
+    image: techbureau/catapult-tools:gcc-0.1.0.1
+    command: bash -c "/bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ./bin/bash:/bin-mount
     - ./build/generated-addresses:/addresses:rw
@@ -77,8 +64,6 @@ services:
 
   peer-node-0-nemgen:
     build: dockerfiles/nemgen
-    environment:
-    - LOCAL_USER_ID=1000
     command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-0-nemgen"
     stop_signal: SIGINT
     volumes:
@@ -87,13 +72,10 @@ services:
     - ./bin/bash:/bin-mount
     - ./build/state:/state:rw
     depends_on:
-    - init
     - generate-configs
 
   peer-node-0:
     build: dockerfiles/catapult
-    environment:
-    - LOCAL_USER_ID=1000
     command: bash -c "/bin-mount/wait /state/peer-node-0-nemgen && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
@@ -102,14 +84,11 @@ services:
     - ./bin/bash:/bin-mount
     - ./build/state:/state
     depends_on:
-    - init
     - generate-configs
     - peer-node-0-nemgen
 
   peer-node-1-nemgen:
     build: dockerfiles/nemgen
-    environment:
-    - LOCAL_USER_ID=1000
     command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-1-nemgen"
     stop_signal: SIGINT
     volumes:
@@ -118,13 +97,10 @@ services:
     - ./bin/bash:/bin-mount
     - ./build/state:/state:rw
     depends_on:
-    - init
     - generate-configs
 
   peer-node-1:
     build: dockerfiles/catapult
-    environment:
-    - LOCAL_USER_ID=1000
     command: bash -c "/bin-mount/wait /state/peer-node-1-nemgen && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
@@ -133,15 +109,11 @@ services:
     - ./bin/bash:/bin-mount
     - ./build/state:/state
     depends_on:
-    - init
     - generate-configs
     - peer-node-1-nemgen
 
-
   api-node-0-nemgen:
     build: dockerfiles/nemgen
-    environment:
-    - LOCAL_USER_ID=1000
     command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/api-node-0-nemgen"
     stop_signal: SIGINT
     volumes:
@@ -150,13 +122,10 @@ services:
     - ./bin/bash:/bin-mount
     - ./build/state:/state:rw
     depends_on:
-    - init
     - generate-configs
 
   api-node-0:
     build: dockerfiles/catapult
-    environment:
-    - LOCAL_USER_ID=1000
     command: bash -c "/bin-mount/wait /state/api-node-0-nemgen && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
     volumes:
@@ -165,7 +134,6 @@ services:
     - ./bin/bash:/bin-mount
     - ./build/state:/state
     depends_on:
-    - init
     - generate-configs
     - api-node-0-nemgen
 
