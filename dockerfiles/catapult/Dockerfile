@@ -1,2 +1,2 @@
-FROM jenkins.nem.ninja:8443/catapult-slim-server-v2:master_release-gcc
+FROM  techbureau/catapult-server:gcc-0.1.0.1
 ADD ./userconfig /userconfig
