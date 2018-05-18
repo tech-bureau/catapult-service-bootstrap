@@ -32,9 +32,13 @@ To stop the server simply press `Ctrl+c` to kill/stop the foreground docker proc
 
 ## Keys Setup
 
-The bootstrap scripts take care of initial key generation and config.  You can get the details of the key(s) that are being used in your test setup by going to:
-
----KEY INFO----
+The bootstrap scripts take care of initial key generation and configuration.  You can get the details of the key(s) that are being used in your test setup by going to the follwoing directory:
+```
+ubuntu@catapult:~/catapult$ cd  build/generated-addresses/
+ubuntu@catapult:~/catapult/build/generated-addresses$ ls
+addresses.yaml  raw-addresses.txt  README.md
+```
+The file raw-addresses.txt is a set of addresses that have been generated fresh as part of the docker-compose using the catapult address utility tool. The content of addresses.yaml is those keys but formatted in yaml and assigned to different roles, such as for the ctapult nodes, the harverstor key(s), etc. This yaml file is used as an input for the autaomtaically generated catpult config files. Of note for the end user is the keys under the yaml key 'nemesis_addresses', which are the keys that are assigned assigned xem and should be used as a faucet.
 
 ## Starting as a Background Process
 
