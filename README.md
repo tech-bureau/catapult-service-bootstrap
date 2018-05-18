@@ -50,7 +50,9 @@ For more detailed usage of the `docker-compose up` command you can check out doc
 
 ## Resetting your Catapult Server
 
-Did you get your server in a bad state or just want to restart with a fresh chain?  No problem, simlpy stop the running docker service and do the following:
+The expected behavior if the docker-compose deployment is stopped and then restarted (by executing 'docker-compose up' again) is the state of the chain should be where it was left off before compose was stopped.
+If, however, you got your server in a bad state or just want to restart with a fresh chain it is no problem; you can simply stop the running the docker compose service (using control C if compose is in the foreground or `docker-compose down` if compose is in the background) and run one of the following scripts before restarting compose:
 
----Reset Steps here---
+- Executing ./clean-data will keep the configuration and generated keys in place, but delete the entire chain. When restarted, catapult will start at block 1
+- Executing ./clean-all' will both clean the data and additionally will remove the generated keys and the configuration generated from these keys. After running this script, new keys found in directory build/generated-addresses/ will have to be used.
 
