@@ -9,13 +9,14 @@ We use docker images as our default packaging and distribution mechanism.  These
 The only dependency that is required is git so you can clone this repository, and docker/docker-compose.  If you do not have the docker tools installed alredy you can get the installation details from the docker community website:
 
 [Docker Install Overview Page](https://docs.docker.com/install/#server)
+
 [Docker Compose Install Overview Page](https://docs.docker.com/compose/install/#install-compose)
 
 ## Installation & Startup Instructions
 
-1) `git clone git@github.com:tech-bureau/catapult-server-bootstrap.git`
-2) `cd catapult-server-bootstrap`
-3) `docker-compose up`
+1. `git clone git@github.com:tech-bureau/catapult-server-bootstrap.git`
+2. `cd catapult-server-bootstrap`
+3. `docker-compose up`
 
 If you followed the docker installation instructions correctly, or already had docker/docker-compose installed, you should see docker doing its job downloading the container images for the first time, then going through running the bootstrap setup.  Should things succeed it should start the Catapult Server right up and you should see the live logs start scrolling by in the foreground like so:
 
