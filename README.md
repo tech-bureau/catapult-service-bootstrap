@@ -1,6 +1,6 @@
-# Catapult Server Bootstrap
+# Catapult Service Bootstrap
 
-This repo contains a set of bootstrap and setup scripts to help developers get going quickly with their own working Catapult Server.  The goal is to make it as easy and quick as possible so as a developer you only have to run this setup and within a minute or so you will have a running server ready to start receiving transactions so you can focus on your development work and not setup or configuring servers.
+This repo contains a set of bootstrap and setup scripts to help developers get going quickly with their own working Catapult Service.  The goal is to make it as easy and quick as possible so as a developer you only have to run this setup and within a minute or so you will have a running server ready to start receiving transactions so you can focus on your development work and not setup or configuring servers.
 
 We use docker images as our default packaging and distribution mechanism.  These bootstrap scripts will prepare some files on disk and then leverage docker-compose to startup and run the needed set of containers so the server can function correctly.
 
@@ -32,13 +32,19 @@ To stop the server simply press `Ctrl+c` to kill/stop the foreground docker proc
 
 ## Keys Setup
 
-The bootstrap scripts take care of initial key generation and configuration.  You can get the details of the key(s) that are being used in your test setup by going to the follwoing directory:
+The bootstrap scripts take care of initial key generation and configuration.  After running for the first time you will have a set of public/private key pairs saved to a couple of files.  You can get the details of the key(s) that are being used in your test setup by going to the follwoing directory:
+
 ```
 ubuntu@catapult:~/catapult$ cd  build/generated-addresses/
 ubuntu@catapult:~/catapult/build/generated-addresses$ ls
 addresses.yaml  raw-addresses.txt  README.md
 ```
-The file raw-addresses.txt is a set of addresses that have been generated fresh as part of the docker-compose using the catapult address utility tool. The content of addresses.yaml is those keys but formatted in yaml and assigned to different roles, such as for the ctapult nodes, the harverstor key(s), etc. This yaml file is used as an input for the autaomtaically generated catpult config files. Of note for the end user is the keys under the yaml key 'nemesis_addresses', which are the keys that are assigned assigned xem and should be used as a faucet.
+
+The file `raw-addresses.txt` is a set of addresses that have been generated fresh as part of the docker-compose run using the Catapult address utility tool.
+
+The file `addresses.yaml` are keys from the `raw-addresses.txt` file but formatted in yaml form and assigned to different roles, such as for the Catapult nodes, the harvestor key(s), etc. This yaml file is used as an input for the Catpult config files generated during the initial run.
+
+NOTE: the keys under the yaml key 'nemesis_addresses', which are the keys that are assigned assigned test xem funds as part of the nemesis block generation.
 
 ## Starting as a Background Process
 
@@ -48,11 +54,18 @@ For more detailed usage of the `docker-compose up` command you can check out doc
 
 [Docker Compose Up Command Overview](https://docs.docker.com/compose/reference/up/)
 
+
 ## Resetting your Catapult Server
 
-The expected behavior if the docker-compose deployment is stopped and then restarted (by executing 'docker-compose up' again) is the state of the chain should be where it was left off before compose was stopped.
-If, however, you got your server in a bad state or just want to restart with a fresh chain it is no problem; you can simply stop the running the docker compose service (using control C if compose is in the foreground or `docker-compose down` if compose is in the background) and run one of the following scripts before restarting compose:
+You can start/stop your Catapult Service as you need.  Each time you start it back up it will continue running from where it left off.
 
-- Executing ./clean-data will keep the configuration and generated keys in place, but delete the entire chain. When restarted, catapult will start at block 1
-- Executing ./clean-all' will both clean the data and additionally will remove the generated keys and the configuration generated from these keys. After running this script, new keys found in directory build/generated-addresses/ will have to be used.
+If your service is in a bad state, or you just want to restart from fresh again you can do so easily with this bootstrap tool resetting things up for you.  To reset from scratch:
+
+1. Stop the running Catapult Service if its running (use Ctrl+C if running in the foreground, or navigate to the repo directory and run `docker-compose down` if running in the background)
+
+2. Run one of the provided clean up scripts:
+
+- Executing `./clean-data` will keep the configuration and generated keys in place, but delete all of the blockchain and cache data. When restarted, Catapult will start fresh
+
+- Executing `./clean-all` will both clean the data and additionally will remove the generated keys and the configuration generated from these keys. After running this script, new keys found in directory build/generated-addresses/ will have to be used in any app or script you are developing from.
 
