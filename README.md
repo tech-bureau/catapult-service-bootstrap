@@ -2,6 +2,8 @@
 
 This repo contains a set of bootstrap and setup scripts to help developers get going quickly with their own working Catapult Service.  The goal is to make it as easy and quick as possible so as a developer you only have to run this setup and within a minute or so you will have a running server ready to start receiving transactions so you can focus on your development work and not setup or configuring servers.
 
+NOTE: this bootstrap setup is for learning and development purposes, it should not power any production Catapult instances.
+
 We use docker images as our default packaging and distribution mechanism.  These bootstrap scripts will prepare some files on disk and then leverage docker-compose to startup and run the needed set of containers so the server can function correctly.
 
 ## Evironment Dependencies
