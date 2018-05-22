@@ -14,8 +14,8 @@ The only dependency that is required is git so you can clone this repository, an
 
 ## Installation & Startup Instructions
 
-1. `git clone git@github.com:tech-bureau/catapult-server-bootstrap.git`
-2. `cd catapult-server-bootstrap`
+1. `git clone git@github.com:tech-bureau/catapult-service-bootstrap.git`
+2. `cd catapult-service-bootstrap`
 3. `docker-compose up`
 
 If you followed the docker installation instructions correctly, or already had docker/docker-compose installed, you should see docker doing its job downloading the container images for the first time, then going through running the bootstrap setup.  Should things succeed it should start the Catapult Server right up and you should see the live logs start scrolling by in the foreground like so:
