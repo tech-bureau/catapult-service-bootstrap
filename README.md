@@ -69,3 +69,8 @@ If your service is in a bad state, or you just want to restart from fresh again 
 
 - Executing `./clean-all` will both clean the data and additionally will remove the generated keys and the configuration generated from these keys. After running this script, new keys found in directory build/generated-addresses/ will have to be used in any app or script you are developing from.
 
+## Known Issues
+
+The Catapult cache and query engine is powered by mongodb.  There are some known issues with the latest storage engine in some docker environments.  We have provided a backup docker compose file to use if you run into mongo `wiredtiger` errors on start.  You can use the backup file by running:
+
+`docker-compose up -f docker-compose-mmapv1.yml`
