@@ -54,7 +54,7 @@ module Catapult
 
 
     def self.break_into_sections(parsed_flat_form)
-      num_nemesis_addresses = parsed_flat_form.size - SECTION_SIZES.values.inject(0, :+)
+      num_nemesis_addresses = parsed_flat_form.size - SECTION_SIZES.values.inject(0, :+) - 2
       unless num_nemesis_addresses > 0
         fail "Not enough addresses"
       end
@@ -64,7 +64,7 @@ module Catapult
         parsed_form[component_type.to_s] = parsed_flat_form[index..index+size-1]
         index = index+size
       end
-      parsed_form['nemesis_addresses'] = parsed_flat_form[index..-1]
+      parsed_form['nemesis_addresses'] = parsed_flat_form[index..index+num_nemesis_addresses-1]
       parsed_form
     end
     
