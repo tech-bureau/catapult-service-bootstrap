@@ -28,7 +28,7 @@ peer-node-1_1             | 2018-05-18 18:52:12.068932 0x00007fe59221c700: <debu
 peer-node-0_1             | 2018-05-18 18:52:12.477647 0x00007f35d4de4700: <debug> (src::NetworkHeightService.cpp@45) network chain height increased from 120 to 121
 ```
 
-You can verify things are running by doing a quick curl request to get block information: `curl localhost:3000/blocks/1`
+You can verify things are running by doing a quick curl request to get block information: `curl localhost:3000/block/1`
 
 To stop the server simply press `Ctrl+c` to kill/stop the foreground docker process.
 
