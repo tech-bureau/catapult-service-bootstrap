@@ -44,9 +44,9 @@ addresses.yaml  raw-addresses.txt  README.md
 
 The file `raw-addresses.txt` is a set of addresses that have been generated fresh as part of the docker-compose run using the Catapult address utility tool.
 
-The file `addresses.yaml` are keys from the `raw-addresses.txt` file but formatted in yaml form and assigned to different roles, such as for the Catapult nodes, the harvestor key(s), etc. This yaml file is used as an input for the Catpult config files generated during the initial run.
+The file `addresses.yaml` are keys from the `raw-addresses.txt` file but formatted in yaml form and assigned to different roles, such as for the Catapult nodes, the harvestor key(s), etc. This yaml file is used as an input for the Catapult config files generated during the initial run.
 
-NOTE: the keys under the yaml key 'nemesis_addresses', which are the keys that are assigned assigned test xem funds as part of the nemesis block generation.
+NOTE: the keys under the yaml key 'nemesis_addresses', which are the keys that are assigned test xem funds as part of the nemesis block generation.
 
 ## Starting as a Background Process
 
