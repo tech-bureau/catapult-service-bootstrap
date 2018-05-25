@@ -1,4 +1,4 @@
-[Japanese README](https://github.com/tech-bureau/catapult-service-bootstrap/blob/master/README.md)
+[Japanese README](https://github.com/tech-bureau/catapult-service-bootstrap/blob/master/README.ja.md)
 
 
 # Catapult Service Bootstrap
