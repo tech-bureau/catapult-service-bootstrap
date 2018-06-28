@@ -28,7 +28,10 @@
   "websocket": {
     "mq": {
       "host": "{{api_node_host}}",
-      "port": 7902
+      "port": 7902,
+      "monitorInterval": 500,
+      "connectTimeout": 10000,
+      "monitorLoggingThrottle": 60000
     },
     "allowOptionalAddress": true
   },
