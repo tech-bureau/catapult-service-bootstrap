@@ -51,6 +51,15 @@ The file `addresses.yaml` are keys from the `raw-addresses.txt` file but formatt
 
 NOTE: the keys under the yaml key 'nemesis_addresses', which are the keys that are assigned test xem funds as part of the nemesis block generation.
 
+## Starting with test block explorer
+
+We have a test block explorer that we have included as an optional service.  If you would like the block explorer to start along with your Catapult services simply run:
+
+`docker-compose up -f docker-compose-with-explorer.yml`
+
+This will launch a service listening on port 8000 that you can hit via your browser to look at the chain details/progress
+
+
 ## Starting as a Background Process
 
 With the initial setup steps above you installed and started your Catapult Server in the foreground, for ongoing development where you just want the server to be running its nice to have it running in the background.  You can do so by navigating back to your `catapult-server-bootstrap` directory and running `docker-compose up -d`
