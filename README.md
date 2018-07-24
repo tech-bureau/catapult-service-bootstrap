@@ -55,7 +55,7 @@ NOTE: the keys under the yaml key 'nemesis_addresses', which are the keys that a
 
 We have a test block explorer that we have included as an optional service.  If you would like the block explorer to start along with your Catapult services simply run:
 
-`docker-compose up -f docker-compose-with-explorer.yml`
+`docker-compose -f docker-compose-with-explorer.yml up`
 
 This will launch a service listening on port 8000 that you can hit via your browser to look at the chain details/progress
 
