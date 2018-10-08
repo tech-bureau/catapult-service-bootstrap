@@ -74,4 +74,4 @@ Catapultサービスは、必要に応じて開始/停止できます。 毎回�
 
 Catapultのキャッシュとクエリエンジンは、mongodbを使用しています。 一部のdocker環境では、最新のストレージエンジンに関する既知の問題がいくつかあります。 起動時にmongoの `wiredtiger`エラーが発生した場合に使用するバックアップのdockerの構成ファイルを準備しています。 バックアップのファイルを使用するには、次のコマンドを実行します。
 
-`docker-compose up -f docker-compose-mmapv1.yml`
+`docker-compose -f docker-compose-mmapv1.yml up`
