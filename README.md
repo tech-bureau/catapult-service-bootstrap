@@ -87,4 +87,4 @@ If your service is in a bad state, or you just want to restart from fresh again 
 
 The Catapult cache and query engine is powered by mongodb.  There are some known issues with the latest storage engine in some docker environments.  We have provided a backup docker compose file to use if you run into mongo `wiredtiger` errors on start.  You can use the backup file by running:
 
-`docker-compose up -f docker-compose-mmapv1.yml`
+`docker-compose -f docker-compose-mmapv1.yml up`
