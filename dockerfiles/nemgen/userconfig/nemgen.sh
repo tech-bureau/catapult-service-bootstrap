@@ -9,7 +9,7 @@ if [ ! -d /data/00000 ]; then
   mkdir -p seed/mijin-test/00000
   dd if=/dev/zero of=seed/mijin-test/00000/hashes.dat bs=1 count=64
   cd settings
-  /catapult/bin/catapult.tools.nemgen --nemesisProperties /nemesis/block-properties-file.properties
+  /catapult/bin/catapult.tools.nemgen --nemesisProperties /nemesis/block-properties-file.properties --resources /userconfig/
   cp -r /tmp/seed/mijin-test/* /data*
 else
   echo "no need to run nemgen"

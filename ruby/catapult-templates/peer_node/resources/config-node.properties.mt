@@ -4,6 +4,7 @@ port = {{port}}
 apiPort = {{api_port}}
 shouldAllowAddressReuse = false
 shouldUseSingleThreadPool = false
+shouldUseCacheDatabaseStorage = true
 
 shouldEnableTransactionSpamThrottling = true
 transactionSpamThrottlingMaxBoostFee = 10'000'000
@@ -34,10 +35,12 @@ transactionElementTraceInterval = 10
 shouldAbortWhenDispatcherIsFull = true
 shouldAuditDispatcherInputs = true
 shouldPrecomputeTransactionAddresses = false
-shouldUseCacheDatabaseStorage = false 
 
 outgoingSecurityMode = None
 incomingSecurityModes = None
+
+maxCacheDatabaseWriteBatchSize = 5MB
+maxTrackedNodes = 5'000
 
 [localnode]
 
@@ -50,11 +53,15 @@ roles = Peer
 
 maxConnections = 10
 maxConnectionAge = 5
+maxConnectionBanAge = 20
+numConsecutiveFailuresBeforeBanning = 3
 
 [incoming_connections]
 
 maxConnections = 512
 maxConnectionAge = 10
+maxConnectionBanAge = 20
+numConsecutiveFailuresBeforeBanning = 3
 backlogSize = 512
 
 [extensions]
@@ -85,3 +92,5 @@ extension.sync = true
 extension.timesync = true
 extension.transactionsink = true
 extension.unbondedpruning = true
+ 
+
