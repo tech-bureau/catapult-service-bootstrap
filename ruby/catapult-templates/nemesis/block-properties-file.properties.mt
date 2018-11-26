@@ -2,6 +2,8 @@
 networkIdentifier = {{network_identifier}} 
 nemesisGenerationHash = {{nemesis_generation_hash}}
 nemesisSignerPrivateKey = {{nemesis_signer_private_key}}
+[cpp]
+cppFileHeader = ../HEADER.inc
 [output]
 cppFile = 
 binDirectory = ../seed/mijin-test
