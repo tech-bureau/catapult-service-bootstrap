@@ -34,7 +34,7 @@ transactionElementTraceInterval = 10
 
 shouldAbortWhenDispatcherIsFull = true
 shouldAuditDispatcherInputs = true
-shouldPrecomputeTransactionAddresses = false
+shouldPrecomputeTransactionAddresses = true
 
 outgoingSecurityMode = None
 incomingSecurityModes = None
