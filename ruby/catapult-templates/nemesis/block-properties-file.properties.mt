@@ -1,38 +1,57 @@
 [nemesis]
-networkIdentifier = {{network_identifier}} 
+
+networkIdentifier = {{network_identifier}}
 nemesisGenerationHash = {{nemesis_generation_hash}}
 nemesisSignerPrivateKey = {{nemesis_signer_private_key}}
+
 [cpp]
-cppFileHeader = ../HEADER.inc
+
+cppFileHeader =
+
 [output]
-cppFile = 
+
+cppFile =
 binDirectory = ../seed/mijin-test
+
 [namespaces]
-nem = true
-eur = false
-[namespace>nem]
+
+cat = true
+cat.currency = true
+cat.harvest = true
+
+[namespace>cat]
+
 duration = 0
-[namespace>eur]
-duration = 123456789
+
 [mosaics]
-nem:xem = true
-eur:euro = false
-[mosaic>nem:xem]
+
+cat:currency = true
+cat:harvest = true
+
+[mosaic>cat:currency]
+
 divisibility = 6
 duration = 0
-supply = {{xem.supply}}
+supply = 8'999'999'998'000'000
 isTransferable = true
 isSupplyMutable = false
 isLevyMutable = false
-[distribution>nem:xem]
-{{#xem.distribution}}
-{{address}} = {{amount}}
-{{/xem.distribution}}
 
-[mosaic>eur:euro]
-divisibility = 2
-duration = 1234567890
+[distribution>cat:currency]
+{{#cat_currency_distribution}}
+{{address}} = {{amount}}
+{{/cat_currency_distribution}}
+
+[mosaic>cat:harvest]
+
+divisibility = 3
+duration = 0
 supply = 15'000'000
 isTransferable = true
 isSupplyMutable = true
 isLevyMutable = false
+
+[distribution>cat:harvest]
+{{#cat_harvest_distribution}}
+{{address}} = {{amount}}
+{{/cat_harvest_distribution}}

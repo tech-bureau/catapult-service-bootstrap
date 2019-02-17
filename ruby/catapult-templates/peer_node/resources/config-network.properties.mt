@@ -6,8 +6,11 @@ generationHash = {{network_generation_hash}}
 
 [chain]
 
-shouldEnableVerifiableState = true
+shouldEnableVerifiableState = {{should_enable_verifiable_state}}
+shouldEnableVerifiableReceipts = {{should_enable_verifiable_receipts}}
 
+currencyMosaicId = {{{currency_mosaic_id}}}
+harvestingMosaicId = {{{harvesting_mosaic_id}}}
 blockGenerationTargetTime = 15s
 blockTimeSmoothingFactor = 3000
 
@@ -18,11 +21,15 @@ maxDifficultyBlocks = 60
 maxTransactionLifetime = 24h
 maxBlockFutureTime = 10s
 
-totalChainBalance = 8'999'999'998'000'000
-minHarvesterBalance = 1'000'000'000'000
+totalChainImportance = {{{total_chain_importance}}}
+minHarvesterBalance = 1'000
 
 blockPruneInterval = 360
 maxTransactionsPerBlock = 200'000
+
+[plugin:catapult.plugins.accountlink]
+
+dummy = to trigger plugin load
 
 [plugin:catapult.plugins.aggregate]
 
@@ -44,6 +51,19 @@ maxSecretLockDuration = 30d
 minProofSize = 10
 maxProofSize = 1000
 
+[plugin:catapult.plugins.mosaic]
+
+maxMosaicsPerAccount = 10'000
+
+maxMosaicDuration = 3650d
+
+isMosaicLevyUpdateAllowed = true
+maxMosaicDivisibility = 6
+maxMosaicDivisibleUnits = 9'000'000'000'000'000
+
+mosaicRentalFeeSinkPublicKey = CCAEE9D1FBD5D022E42377EE3AF60455F29DDFE1FF2FA54CA1E172E9AB6D5D3F
+mosaicRentalFee = 500'000'000
+
 [plugin:catapult.plugins.multisig]
 
 maxMultisigDepth = 3
@@ -59,21 +79,11 @@ maxNamespaceDuration = 365d
 namespaceGracePeriodDuration = 0d
 reservedRootNamespaceNames = xem, nem, user, account, org, com, biz, net, edu, mil, gov, info
 
-namespaceRentalFeeSinkPublicKey = 3E82E1C1E4A75ADAA3CBA8C101C3CD31D9817A2EB966EB3B511FB2ED45B8E262
-rootNamespaceRentalFeePerBlock = 100'000
-childNamespaceRentalFee = 10'000'000
+namespaceRentalFeeSinkPublicKey = CCAEE9D1FBD5D022E42377EE3AF60455F29DDFE1FF2FA54CA1E172E9AB6D5D3F
+rootNamespaceRentalFeePerBlock = 1'000'000
+childNamespaceRentalFee = 1'000'000
 
 maxChildNamespaces = 500
-maxMosaicsPerAccount = 10'000
-
-maxMosaicDuration = 3650d
-
-isMosaicLevyUpdateAllowed = true
-maxMosaicDivisibility = 6
-maxMosaicDivisibleUnits = 9'000'000'000'000'000
-
-mosaicRentalFeeSinkPublicKey = 53E140B5947F104CABC2D6FE8BAEDBC30EF9A0609C717D9613DE593EC2A266D3
-mosaicRentalFee = 50'000'000
 
 [plugin:catapult.plugins.property]
 

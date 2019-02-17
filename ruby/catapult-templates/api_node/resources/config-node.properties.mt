@@ -4,7 +4,7 @@ port = {{port}}
 apiPort = {{api_port}}
 shouldAllowAddressReuse = false
 shouldUseSingleThreadPool = false
-shouldUseCacheDatabaseStorage = true
+shouldUseCacheDatabaseStorage = {{should_use_cache_database_storage}}
 
 shouldEnableTransactionSpamThrottling = true
 transactionSpamThrottlingMaxBoostFee = 10'000'000
@@ -17,6 +17,8 @@ shortLivedCacheBlockDuration = 100m
 shortLivedCachePruneInterval = 90s
 shortLivedCacheMaxSize = 10'000'000
 
+minFeeMultiplier = 0
+transactionSelectionStrategy = oldest
 unconfirmedTransactionsCacheMaxResponseSize = 20MB
 unconfirmedTransactionsCacheMaxSize = 1'000'000
 
@@ -87,6 +89,7 @@ extension.hashcache = true
 extension.networkheight = true
 extension.nodediscovery = true
 extension.packetserver = true
+extension.pluginhandlers = true
 extension.sync = true
 extension.timesync = true
 extension.transactionsink = true
