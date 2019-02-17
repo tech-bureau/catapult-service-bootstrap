@@ -21,9 +21,23 @@ module Catapult
           @index  = index
           @type   = parent.type
         end
-        
+
+        # TODO: this should be calculeted
+        TOTAL_CHAIN_IMPORTANCE = "800'000" # the sum of the currency harvesting amounts should be a power of ten of this
+
+        CURRENCY_MOSAIC_ID     = "0x5B6B'5282'5A09'2704" # this get overwritten so the exact value makes no difference
+        HARVESTING_MOSAIC_ID   = "0x468A'5847'D783'45DA" # this get overwritten so the exact value makes no difference
         def hash
           {
+            # TODO: move these to seperate config file
+            should_enable_verifiable_state: true,
+            should_enable_verifiable_receipts: true,
+            should_use_cache_database_storage: true,
+
+            total_chain_importance: TOTAL_CHAIN_IMPORTANCE,
+            currency_mosaic_id: CURRENCY_MOSAIC_ID,
+            harvesting_mosaic_id: HARVESTING_MOSAIC_ID,
+
             network_identifier: Global.catapult_nework_identifier,
             network_public_key: self.parent.network_public_key,
             network_generation_hash: self.parent.network_generation_hash,
