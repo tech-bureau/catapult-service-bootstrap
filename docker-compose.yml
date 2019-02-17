@@ -18,7 +18,7 @@ services:
   ######  dynamic configuration  ###########
 
   generate-raw-addresses:
-    image: techbureau/catapult-tools:gcc-0.2.0.2
+    image: techbureau/catapult-tools:gcc-0.3.0.1
     command: bash -c "/bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ./bin/bash:/bin-mount
@@ -65,7 +65,7 @@ services:
     - db
 
   rest-gateway:
-    image: techbureau/catapult-rest-server:1.0.8
+    image: techbureau/catapult-rest-server:1.0.11
     command: ash -c "/bin-mount/wait /state/configs-generated && npm start resources/rest.json /userconfig/rest.json"
     ports:
     - "3000:3000"
