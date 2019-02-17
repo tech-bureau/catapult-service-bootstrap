@@ -25,26 +25,33 @@ module Catapult
             network_identifier: generation_info.network_identifier,
             nemesis_generation_hash: generation_info.generation_hash,
             nemesis_signer_private_key: generation_info.signer_private_key,
-            xem: xem(key_info_array)
+            cat_harvest_distribution: cat_harvest_distribution(key_info_array),
+            cat_currency_distribution: cat_currency_distribution(key_info_array)
           }
         end
         
         private
-        
-        def self.xem(key_info_array)
-          fail "Only have #{key_info_array.size} accounts, but need #{XEM_NUM_OF_ACCOUNTS}" if key_info_array.size < XEM_NUM_OF_ACCOUNTS
-          {
-            supply:  XEM_TOTAL_SUPPLY,
-            distribution: key_info_array[0..XEM_NUM_OF_ACCOUNTS-1].map { |key_info| xem_distribution(key_info) }
-          }
+
+        # TODO: hard coding until we figure out how to dynamically compute the mosaic ids in network config
+        NUM_HARVEST_KEYS       = 4
+        HARVEST_ACCOUNT_SUPPLY = "2'000'000"
+        def self.cat_harvest_distribution(key_info_array)
+          key_info_array[0...NUM_HARVEST_KEYS].map { |key_info| distribution(key_info, HARVEST_ACCOUNT_SUPPLY) }
         end
-        
-        def self.xem_distribution(key_info)
+
+        NUM_CURRENCY_KEYS       = 22 # this has to equal ration XEM_TOTAL_SUPPLY/XEM_ACCOUNT_SUPPLY
+        CURRENCY_ACCOUNT_SUPPLY = XEM_ACCOUNT_SUPPLY
+        def self.cat_currency_distribution(key_info_array)
+          key_info_array[0...NUM_CURRENCY_KEYS].map { |key_info| distribution(key_info, CURRENCY_ACCOUNT_SUPPLY) }
+        end
+
+        def self.distribution(key_info, amount)
           {
             address: key_info.address,
-            amount:  XEM_ACCOUNT_SUPPLY,
+            amount:  amount
           }
         end
+
       end
       
     end
