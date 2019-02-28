@@ -48,7 +48,7 @@ services:
 
   db:
     image: mongo
-    command: bash -c "mongod --dbpath=/dbdata --bind_ip=db"
+    command: bash -c "mongod --storageEngine mmapv1 --dbpath=/dbdata --bind_ip=db"
     stop_signal: SIGINT
     volumes:
     - ./data/mongo:/dbdata:rw

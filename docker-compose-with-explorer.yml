@@ -155,3 +155,8 @@ services:
     - generate-configs
     - api-node-0-nemgen
 
+  block-explorer:
+    image: techbureau/catapult-block-explorer
+    command: ["python", "-m", "http.server", "8000"]
+    ports:
+    - "8000:8000"
