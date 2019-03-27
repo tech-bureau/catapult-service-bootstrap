@@ -21,7 +21,8 @@
   "apiNode": {
     "host": "{{api_node_host}}",
     "port": 7900,
-    "publicKey": "{{api_node_public_key}}"
+    "publicKey": "{{api_node_public_key}}",
+    "timeout": 1000
   },
 
   "websocket": {
