@@ -65,17 +65,19 @@ There is another new binary in the build for the catapult-server called the reco
 
 With this new setup besides starting an entire network at the same time there is also a set of commands and files to start up pieces of a network.  The following are currently provided:
 
-./cmds/setup-network               This will create the nemesis block and generate all the config files if they do not already exist on disk
-./cmds/start-all                   Creates config and nemesis if doesnt exist, starts up all services, just like in older versions of bootstrap tool
-./cmds/stop-all                    Stop all the services
-./cmds/start-catapult-peers        Start peer0 and peer1 services only
-./cmds/stop-catapult-peers         Stop peer0 and peer1 services
-./cmds/start-api-db                Start the mongodb instance and configure schema/indexes if needed
-./cmds/stop-api-db                 Stop the mongdb service
-./cmds/start-catapult-api          Start the api node and REST gateway services
-./cmds/stop-catapult-api           Stop the api node and REST gateway services
-./cmds/start-catapult-api-broker   Start just the api broker service
-./cmds/stop-catapult-api-broker    Stop just the api broker service
+| Command                       |  Description  |
+| ----------------------------- | ------------- |
+| ./cmds/setup-network            |   This will create the nemesis block and generate all the config files if they do not already exist on disk |
+| ./cmds/start-all                |   Creates config and nemesis if doesnt exist, starts up all services, just like in older versions of bootstrap tool |
+| ./cmds/stop-all                 |   Stop all the services |
+| ./cmds/start-catapult-peers     |   Start peer0 and peer1 services only |
+| ./cmds/stop-catapult-peers      |   Stop peer0 and peer1 services |
+| ./cmds/start-api-db             |   Start the mongodb instance and configure schema/indexes if needed |
+| ./cmds/stop-api-db              |   Stop the mongdb service |
+| ./cmds/start-catapult-api       |   Start the api node and REST gateway services |
+| ./cmds/stop-catapult-api        |   Stop the api node and REST gateway services |
+| ./cmds/start-catapult-api-broker|   Start just the api broker service |
+| ./cmds/stop-catapult-api-broker |   Stop just the api broker service |
 
 All start commands take flags `-b` for forcing a build of docker containers, as well as a `-d` for running container services in a background process.
 
