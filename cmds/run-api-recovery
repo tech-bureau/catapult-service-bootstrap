@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker-compose -f cmds/docker/docker-compose-recover.yml up --build

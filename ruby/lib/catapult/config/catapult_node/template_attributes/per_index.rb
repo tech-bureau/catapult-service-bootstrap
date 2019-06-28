@@ -23,26 +23,40 @@ module Catapult
         end
 
         # TODO: this should be calculeted
-        TOTAL_CHAIN_IMPORTANCE = "800'000" # the sum of the currency harvesting amounts should be a power of ten of this
+        TOTAL_CHAIN_IMPORTANCE = "15'000'000" # the sum of the currency harvesting amounts should be a power of ten of this
+        # TOTAL_CHAIN_IMPORTANCE = "8'000'000" # the sum of the currency harvesting amounts should be a power of ten of this
 
         CURRENCY_MOSAIC_ID     = "0x5B6B'5282'5A09'2704" # this get overwritten so the exact value makes no difference
         HARVESTING_MOSAIC_ID   = "0x468A'5847'D783'45DA" # this get overwritten so the exact value makes no difference
+
+        MOSAIC_RENTAL_FEE_SINK_PUBLIC_KEY    = "53E140B5947F104CABC2D6FE8BAEDBC30EF9A0609C717D9613DE593EC2A266D3" #default canned value 
+        NAMESPACE_RENTAL_FEE_SINK_PUBLIC_KEY = "3E82E1C1E4A75ADAA3CBA8C101C3CD31D9817A2EB966EB3B511FB2ED45B8E262" #default canned value
+
+        HARVESTING_BENEFICIARY = "0000000000000000000000000000000000000000000000000000000000000000" #default canned value
+
         def hash
           {
             # TODO: move these to seperate config file
             should_enable_verifiable_state: true,
             should_enable_verifiable_receipts: true,
             should_use_cache_database_storage: true,
+            should_enable_auto_sync_cleanup: true,
 
             total_chain_importance: TOTAL_CHAIN_IMPORTANCE,
             currency_mosaic_id: CURRENCY_MOSAIC_ID,
             harvesting_mosaic_id: HARVESTING_MOSAIC_ID,
 
+            mosaic_rental_fee_sink_public_key: MOSAIC_RENTAL_FEE_SINK_PUBLIC_KEY,
+            namespace_rental_fee_sink_public_key: NAMESPACE_RENTAL_FEE_SINK_PUBLIC_KEY,
+
             network_identifier: Global.catapult_nework_identifier,
             network_public_key: self.parent.network_public_key,
             network_generation_hash: self.parent.network_generation_hash,
+
             harvesting_is_on: self.harvesting_is_on?,
             harvest_key: self.harvest_key?,
+            harvesting_beneficiary: HARVESTING_BENEFICIARY,
+
             mongo_host: self.mongo_host_for_api_node, # just used when there is an api host
             bootkey: self.private_key,
             api_port: PEER_CONFIG_API_PORT,

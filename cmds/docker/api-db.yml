@@ -1,0 +1,37 @@
+
+#    Copyright 2018 Tech Bureau, Corp
+# 
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+# 
+#        http:#www.apache.org/licenses/LICENSE-2.0
+# 
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+version: '2'
+services:
+  db:
+    image: mongo:3.4
+    command: bash -c "mongod --dbpath=/dbdata --bind_ip=db"
+    stop_signal: SIGINT
+    volumes:
+    - ../../data/mongo:/dbdata:rw
+    - ../../bin/bash:/bin-mount
+    ports:
+    - "27017:27017"
+
+  init-db:
+    image: mongo:3.4
+    command:  bash -c "/bin/bash /userconfig/mongors.sh"
+    volumes:
+    - ../../data/mongo:/data/db:rw
+    - ../../static-config/mongo/:/userconfig:ro
+    - ../../bin/bash:/bin-mount
+    depends_on:
+    - db
+

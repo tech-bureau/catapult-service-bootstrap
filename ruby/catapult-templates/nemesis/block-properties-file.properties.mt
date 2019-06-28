@@ -32,7 +32,7 @@ cat:harvest = true
 
 divisibility = 6
 duration = 0
-supply = 8'999'999'998'000'000
+supply = 8'998'999'998'000'000
 isTransferable = true
 isSupplyMutable = false
 isLevyMutable = false

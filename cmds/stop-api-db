@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker-compose -f cmds/docker/api-db.yml down

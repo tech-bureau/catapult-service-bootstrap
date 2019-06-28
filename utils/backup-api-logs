@@ -1,0 +1,9 @@
+#!/bin/bash
+
+dir_param=$1
+
+if [ "$dir_param" == "" ]; then
+  find data/api-node-0 -type f -name '*.log' | xargs zip catapult-api-logs.zip
+else
+  find data/api-node-0 -type f -name '*.log' | xargs zip ${dir_param}/catapult-api-logs.zip
+fi

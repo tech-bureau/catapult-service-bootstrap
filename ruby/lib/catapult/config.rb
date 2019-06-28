@@ -42,6 +42,8 @@ module Catapult
     }
 
     def self.generate_and_write_configurations(keys, base_config_target_dir, nemesis_dir)
+      return if File.exists?("#{base_config_target_dir}/api-node-0/userconfig/resources/config-network.properties")
+
       ndx_config_files = {}
       ndx_config_files.merge!(CatapultNode::PeerNode.generate(keys: keys))
       ndx_config_files.merge!(CatapultNode::ApiNode.generate(keys: keys))

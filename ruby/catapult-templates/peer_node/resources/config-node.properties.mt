@@ -5,6 +5,7 @@ apiPort = {{api_port}}
 shouldAllowAddressReuse = false
 shouldUseSingleThreadPool = false
 shouldUseCacheDatabaseStorage = {{should_use_cache_database_storage}}
+shouldEnableAutoSyncCleanup = {{should_enable_auto_sync_cleanup}}
 
 shouldEnableTransactionSpamThrottling = true
 transactionSpamThrottlingMaxBoostFee = 10'000'000
@@ -36,7 +37,6 @@ transactionElementTraceInterval = 10
 
 shouldAbortWhenDispatcherIsFull = true
 shouldAuditDispatcherInputs = true
-shouldPrecomputeTransactionAddresses = false
 
 outgoingSecurityMode = None
 incomingSecurityModes = None
@@ -64,35 +64,3 @@ maxConnectionAge = 10
 maxConnectionBanAge = 20
 numConsecutiveFailuresBeforeBanning = 3
 backlogSize = 512
-
-[extensions]
-
-# api extensions
-#   (in order for precomputation to work in all cases when enabled, `addressextraction` must be registered first
-#    because it precomputes addresses of rolled-back transactions)
-extension.addressextraction = false
-extension.mongo = false
-extension.partialtransaction = false
-extension.zeromq = false
-
-# p2p extensions
-extension.eventsource = true
-{{#harvesting_is_on}}
-extension.harvesting = true
-{{/harvesting_is_on}}
-extension.syncsource = true
-
-# common extensions
-extension.diagnostics = true
-extension.filechain = true
-extension.hashcache = true
-extension.networkheight = true
-extension.nodediscovery = true
-extension.packetserver = true
-extension.pluginhandlers = true
-extension.sync = true
-extension.timesync = true
-extension.transactionsink = true
-extension.unbondedpruning = true
- 
-

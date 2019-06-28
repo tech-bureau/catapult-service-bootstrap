@@ -1,0 +1,9 @@
+#!/bin/bash
+
+build_param=$1
+
+if [ "$build_param" == "--build" ]; then
+  docker-compose -f cmds/docker/nemgen-test.yml up --build
+else
+  docker-compose -f cmds/docker/nemgen-test.yml up
+fi

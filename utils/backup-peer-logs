@@ -1,0 +1,11 @@
+#!/bin/bash
+
+dir_param=$1
+
+if [ "$dir_param" == "" ]; then
+  find data/peer-node-0 -type f -name '*.log' | xargs zip catapult-peer-logs.zip
+  find data/peer-node-1 -type f -name '*.log' | xargs zip -u catapult-peer-logs.zip
+else
+  find data/peer-node-0 -type f -name '*.log' | xargs zip ${dir_param}/catapult-peer-logs.zip
+  find data/peer-node-1 -type f -name '*.log' | xargs zip -u ${dir_param}/catapult-peer-logs.zip
+fi
