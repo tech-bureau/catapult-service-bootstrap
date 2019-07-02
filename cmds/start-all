@@ -15,4 +15,4 @@ while [ "$1" != "" ]; do
     shift
 done
 
-docker-compose -f cmds/docker/docker-compose.yml up "$daemon_flag" "$build_flag"
+docker-compose -f cmds/docker/docker-compose.yml up $daemon_flag $build_flag
