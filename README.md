@@ -9,6 +9,8 @@ NOTE: this bootstrap setup is for learning and development purposes, it should n
 
 We use docker images as our default packaging and distribution mechanism.  These bootstrap scripts will prepare some files on disk and then leverage docker-compose to startup and run the needed set of containers so the server can function correctly.
 
+NOTE: after releases with docker image updates, or if switching between versions it is typical to need to build new images when starting the docker services, this can be done by passing the `-b` flag to any of the commands which will pass to docker-compose.  Should you run into weird behavior sometimes it helps or is required to clear out old images, this can be done with the `docker system prune -a` command, this will purge all container references and force download and build on next run.
+
 ## Evironment Dependencies
 
 The only dependency that is required is git so you can clone this repository, and docker/docker-compose.  If you do not have the docker tools installed alredy you can get the installation details from the docker community website:
