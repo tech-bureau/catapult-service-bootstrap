@@ -103,31 +103,32 @@ services:
     - generate-configs
     - peer-node-0-nemgen
 
-  peer-node-1-nemgen:
-    build: dockerfiles/nemgen
-    command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-1-nemgen"
-    stop_signal: SIGINT
-    volumes:
-    - ./build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
-    - ./build/nemesis/:/nemesis
-    - ./data/peer-node-1:/data:rw
-    - ./bin/bash:/bin-mount
-    - ./build/state:/state:rw
-    depends_on:
-    - generate-configs
+# removed peer-node-1 for nf-testnet nodes
+#  peer-node-1-nemgen:
+#    build: dockerfiles/nemgen
+#    command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-1-nemgen"
+#    stop_signal: SIGINT
+#    volumes:
+#    - ./build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
+#    - ./build/nemesis/:/nemesis
+#    - ./data/peer-node-1:/data:rw
+#    - ./bin/bash:/bin-mount
+#    - ./build/state:/state:rw
+#    depends_on:
+#    - generate-configs
 
-  peer-node-1:
-    build: dockerfiles/catapult
-    command: bash -c "/bin-mount/wait /state/peer-node-1-nemgen && /bin/bash /userconfig/startServer.sh"
-    stop_signal: SIGINT
-    volumes:
-    - ./build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
-    - ./data/peer-node-1:/data:rw
-    - ./bin/bash:/bin-mount
-    - ./build/state:/state
-    depends_on:
-    - generate-configs
-    - peer-node-1-nemgen
+#  peer-node-1:
+#    build: dockerfiles/catapult
+#    command: bash -c "/bin-mount/wait /state/peer-node-1-nemgen && /bin/bash /userconfig/startServer.sh"
+#    stop_signal: SIGINT
+#    volumes:
+#    - ./build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
+#    - ./data/peer-node-1:/data:rw
+#    - ./bin/bash:/bin-mount
+#    - ./build/state:/state
+#    depends_on:
+#    - generate-configs
+#    - peer-node-1-nemgen
 
   api-node-0-nemgen:
     build: dockerfiles/nemgen

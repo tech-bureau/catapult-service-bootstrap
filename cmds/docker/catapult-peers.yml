@@ -28,13 +28,14 @@ services:
     - ../../bin/bash:/bin-mount
     - ../../build/state:/state
 
-  peer-node-1:
-    build: dockerfiles/catapult
-    command: bash -c "/bin-mount/wait /state/peer-node-1-nemgen && /bin/bash /userconfig/startServer.sh"
-    stop_signal: SIGINT
-    volumes:
-    - ../../build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
-    - ../../data/peer-node-1:/data:rw
-    - ../../bin/bash:/bin-mount
-    - ../../build/state:/state
+# removed peer-node-1 for nf-testnet nodes
+#  peer-node-1:
+#    build: dockerfiles/catapult
+#    command: bash -c "/bin-mount/wait /state/peer-node-1-nemgen && /bin/bash /userconfig/startServer.sh"
+#    stop_signal: SIGINT
+#    volumes:
+#    - ../../build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
+#    - ../../data/peer-node-1:/data:rw
+#    - ../../bin/bash:/bin-mount
+#    - ../../build/state:/state
 
