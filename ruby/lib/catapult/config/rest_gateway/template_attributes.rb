@@ -25,6 +25,7 @@ module Catapult
         {
           rest_gateway_private_key: rest_gateway_private_key(index),
           api_node_host: api_node_host(index),
+          api_node_broker_host: api_node_broker_host(index),
           api_node_public_key: api_node_public_key(index)
         }
       end
@@ -40,6 +41,10 @@ module Catapult
       
       def api_node_host(_index)
         Global.component_address(:api_node, API_NODE_INDEX)
+      end
+
+      def api_node_broker_host(_index)
+        Global.component_address(:api_node_broker, API_NODE_INDEX)
       end
       
       def api_node_public_key(_index)
