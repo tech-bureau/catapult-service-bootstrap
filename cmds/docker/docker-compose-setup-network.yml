@@ -18,7 +18,7 @@ services:
   ######  dynamic configuration  ###########
 
   generate-raw-addresses:
-    image: techbureau/catapult-tools-private:gcc-master-e232da9c76
+    image: techbureau/catapult-tools:gcc-0.5.0.1
     command: bash -c "/bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ../../bin/bash:/bin-mount
