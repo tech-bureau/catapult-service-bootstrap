@@ -22,8 +22,6 @@ services:
     build: dockerfiles/catapult
     command: bash -c "/bin/bash /userconfig/startBroker.sh"
     stop_signal: SIGINT
-    ports:
-    - "7902:7902"
     volumes:
     - ../../build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/api-node-0:/data:rw
