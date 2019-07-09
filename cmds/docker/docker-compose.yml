@@ -1,12 +1,12 @@
 
 #    Copyright 2018 Tech Bureau, Corp
-# 
+#
 #    Licensed under the Apache License, Version 2.0 (the "License");
 #    you may not use this file except in compliance with the License.
 #    You may obtain a copy of the License at
-# 
+#
 #        http:#www.apache.org/licenses/LICENSE-2.0
-# 
+#
 #    Unless required by applicable law or agreed to in writing, software
 #    distributed under the License is distributed on an "AS IS" BASIS,
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -95,6 +95,8 @@ services:
     build: dockerfiles/catapult
     command: bash -c "/bin-mount/wait /state/peer-node-0-nemgen && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
+    ports:
+    - "7900:7900"
     volumes:
     - ../../build/catapult-config/peer-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/peer-node-0:/data:rw
@@ -148,6 +150,8 @@ services:
     build: dockerfiles/catapult
     command: bash -c "/bin-mount/wait /state/api-node-0-nemgen && /bin-mount/wait /state/api-node-0-broker && /bin/bash /userconfig/startApiServer.sh"
     stop_signal: SIGINT
+    ports:
+    - "7910:7910"
     volumes:
     - ../../build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/api-node-0:/data:rw
@@ -162,8 +166,6 @@ services:
     build: dockerfiles/catapult
     command: bash -c "/bin-mount/wait /state/api-node-0-nemgen && /bin/bash /userconfig/startBroker.sh"
     stop_signal: SIGINT
-    ports:
-    - "3000:3000"
     volumes:
     - ../../build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/api-node-0:/data:rw
