@@ -4,11 +4,11 @@
     {
       "publicKey": "",
       "endpoint": {
-        "host": "peer-node-1",
+        "host": "peer-node-0",
         "port": 7900
       },
       "metadata": {
-        "name": "peer-node-1",
+        "name": "peer-node-0-friendlyName",
         "roles": "Peer"
       }
     }

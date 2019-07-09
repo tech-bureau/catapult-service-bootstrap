@@ -8,7 +8,7 @@
         "port": 7910
       },
       "metadata": {
-        "name": "api-node-0",
+        "name": "api-node-0-friendlyName",
         "roles": "Api"
       }
     }
