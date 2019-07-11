@@ -19,7 +19,7 @@
   },
 
   "apiNode": {
-    "host": "120.79.181.170",
+    "host": "api-node-0",
     "port": 7910,
     "publicKey": "",
     "timeout": 1000
