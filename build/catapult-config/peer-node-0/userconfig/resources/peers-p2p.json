@@ -2,7 +2,7 @@
   "_info": "this file contains a list of peer_node peers",
   "knownPeers": [
     {
-      "publicKey": "30C1DEF5AFCCD0F7E6B8EA1552D5D16FB3FFB4BC44696F201EF05A1EB8877077",
+      "publicKey": "",
       "endpoint": {
         "host": "peer-node-0",
         "port": 7900
