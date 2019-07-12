@@ -1,0 +1,9 @@
+#!/bin/bash
+
+reset_param=$1
+
+if [ "$reset_param" == "--reset" ]; then
+  rm build/state/configs-edited
+fi
+
+docker-compose -f cmds/docker/setup-nf-testnet.yml up --build generate-configs-nf
