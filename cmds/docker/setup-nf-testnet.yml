@@ -18,7 +18,7 @@ services:
 
   generate-configs-nf:
     build: dockerfiles/nf-testnet
-    command: bash -c "/bin/bash /userconfig/config-nf-node.sh"
+    command: bash -c "/bin/bash /userconfig/config-nf-node.sh /addresses /config-build /state true"
     stop_signal: SIGINT
     volumes:
     - ../../bin/bash:/bin-mount

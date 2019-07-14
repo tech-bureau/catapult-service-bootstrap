@@ -7,111 +7,91 @@ TAIL_BIN=`which tail`
 SED_BIN=`which sed`
 AWK_BIN=`which awk`
 
-# default config
-CONFIG_PATH=/config-build
-USERCONFIG=/userconfig
-NODE_CONFIG_PATH=userconfig/resources
+# deploy config / read arguments
+ADDRESSES_PATH=${1:-/addresses}
+CONFIG_PATH=${2:-/config-build}
+STATE_PATH=${3:-/state}
+GENERATE_KEY=${4:-true}
 
 # Server Config
-SERVER_IP=12.12.12.12
-NODE_NAME=el-my
+SERVER_IP=${5:-1.2.3.4}
+NODE_NAME=${6:-my-testnet-node}
 API_FRIENDLY_NAME=api-node-${NODE_NAME}
 PEER_FRIENDLY_NAME=peer-node-${NODE_NAME}
 
-# Auto KeyGeneration `false ` | `true`
-GENERATE_KEY=true
+# server paths 
+USERCONFIG=/userconfig
+NODE_CONFIG_PATH=userconfig/resources
 
 # If using Custom KeyPair, Change `GENERATE_KEY` to `false`
-# API Node
 PRIVKEY_API_NODE=0000000000000000000000000000000000000000000000000000000000000000
 PUBKEY_API_NODE=0000000000000000000000000000000000000000000000000000000000000000
-
-# Peer Node
 PRIVKEY_PEER_NODE=0000000000000000000000000000000000000000000000000000000000000000
 PUBKEY_PEER_NODE=0000000000000000000000000000000000000000000000000000000000000000
-
-# Rest gateway
 PRIVKEY_REST=0000000000000000000000000000000000000000000000000000000000000000
-
-# Harvestor
 PRIVKEY_HARVEST=0000000000000000000000000000000000000000000000000000000000000000
 
-# read private keys from /userconfig/nf-testnet.txt
-read_private_key() {
-    local key=`${CAT_BIN} ${USERCONFIG}/nf-testnet.txt | ${GREP_BIN} -m $1 'private key:' | ${AWK_BIN} '{print $3}' | ${TAIL_BIN} -1`
+# read account details from /addresses/raw-testnet.txt
+# @param    {integer}   index (offset)
+# @param    {string}    key ('private key:', 'public key:', ..)
+read_account_details() {
+    local key=`${CAT_BIN} ${ADDRESSES_PATH}/raw-testnet.txt | ${GREP_BIN} -m $2 "$1" | ${AWK_BIN} '{print $3}' | ${TAIL_BIN} -1`
     echo "$key"
 }
 
-# read public keys from /userconfig/nf-testnet.txt
-read_public_key() {
-    local key=`${CAT_BIN} ${USERCONFIG}/nf-testnet.txt | ${GREP_BIN} -m $1 'public key:' | ${AWK_BIN} '{print $3}' | ${TAIL_BIN} -1`
-    echo "$key"
-}
-
-# read address from /userconfig/nf-testnet.txt
-read_address() {
-    local address=`${CAT_BIN} ${USERCONFIG}/nf-testnet.txt | ${GREP_BIN} -m $1 'address (mijin-test):' | ${AWK_BIN} '{print $3}' | ${TAIL_BIN} -1`
-    echo "$address"
-}
-
-# generate Keypair address file
+# save generated testnet addresses
 write_config() {
-cat <<EOT > /addresses/testnet-config.txt
-    API-NODE
-    --------------------
-    Private Key: ${PRIVKEY_API_NODE}
-    Public Key: ${PUBKEY_API_NODE}
-    Address: ${ADDRESS_API_NODE}
-
-    PEER-NODE
-    --------------------
-    Private Key: ${PRIVKEY_PEER_NODE}
-    Public Key: ${PUBKEY_PEER_NODE}
-    Address: ${ADDRESS_PEER_NODE}
-
-    HARVEST Account
-    --------------------
-    Private Key: ${PRIVKEY_HARVEST}
-    Public Key: ${PUBKEY_HARVEST}
-    Address: ${ADDRESS_HARVEST}
-
-    REST-Gateway
-    --------------------
-    Private Key: ${PRIVKEY_REST}
-    Public Key: ${PUBKEY_REST}
-    Address: ${ADDRESS_REST}
+cat <<EOT > ${ADDRESSES_PATH}/testnet.yaml
+apiNode:
+  privateKey : ${PRIVKEY_API_NODE}
+  publicKey  : ${PUBKEY_API_NODE}
+  address    : ${ADDRESS_API_NODE}
+peerNode:
+  privateKey : ${PRIVKEY_PEER_NODE}
+  publicKey  : ${PUBKEY_PEER_NODE}
+  address    : ${ADDRESS_PEER_NODE}
+restGateway:
+  privateKey : ${PRIVKEY_REST}
+  publicKey  : ${PUBKEY_REST}
+  address    : ${ADDRESS_REST}
+harvester;
+  privateKey : ${PRIVKEY_HARVEST}
+  publicKey  : ${PUBKEY_HARVEST}
+  address    : ${ADDRESS_HARVEST}
 EOT
 }
 
 # verify current state
-if [ -e /state/configs-edited ] ; then
+if [ -e ${STATE_PATH}/configs-edited ] ; then
     echo "[ERROR] Configuration files have already been edited."
-    echo "[ERROR] you can delete build/state/configs-edited and run-it."
+    echo "[ERROR] you can delete build/state/configs-edited if you wish to force run."
     exit 1
 fi
 
+# do we need to generate keys ?
 if [ $GENERATE_KEY = 'true' ] ; then
-    /catapult/bin/catapult.tools.address --generate=4 -n mijin-test > ${USERCONFIG}/nf-testnet.txt
+    # generate 4 new addresses for the node
+    /catapult/bin/catapult.tools.address --generate=4 -n mijin-test > ${ADDRESSES_PATH}/raw-testnet.txt
 
     # read private keys
-    PRIVKEY_API_NODE=$(read_private_key 1)
-    PRIVKEY_PEER_NODE=$(read_private_key 2)
-    PRIVKEY_HARVEST=$(read_private_key 3)
-    PRIVKEY_REST=$(read_private_key 4)
+    PRIVKEY_API_NODE=$(read_account_details "private key:" 1)
+    PRIVKEY_PEER_NODE=$(read_account_details "private key:" 2)
+    PRIVKEY_HARVEST=$(read_account_details "private key:" 3)
+    PRIVKEY_REST=$(read_account_details "private key:" 4)
 
     # read public keys
-    PUBKEY_API_NODE=$(read_public_key 1)
-    PUBKEY_PEER_NODE=$(read_public_key 2)
-    PUBKEY_HARVEST=$(read_public_key 3)
-    PUBKEY_REST=$(read_public_key 4)
+    PUBKEY_API_NODE=$(read_account_details "public key:" 1)
+    PUBKEY_PEER_NODE=$(read_account_details "public key:" 2)
+    PUBKEY_HARVEST=$(read_account_details "public key:" 3)
+    PUBKEY_REST=$(read_account_details "public key:" 4)
 
     # read address
-    ADDRESS_API_NODE=$(read_address 1)
-    ADDRESS_PEER_NODE=$(read_address 2)
-    ADDRESS_HARVEST=$(read_address 3)
-    ADDRESS_REST=$(read_address 4)
+    ADDRESS_API_NODE=$(read_account_details "address (mijin-test):" 1)
+    ADDRESS_PEER_NODE=$(read_account_details "address (mijin-test):" 2)
+    ADDRESS_HARVEST=$(read_account_details "address (mijin-test):" 3)
+    ADDRESS_REST=$(read_account_details "address (mijin-test):" 4)
 
-    # write testnet-node account
+    # write testnet-node account details to /addresses/testnet.yaml
     $(write_config)
 fi
 
@@ -184,10 +164,13 @@ echo
 config_rest_gateway
 
 # save config state
-touch /state/configs-edited
+touch ${STATE_PATH}/configs-edited
 
 echo Done configuring your Catapult Testnet node!
 
 if [ $GENERATE_KEY = 'true' ] ; then
-    echo config key: build/generated-addresses/testnet-config.txt
+    echo config key: build/generated-addresses/testnet.yaml
 fi
+
+exit 0
+
