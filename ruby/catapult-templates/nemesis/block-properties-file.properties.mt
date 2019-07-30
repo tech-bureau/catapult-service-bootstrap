@@ -35,7 +35,7 @@ duration = 0
 supply = 8'998'999'998'000'000
 isTransferable = true
 isSupplyMutable = false
-isLevyMutable = false
+isRestrictable = false
 
 [distribution>cat:currency]
 {{#cat_currency_distribution}}
@@ -49,7 +49,7 @@ duration = 0
 supply = 15'000'000
 isTransferable = true
 isSupplyMutable = true
-isLevyMutable = false
+isRestrictable = false
 
 [distribution>cat:harvest]
 {{#cat_harvest_distribution}}
