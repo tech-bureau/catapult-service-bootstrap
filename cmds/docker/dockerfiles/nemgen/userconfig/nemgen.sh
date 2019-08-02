@@ -16,7 +16,7 @@ if [ ! -d /data/00000 ]; then
   dd if=/dev/zero of=seed/mijin-test/00000/hashes.dat bs=1 count=64
   cd settings
   ######## need to run twice and patch the mosaic ids
-  # first time to get cat.harvest nad cat.currency
+  # first time to get cat.harvest and cat.currency
   /catapult/bin/catapult.tools.nemgen  --resources /userconfig/ --nemesisProperties /nemesis/block-properties-file.properties 2> /tmp/nemgen.log
   harvesting_mosaic_id=$(grep "cat.harvest" /tmp/nemgen.log | grep nonce  | awk -F=  '{split($0, a, / /); print a[9]}' | sort -u)
   currency_mosaic_id=$(grep "cat.currency" /tmp//nemgen.log | grep nonce  | awk -F=  '{split($0, a, / /); print a[9]}' | sort -u)
