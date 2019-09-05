@@ -1,6 +1,7 @@
 [account]
 
-bootKey = {{bootkey}}
+bootPrivateKey = {{boot_private_key}}
+shouldAutoDetectDelegatedHarvesters = true
 
 [storage]
 

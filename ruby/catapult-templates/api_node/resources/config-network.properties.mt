@@ -6,8 +6,8 @@ generationHash = {{network_generation_hash}}
 
 [chain]
 
-shouldEnableVerifiableState = {{should_enable_verifiable_state}}
-shouldEnableVerifiableReceipts = {{should_enable_verifiable_receipts}}
+enableVerifiableState = {{enable_verifiable_state}}
+enableVerifiableReceipts = {{enable_verifiable_receipts}}
 
 currencyMosaicId = {{currency_mosaic_id}}
 harvestingMosaicId = {{harvesting_mosaic_id}}
@@ -19,6 +19,7 @@ importanceGrouping = 39
 importanceActivityPercentage = 5
 maxRollbackBlocks = 40
 maxDifficultyBlocks = 60
+defaultDynamicFeeMultiplier = 10'000
 
 maxTransactionLifetime = 24h
 maxBlockFutureTime = 10s
@@ -75,7 +76,7 @@ mosaicRentalFee = 500'000'000
 [plugin:catapult.plugins.multisig]
 
 maxMultisigDepth = 3
-maxCosignersPerAccount = 10
+maxCosignatoriesPerAccount = 10
 maxCosignedAccountsPerAccount = 5
 
 [plugin:catapult.plugins.namespace]
@@ -105,4 +106,3 @@ maxMosaicRestrictionValues = 20
 [plugin:catapult.plugins.transfer]
 
 maxMessageSize = 1024
-
