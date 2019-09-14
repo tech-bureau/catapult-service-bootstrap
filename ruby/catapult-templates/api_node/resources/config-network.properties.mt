@@ -6,8 +6,8 @@ generationHash = {{network_generation_hash}}
 
 [chain]
 
-shouldEnableVerifiableState = {{should_enable_verifiable_state}}
-shouldEnableVerifiableReceipts = {{should_enable_verifiable_receipts}}
+enableVerifiableState = {{enable_verifiable_state}}
+enableVerifiableReceipts = {{enable_verifiable_receipts}}
 
 currencyMosaicId = {{currency_mosaic_id}}
 harvestingMosaicId = {{harvesting_mosaic_id}}
@@ -19,6 +19,7 @@ importanceGrouping = 39
 importanceActivityPercentage = 5
 maxRollbackBlocks = 40
 maxDifficultyBlocks = 60
+defaultDynamicFeeMultiplier = 10'000
 
 maxTransactionLifetime = 24h
 maxBlockFutureTime = 10s
@@ -59,6 +60,10 @@ maxSecretLockDuration = 30d
 minProofSize = 1
 maxProofSize = 1000
 
+[plugin:catapult.plugins.metadata]
+
+maxValueSize = 1024
+
 [plugin:catapult.plugins.mosaic]
 
 maxMosaicsPerAccount = 10'000
@@ -71,29 +76,33 @@ mosaicRentalFee = 500'000'000
 [plugin:catapult.plugins.multisig]
 
 maxMultisigDepth = 3
-maxCosignersPerAccount = 10
+maxCosignatoriesPerAccount = 10
 maxCosignedAccountsPerAccount = 5
 
 [plugin:catapult.plugins.namespace]
 
 maxNameSize = 64
+maxChildNamespaces = 500
+maxNamespaceDepth = 3
 
 # *approximate* days based on blockGenerationTargetTime
+minNamespaceDuration = 1m
 maxNamespaceDuration = 365d
-namespaceGracePeriodDuration = 0d
+namespaceGracePeriodDuration = 2m
 reservedRootNamespaceNames = xem, nem, user, account, org, com, biz, net, edu, mil, gov, info
 
 namespaceRentalFeeSinkPublicKey = {{namespace_rental_fee_sink_public_key}}
 rootNamespaceRentalFeePerBlock = 1'000'000
 childNamespaceRentalFee = 100'000'000
 
-maxChildNamespaces = 500
-
 [plugin:catapult.plugins.restrictionaccount]
 
 maxAccountRestrictionValues = 512
 
+[plugin:catapult.plugins.restrictionmosaic]
+
+maxMosaicRestrictionValues = 20
+
 [plugin:catapult.plugins.transfer]
 
 maxMessageSize = 1024
-

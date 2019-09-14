@@ -18,7 +18,7 @@ services:
   ######  dynamic configuration  ###########
 
   generate-raw-addresses:
-    image: techbureau/catapult-tools:gcc-0.6.0.1
+    build: dockerfiles/tools
     command: bash -c "/bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ../../bin/bash:/bin-mount
@@ -65,7 +65,7 @@ services:
     - db
 
   rest-gateway:
-    image: techbureau/catapult-rest-server:1.0.17-temp-fix
+    build: dockerfiles/catapult-rest
     command: ash -c "/bin-mount/wait /state/configs-generated && npm start resources/rest.json /userconfig/rest.json"
     stop_signal: SIGINT
     ports:
