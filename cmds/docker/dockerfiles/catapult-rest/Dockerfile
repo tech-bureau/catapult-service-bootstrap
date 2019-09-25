@@ -1,1 +1,1 @@
-FROM techbureau/catapult-rest-server:master-abae542
+FROM techbureau/catapult-rest-server-nightly:latest
