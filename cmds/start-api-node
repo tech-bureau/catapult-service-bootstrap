@@ -1,0 +1,18 @@
+#!/bin/bash
+
+build_flag=
+daemon_flag=
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -d | --daemon )         daemon_flag="-d"
+                                ;;
+        -b | --build )          build_flag="--build"
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
+docker-compose -f cmds/docker/catapult-api-node.yml up $daemon_flag $build_flag
