@@ -37,10 +37,10 @@ module Catapult
         def hash
           {
             # TODO: move these to seperate config file
-            should_enable_verifiable_state: true,
-            should_enable_verifiable_receipts: true,
-            should_use_cache_database_storage: true,
-            should_enable_auto_sync_cleanup: true,
+            enable_verifiable_state: true,
+            enable_verifiable_receipts: true,
+            enable_cache_database_storage: true,
+            enable_auto_sync_cleanup: true,
 
             total_chain_importance: TOTAL_CHAIN_IMPORTANCE,
             currency_mosaic_id: CURRENCY_MOSAIC_ID,
@@ -58,7 +58,7 @@ module Catapult
             harvesting_beneficiary: HARVESTING_BENEFICIARY,
 
             mongo_host: self.mongo_host_for_api_node, # just used when there is an api host
-            bootkey: self.private_key,
+            boot_private_key: self.private_key,
             api_port: PEER_CONFIG_API_PORT,
             port: Peer.port(self.type),
             host: Peer.host(self.type, self.index),

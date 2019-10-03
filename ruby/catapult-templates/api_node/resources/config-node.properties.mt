@@ -2,12 +2,12 @@
 
 port = {{port}}
 apiPort = {{api_port}}
-shouldAllowAddressReuse = false
-shouldUseSingleThreadPool = false
-shouldUseCacheDatabaseStorage = {{should_use_cache_database_storage}}
-shouldEnableAutoSyncCleanup = false
+enableAddressReuse = false
+enableSingleThreadPool = false
+enableCacheDatabaseStorage = {{enable_cache_database_storage}}
+enableAutoSyncCleanup = false
 
-shouldEnableTransactionSpamThrottling = true
+enableTransactionSpamThrottling = true
 transactionSpamThrottlingMaxBoostFee = 10'000'000
 
 maxBlocksPerSyncAttempt = 400
@@ -35,14 +35,17 @@ blockElementTraceInterval = 1
 transactionDisruptorSize = 16384
 transactionElementTraceInterval = 10
 
-shouldAbortWhenDispatcherIsFull = true
-shouldAuditDispatcherInputs = true
+enableDispatcherAbortWhenFull = true
+enableDispatcherInputAuditing = true
 
 outgoingSecurityMode = None
 incomingSecurityModes = None
 
 maxCacheDatabaseWriteBatchSize = 5MB
 maxTrackedNodes = 5'000
+
+# all hosts are trusted when list is empty
+trustedHosts = 
 
 [localnode]
 

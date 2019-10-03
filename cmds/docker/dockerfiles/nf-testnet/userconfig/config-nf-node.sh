@@ -102,7 +102,7 @@ config_api_node(){
     ## 4) register neighboor api node (self)
     ${SED_BIN} -i -e "s/host =.*/host = ${SERVER_IP}/" ${CONFIG_PATH}/api-node-0/${NODE_CONFIG_PATH}/config-node.properties
     ${SED_BIN} -i -e "s/friendlyName =.*/friendlyName = ${API_FRIENDLY_NAME}/" ${CONFIG_PATH}/api-node-0/${NODE_CONFIG_PATH}/config-node.properties
-    ${SED_BIN} -i -e "s/bootKey =.*/bootKey = ${PRIVKEY_API_NODE}/" ${CONFIG_PATH}/api-node-0/${NODE_CONFIG_PATH}/config-user.properties
+    ${SED_BIN} -i -e "s/bootPrivateKey =.*/bootPrivateKey = ${PRIVKEY_API_NODE}/" ${CONFIG_PATH}/api-node-0/${NODE_CONFIG_PATH}/config-user.properties
 
     ${SED_BIN} -i -e "s/\"publicKey\": \"\"/\"publicKey\": \"${PUBKEY_PEER_NODE}\"/" ${CONFIG_PATH}/api-node-0/${NODE_CONFIG_PATH}/peers-p2p.json
     ${SED_BIN} -i -e "s/peer-node-0-friendlyName/${PEER_FRIENDLY_NAME}/" ${CONFIG_PATH}/api-node-0/${NODE_CONFIG_PATH}/peers-p2p.json
@@ -121,7 +121,7 @@ config_peer_node() {
     ${SED_BIN} -i -e "s/host =.*/host = ${SERVER_IP}/" ${CONFIG_PATH}/peer-node-0/${NODE_CONFIG_PATH}/config-node.properties
     ${SED_BIN} -i -e "s/friendlyName =.*/friendlyName = ${PEER_FRIENDLY_NAME}/" ${CONFIG_PATH}/peer-node-0/${NODE_CONFIG_PATH}/config-node.properties
     ${SED_BIN} -i -e "s/harvestKey =.*/harvestKey = ${PRIVKEY_HARVEST}/" ${CONFIG_PATH}/peer-node-0/${NODE_CONFIG_PATH}/config-harvesting.properties
-    ${SED_BIN} -i -e "s/bootKey =.*/bootKey = ${PRIVKEY_PEER_NODE}/" ${CONFIG_PATH}/peer-node-0/${NODE_CONFIG_PATH}/config-user.properties
+    ${SED_BIN} -i -e "s/bootPrivateKey =.*/bootPrivateKey = ${PRIVKEY_PEER_NODE}/" ${CONFIG_PATH}/peer-node-0/${NODE_CONFIG_PATH}/config-user.properties
 
     ${SED_BIN} -i -e "s/\"publicKey\": \"\"/\"publicKey\": \"${PUBKEY_PEER_NODE}\"/" ${CONFIG_PATH}/peer-node-0/${NODE_CONFIG_PATH}/peers-p2p.json
     ${SED_BIN} -i -e "s/peer-node-0-friendlyName/${PEER_FRIENDLY_NAME}/" ${CONFIG_PATH}/peer-node-0/${NODE_CONFIG_PATH}/peers-p2p.json
