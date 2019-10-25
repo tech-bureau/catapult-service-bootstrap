@@ -1,1 +1,1 @@
-FROM techbureau/catapult-tools:gcc-0.8.0.3
+FROM techbureau/catapult-tools-private:gcc-cmake_install-8a672d1697

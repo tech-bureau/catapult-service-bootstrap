@@ -14,4 +14,4 @@ rm /data/startup/datadir-initialized
 
 touch /state/api-node-0-broker
 
-exec /catapult/bin/catapult.broker /userconfig
+exec /usr/catapult/bin/catapult.broker /userconfig

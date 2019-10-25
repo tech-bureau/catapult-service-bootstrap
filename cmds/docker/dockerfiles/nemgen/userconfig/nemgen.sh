@@ -17,14 +17,14 @@ if [ ! -d /data/00000 ]; then
   cd settings
   ######## need to run twice and patch the mosaic ids
   # first time to get cat.harvest nad cat.currency
-  /catapult/bin/catapult.tools.nemgen  --resources /userconfig/ --nemesisProperties /nemesis/block-properties-file.properties 2> /tmp/nemgen.log
+  /usr/catapult/bin/catapult.tools.nemgen  --resources /userconfig/ --nemesisProperties /nemesis/block-properties-file.properties 2> /tmp/nemgen.log
   harvesting_mosaic_id=$(grep "cat.harvest" /tmp/nemgen.log | grep nonce  | awk -F=  '{split($0, a, / /); print a[9]}' | sort -u)
   currency_mosaic_id=$(grep "cat.currency" /tmp//nemgen.log | grep nonce  | awk -F=  '{split($0, a, / /); print a[9]}' | sort -u)
 
   # second time after replacing values for currencyMosaicId and harvestingMosaicId
   sed -i "s/^harvestingMosaicId = .*/harvestingMosaicId = $(config_form ${harvesting_mosaic_id})/" /userconfig/resources/config-network.properties
   sed -i "s/^currencyMosaicId = .*/currencyMosaicId = $(config_form ${currency_mosaic_id})/" /userconfig/resources/config-network.properties
-  /catapult/bin/catapult.tools.nemgen  --resources /userconfig/ --nemesisProperties /nemesis/block-properties-file.properties
+  /usr/catapult/bin/catapult.tools.nemgen  --resources /userconfig/ --nemesisProperties /nemesis/block-properties-file.properties
 
   cp -r /tmp/seed/mijin-test/* /data*
 else

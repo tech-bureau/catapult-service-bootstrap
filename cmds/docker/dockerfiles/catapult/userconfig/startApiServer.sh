@@ -37,4 +37,4 @@ echo "!!!! Going to start api node now...."
 
 touch /state/api-node-0
 
-exec /catapult/bin/catapult.server /userconfig
+exec /usr/catapult/bin/catapult.server /userconfig

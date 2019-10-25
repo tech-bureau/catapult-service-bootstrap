@@ -6,4 +6,4 @@ enableDelegatedHarvestersAutoDetection = true
 [storage]
 
 dataDirectory = /data
-pluginsDirectory = 
+pluginsDirectory = /usr/catapult/lib

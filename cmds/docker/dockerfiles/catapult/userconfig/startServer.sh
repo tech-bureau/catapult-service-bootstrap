@@ -29,4 +29,4 @@ touch /data/startup/datadir-initialized
 
 echo "!!!! Going to start server now...."
 
-exec /catapult/bin/catapult.server /userconfig
+exec /usr/catapult/bin/catapult.server /userconfig

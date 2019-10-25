@@ -9,5 +9,5 @@ if [ ! -d /data/00000 ]; then
 fi
 ls -alh /data
 cd /data
-exec /catapult/bin/catapult.server /userconfig
+exec /usr/catapult/bin/catapult.server /userconfig
 
