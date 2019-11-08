@@ -12,16 +12,15 @@
   "clientPrivateKey": "{{rest_gateway_private_key}}",
   "extensions": [
     "accountLink",
-    "accountRestrictions",
     "aggregate",
     "lockHash",
     "lockSecret",
     "mosaic",
-    "mosaicRestrictions",
     "metadata",
     "multisig",
     "namespace",
     "receipts",
+    "restrictions",
     "transfer"
   ],
   "db": {

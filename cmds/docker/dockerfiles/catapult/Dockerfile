@@ -1,2 +1,2 @@
-FROM  techbureau/catapult-server-private:gcc-cmake_install-8a672d1697
+FROM  techbureau/catapult-server:gcc-0.9.0.1
 ADD ./userconfig /userconfig
