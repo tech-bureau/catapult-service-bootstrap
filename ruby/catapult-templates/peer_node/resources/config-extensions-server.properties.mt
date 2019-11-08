@@ -10,7 +10,7 @@ extension.mongo = false
 extension.zeromq = false
 
 # p2p extensions
-extension.eventsource = true
+extension.eventsource = false
 {{#harvesting_is_on}}
 extension.harvesting = true
 {{/harvesting_is_on}}
@@ -19,7 +19,7 @@ extension.syncsource = true
 # common extensions
 extension.diagnostics = true
 extension.hashcache = true
-extension.networkheight = true
+extension.networkheight = false
 extension.nodediscovery = true
 extension.packetserver = true
 extension.pluginhandlers = true

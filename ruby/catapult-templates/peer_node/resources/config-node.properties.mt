@@ -5,7 +5,7 @@ apiPort = {{api_port}}
 maxIncomingConnectionsPerIdentity = 3
 
 enableAddressReuse = false
-enableSingleThreadPool = false
+enableSingleThreadPool = true
 enableCacheDatabaseStorage = {{enable_cache_database_storage}}
 enableAutoSyncCleanup = {{enable_auto_sync_cleanup}}
 
@@ -18,15 +18,15 @@ maxChainBytesPerSyncAttempt = 100MB
 shortLivedCacheTransactionDuration = 10m
 shortLivedCacheBlockDuration = 100m
 shortLivedCachePruneInterval = 90s
-shortLivedCacheMaxSize = 10'000'000
+shortLivedCacheMaxSize = 200'000
 
-minFeeMultiplier = 0
-transactionSelectionStrategy = oldest
+minFeeMultiplier = 100
+transactionSelectionStrategy = maximize-fee
 unconfirmedTransactionsCacheMaxResponseSize = 20MB
-unconfirmedTransactionsCacheMaxSize = 1'000'000
+unconfirmedTransactionsCacheMaxSize = 50'000
 
-connectTimeout = 10s
-syncTimeout = 60s
+connectTimeout = 15s
+syncTimeout = 120s
 
 socketWorkingBufferSize = 512KB
 socketWorkingBufferSensitivity = 100
@@ -37,17 +37,17 @@ blockElementTraceInterval = 1
 transactionDisruptorSize = 16384
 transactionElementTraceInterval = 10
 
-enableDispatcherAbortWhenFull = true
+enableDispatcherAbortWhenFull = false
 enableDispatcherInputAuditing = true
 
-outgoingSecurityMode = None
-incomingSecurityModes = None
+outgoingSecurityMode = Signed
+incomingSecurityModes = None,Signed
 
 maxCacheDatabaseWriteBatchSize = 5MB
 maxTrackedNodes = 5'000
 
 # all hosts are trusted when list is empty
-trustedHosts =
+trustedHosts = 127.0.0.1
 localNetworks = 127.0.0.1
 
 [localnode]

@@ -17,7 +17,7 @@ extension.syncsource = false
 # common extensions
 extension.diagnostics = true
 extension.hashcache = true
-extension.networkheight = true
+extension.networkheight = false
 extension.nodediscovery = true
 extension.packetserver = true
 extension.pluginhandlers = true
