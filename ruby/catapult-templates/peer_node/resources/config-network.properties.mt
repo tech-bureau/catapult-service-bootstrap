@@ -29,7 +29,7 @@ initialCurrencyAtomicUnits = 8'998'999'998'000'000
 maxMosaicAtomicUnits = 9'000'000'000'000'000
 
 totalChainImportance = {{{total_chain_importance}}}
-minHarvesterBalance = 10'000'000'000
+minHarvesterBalance = 500
 harvestBeneficiaryPercentage = 10
 
 blockPruneInterval = 360
