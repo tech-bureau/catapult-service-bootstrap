@@ -18,7 +18,7 @@ blockTimeSmoothingFactor = 3000
 
 importanceGrouping = 1433
 importanceActivityPercentage = 5
-maxRollbackBlocks = 400
+maxRollbackBlocks = 398
 maxDifficultyBlocks = 60
 defaultDynamicFeeMultiplier = 1'000
 

@@ -12,7 +12,7 @@ enableAutoSyncCleanup = false
 enableTransactionSpamThrottling = true
 transactionSpamThrottlingMaxBoostFee = 10'000'000
 
-maxBlocksPerSyncAttempt = 398
+maxBlocksPerSyncAttempt = 400
 maxChainBytesPerSyncAttempt = 100MB
 
 shortLivedCacheTransactionDuration = 10m
