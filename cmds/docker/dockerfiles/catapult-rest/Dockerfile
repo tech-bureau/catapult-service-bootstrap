@@ -1,1 +1,1 @@
-FROM techbureau/catapult-rest-server:1.0.20
+FROM techbureau/catapult-rest-server-nightly:latest
