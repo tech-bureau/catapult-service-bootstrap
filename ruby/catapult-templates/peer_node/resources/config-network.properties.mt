@@ -4,6 +4,7 @@ identifier = {{network_identifier}}
 nodeEqualityStrategy = public-key
 publicKey = {{network_public_key}}
 generationHash = {{network_generation_hash}}
+epochAdjustment = 1573430400s
 
 [chain]
 
@@ -30,6 +31,7 @@ maxMosaicAtomicUnits = 9'000'000'000'000'000
 
 totalChainImportance = {{{total_chain_importance}}}
 minHarvesterBalance = 500
+maxHarvesterBalance = 50'000'000'000'000
 harvestBeneficiaryPercentage = 10
 
 blockPruneInterval = 360

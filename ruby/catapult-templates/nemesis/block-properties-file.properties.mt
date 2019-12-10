@@ -11,7 +11,7 @@ cppFileHeader =
 [output]
 
 cppFile =
-binDirectory = ../seed/mijin-test
+binDirectory = ../seed/public-test
 
 [namespaces]
 

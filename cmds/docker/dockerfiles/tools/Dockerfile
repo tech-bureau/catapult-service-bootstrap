@@ -1,1 +1,1 @@
-FROM techbureau/catapult-tools:gcc-0.9.0.1
+FROM techbureau/catapult-tools:gcc-keccak-0.9.1.1
