@@ -13,7 +13,7 @@
 #    limitations under the License.
 module Catapult
   module Global
-    CATAPULT_NETWORK_IDENTIFIER = 'public-test'
+    CATAPULT_NETWORK_IDENTIFIER = 'mijin-test'
     MONGO_HOST                  = 'db'
 
     def self.catapult_nework_identifier

@@ -11,7 +11,7 @@ cppFileHeader =
 [output]
 
 cppFile =
-binDirectory = ../seed/public-test
+binDirectory = ../seed/nemesis
 
 [namespaces]
 

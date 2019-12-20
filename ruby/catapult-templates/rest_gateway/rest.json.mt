@@ -1,6 +1,6 @@
 {
   "network": {
-    "name": "publicTest",
+    "name": "mijinTest",
     "description": "catapult development network"
   },
 

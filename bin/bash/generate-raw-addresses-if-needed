@@ -4,6 +4,6 @@ raw_addresses_path=$2
 formatted_address_path=$3
 if [ ! -f $formatted_address_path ] ;
 then
-  /usr/catapult/bin/catapult.tools.address --generate=${num_addresses} -n public-test > ${raw_addresses_path}
+  /usr/catapult/bin/catapult.tools.address --generate=${num_addresses} -n mijin-test > ${raw_addresses_path}
 fi
 
