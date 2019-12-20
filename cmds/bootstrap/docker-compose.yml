@@ -13,7 +13,15 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-version: '2'
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
 services:
   ######  dynamic configuration  ###########
 
@@ -77,6 +85,9 @@ services:
     depends_on:
     - init-db
     - setup-network
+    networks:
+      default:
+        ipv4_address: 172.20.0.9
 
   peer-node-0-nemgen:
     build: dockerfiles/nemgen
