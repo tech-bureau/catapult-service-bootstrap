@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker-compose -f cmds/docker/api-db.yml down
+docker-compose -f cmds/bootstrap/api-db.yml down

@@ -13,13 +13,20 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-version: '2'
+version: '3'
+
+networks:
+  default:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
 services:
 
   ###### running services ###########
 
   rest-gateway:
-    image: techbureau/catapult-rest-server:1.0.17-temp-fix
+    build: dockerfiles/catapult-rest
     command: ash -c "/bin-mount/wait /state/configs-generated && npm start resources/rest.json /userconfig/rest.json"
     stop_signal: SIGINT
     ports:
@@ -28,6 +35,9 @@ services:
     - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
     - ../../bin/ash:/bin-mount
     - ../../build/state:/state
+    networks:
+      default:
+        ipv4_address: 172.20.0.9
 
   api-node-0:
     build: dockerfiles/catapult
