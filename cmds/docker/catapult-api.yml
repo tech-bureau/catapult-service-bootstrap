@@ -19,8 +19,8 @@ services:
   ###### running services ###########
 
   rest-gateway:
-    image: techbureau/catapult-rest-server:1.0.17-temp-fix
-    command: ash -c "/bin-mount/wait /state/configs-generated && npm start resources/rest.json /userconfig/rest.json"
+    image: techbureau/nemfoundation/catapult-rest-f2-edge:commit-02fea32
+    command: ash -c "/bin-mount/wait /state/configs-generated && HASHING_FUNCTION=keccak npm start resources/rest.json /userconfig/rest.json"
     stop_signal: SIGINT
     ports:
     - "3000:3000"
