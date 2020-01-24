@@ -41,24 +41,6 @@ You can verify things are running by doing a quick curl request to get block inf
 
 To stop the server simply press `Ctrl+c` to kill/stop the foreground docker process.
 
-## Updated Dragon Bootstrap
-
-This setup of the bootstrap tool has been updated to support the latest dragon builds.
-
-The main difference in the bootstrap setup is the organization of the cmds/ folder which has a set of shell scripts for performing various actions.
-
-The previous `./clean-all` and `./clean-data` scripts have been moved to `./cmds/clean-all` and `./cmds/clean-data`
-
-Other changes are there are now docker compose files for all services together, like before, but also individual services such as peer nodes, api database, api node + gateway and the new broker service.
-
-### New Broker Service
-
-The big change in latest dragon build and going forward is the introduction of the broker service.  Previously the api node would use the mongo extension plugin to take data written to the chain and copy it to the mongodb setup.  This make the api node more complex and had implications on api node performance and potential issues with failure scenarios.
-
-Now the api node writes to a "spool" directory that is a shared state location on disk.  As the aspi node writes to the spool/ directory, the broker service will read from the /spool directory and take over persiting the chain information into mongodb for api gateway read calls.
-
-NOTE: broker runs on same node and under same config/directory as the api node
-
 ### Recovery Tool
 
 There is another new binary in the build for the catapult-server called the recovery tool.  This tools main job is to be run after an unclean shutdown, or after failure, of a node, particularly the api node.  When either the server.lock or broker.lock file(s) are present it typically means that there was an unclean shutdown or failure.  The recovery tool will look at the files on disk under the spool/ folder, clean up the files and sync the data to mongodb, and if all runs okay it will finally delete the lock files and shutdown.
@@ -126,3 +108,4 @@ If your service is in a bad state, or you just want to restart from fresh again 
 
 The Catapult cache and query engine is powered by mongodb.  There are some known issues with the latest storage engine in some docker environments.  The previous temporary fix was to use an older version with a custom docker compose file, that has been removed in the dragon release, please submit an issue if running into it and we can look at resurecting it.
 
+It has been reported that some older hosting and x86 chipsets are failing to start services. Currently main build targets for server releases are for more modern chipsets, if experiencing issues please report in the community developer slack group.
