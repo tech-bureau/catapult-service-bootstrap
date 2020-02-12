@@ -50,6 +50,8 @@ services:
     image: mongo
     command: bash -c "mongod --dbpath=/dbdata --bind_ip=db"
     stop_signal: SIGINT
+    ports:
+    - "27007:27017"
     volumes:
     - ../../data/mongo:/dbdata:rw
     - ../../bin/bash:/bin-mount
