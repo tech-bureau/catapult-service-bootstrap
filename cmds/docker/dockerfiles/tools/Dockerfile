@@ -1,1 +1,1 @@
-FROM techbureau/catapult-tools:gcc-keccak-0.9.2.1
+FROM techbureau/catapult-tools-private:gcc-master-4749c2977a
