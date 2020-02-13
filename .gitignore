@@ -8,3 +8,5 @@ build/nemesis/*
 !build/nemesis/README.md
 build/state/*
 !build/state/README.md
+catapult-rest
+catapult-rest/*

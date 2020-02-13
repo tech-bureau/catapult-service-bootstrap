@@ -3,7 +3,7 @@
 build_param=$1
 
 if [ "$build_param" == "--build" ]; then
-  docker-compose -f cmds/docker/docker-compose-setup-network.yml up --build
+  docker-compose -f cmds/bootstrap/docker-compose-setup-network.yml up --build
 else
-  docker-compose -f cmds/docker/docker-compose-setup-network.yml up
+  docker-compose -f cmds/bootstrap/docker-compose-setup-network.yml up
 fi

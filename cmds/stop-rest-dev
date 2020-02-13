@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker-compose -f cmds/bootstrap/rest-dev.yml down
