@@ -51,7 +51,7 @@ services:
     command: bash -c "mongod --dbpath=/dbdata --bind_ip=db"
     stop_signal: SIGINT
     ports:
-    - "27007:27017"
+    - "27017:27017"
     volumes:
     - ../../data/mongo:/dbdata:rw
     - ../../bin/bash:/bin-mount
@@ -68,7 +68,7 @@ services:
 
   rest-gateway:
     build: dockerfiles/catapult-rest
-    command: ash -c "/bin-mount/wait /state/configs-generated && npm start resources/rest.json /userconfig/rest.json"
+    command: ash -c "/bin-mount/wait /state/configs-generated && HASHING_FUNCTION=keccak npm start resources/rest.json /userconfig/rest.json"
     stop_signal: SIGINT
     ports:
     - "3000:3000"
