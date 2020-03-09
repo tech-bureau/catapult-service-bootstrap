@@ -1,1 +1,1 @@
-FROM nemfoundation/catapult-rest-f2-edge:commit-02fea32
+FROM nemfoundation/symbol-rest-beta:commit-cefb14e
