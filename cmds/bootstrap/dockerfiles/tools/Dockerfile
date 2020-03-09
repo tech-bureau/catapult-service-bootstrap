@@ -1,1 +1,1 @@
-FROM techbureau/catapult-tools-private:gcc-master-4749c2977a
+FROM techbureau/catapult-tools:gcc-0.9.3.1
