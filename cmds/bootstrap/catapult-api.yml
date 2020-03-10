@@ -19,8 +19,8 @@ services:
   ###### running services ###########
 
   rest-gateway:
-    image: techbureau/nemfoundation/catapult-rest-f2-edge:commit-02fea32
-    command: ash -c "/bin-mount/wait /state/configs-generated && HASHING_FUNCTION=keccak npm start resources/rest.json /userconfig/rest.json"
+    image: dockerfiles/catapult-rest
+    command: ash -c "/bin-mount/wait /state/configs-generated && npm start /userconfig/rest.json"
     stop_signal: SIGINT
     ports:
     - "3000:3000"
@@ -28,6 +28,7 @@ services:
     - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
     - ../../bin/ash:/bin-mount
     - ../../build/state:/state
+    - ../../build/catapult-config/peer-node-0/userconfig/resources/:/api-node-config/
 
   api-node-0:
     build: dockerfiles/catapult

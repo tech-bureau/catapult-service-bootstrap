@@ -48,6 +48,8 @@ services:
 
   db:
     image: mongo
+    ports:
+    - 27017:27017
     command: bash -c "mongod --dbpath=/dbdata --bind_ip=db"
     stop_signal: SIGINT
     volumes:
@@ -63,20 +65,6 @@ services:
     - ../../bin/bash:/bin-mount
     depends_on:
     - db
-
-  rest-gateway:
-    build: dockerfiles/catapult-rest
-    command: ash -c "/bin-mount/wait /state/configs-generated && HASHING_FUNCTION=keccak npm start resources/rest.json /userconfig/rest.json"
-    stop_signal: SIGINT
-    ports:
-    - "3000:3000"
-    volumes:
-    - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
-    - ../../bin/ash:/bin-mount
-    - ../../build/state:/state
-    depends_on:
-    - init-db
-    - setup-network
 
   peer-node-0-nemgen:
     build: dockerfiles/nemgen

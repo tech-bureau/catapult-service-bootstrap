@@ -1,7 +1,8 @@
 {
   "network": {
     "name": "publicTest",
-    "description": "catapult development network"
+    "description": "catapult development network",
+    "propertiesFilePath": "/api-node-config/config-network.properties"
   },
 
   "port": 3000,
@@ -67,5 +68,7 @@
       "maxsize": 20971520,
       "maxFiles": 100
     }
-  }
+  },
+
+  "numBlocksTransactionFeeStats": 300
 }

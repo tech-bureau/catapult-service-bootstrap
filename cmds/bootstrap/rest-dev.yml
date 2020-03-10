@@ -1,0 +1,16 @@
+version: '3'
+
+networks:
+  default:
+    external:
+      name: bootstrap_default
+services:
+  rest-gateway:
+    image: techbureau/catapult-rest-dev
+    command: ash -c "cd /catapult-rest && ./yarn_setup.sh && cd rest && yarn start:debug resources/rest.json"
+    stop_signal: SIGINT
+    ports:
+    - "3000:3000"
+    volumes:
+    - ../../catapult-rest:/catapult-rest/
+    - ../../build/catapult-config/peer-node-0/userconfig/resources/:/api-node-config/

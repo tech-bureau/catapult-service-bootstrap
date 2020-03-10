@@ -1,7 +1,7 @@
 [Japanese README](https://github.com/tech-bureau/catapult-service-bootstrap/blob/master/README.ja.md)
 
 
-# Catapult Service Bootstrap
+# Catapult Service Bootstrap for versions 0.9.3.x
 
 This repo contains a set of bootstrap and setup scripts to help developers get going quickly with their own working Catapult Service.  The goal is to make it as easy and quick as possible so as a developer you only have to run this setup and within a minute or so you will have a running server ready to start receiving transactions so you can focus on your development work and not setup or configuring servers.
 

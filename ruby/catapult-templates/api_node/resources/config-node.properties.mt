@@ -2,7 +2,7 @@
 
 port = {{port}}
 apiPort = {{api_port}}
-maxIncomingConnectionsPerIdentity = 3
+maxIncomingConnectionsPerIdentity = 6
 
 enableAddressReuse = false
 enableSingleThreadPool = false
@@ -12,7 +12,7 @@ enableAutoSyncCleanup = false
 enableTransactionSpamThrottling = true
 transactionSpamThrottlingMaxBoostFee = 10'000'000
 
-maxBlocksPerSyncAttempt = 400
+maxBlocksPerSyncAttempt = 1435
 maxChainBytesPerSyncAttempt = 100MB
 
 shortLivedCacheTransactionDuration = 10m

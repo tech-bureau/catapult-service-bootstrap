@@ -76,6 +76,7 @@ services:
     - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
     - ../../bin/ash:/bin-mount
     - ../../build/state:/state
+    - ../../build/catapult-config/peer-node-0/userconfig/resources/:/api-node-config/
     depends_on:
     - init-db
     - setup-network
