@@ -10,3 +10,6 @@ build/state/*
 !build/state/README.md
 catapult-rest
 catapult-rest/*
+ruby/*.gem
+ruby/spec/config_generation/output
+*.bak

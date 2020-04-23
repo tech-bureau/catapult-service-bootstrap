@@ -40,9 +40,6 @@ transactionElementTraceInterval = 10
 enableDispatcherAbortWhenFull = false
 enableDispatcherInputAuditing = true
 
-outgoingSecurityMode = Signed
-incomingSecurityModes = None,Signed
-
 maxCacheDatabaseWriteBatchSize = 5MB
 maxTrackedNodes = 5'000
 
