@@ -13,15 +13,22 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-version: '2'
+version: '3'
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
 services:
 
   ###### running services ###########
 
   api-node-broker-0:
     build: dockerfiles/catapult
-    command: bash -c "/bin/bash /userconfig/startBroker.sh"
+    command: bash -c "//bin/bash /userconfig/runServerRecover.sh && bin/bash /userconfig/startBroker.sh"
     stop_signal: SIGINT
+    restart: on-failure:2
     volumes:
     - ../../build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/api-node-0:/data:rw

@@ -13,4 +13,7 @@ services:
     - "3000:3000"
     volumes:
     - ../../catapult-rest:/catapult-rest/
-    - ../../build/catapult-config/peer-node-0/userconfig/resources/:/api-node-config/
+    - ../../build/catapult-config/api-node-0/userconfig/resources/:/api-node-config/
+    networks:
+      default:
+        ipv4_address: 172.20.0.10

@@ -13,9 +13,33 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-version: '2'
+version: '3'
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
 services:
   ######  dynamic configuration  ###########
+
+  rest-gateway:
+    build: dockerfiles/catapult-rest
+    command: ash -c "/bin-mount/wait /state/configs-generated && npm start /userconfig/rest.json"
+    stop_signal: SIGINT
+    ports:
+    - "3000:3000"
+    volumes:
+    - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
+    - ../../bin/ash:/bin-mount
+    - ../../build/state:/state
+    - ../../build/catapult-config/api-node-0/userconfig/resources/:/api-node-config/
+    depends_on:
+    - init-db
+    - setup-network
+    networks:
+      default:
+        ipv4_address: 172.20.0.10
 
   generate-raw-addresses:
     build: dockerfiles/tools
@@ -63,21 +87,6 @@ services:
     - ../../bin/bash:/bin-mount
     depends_on:
     - db
-
-  rest-gateway:
-    build: dockerfiles/catapult-rest
-    command: ash -c "/bin-mount/wait /state/configs-generated && npm start /userconfig/rest.json"
-    stop_signal: SIGINT
-    ports:
-    - "3000:3000"
-    volumes:
-    - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
-    - ../../bin/ash:/bin-mount
-    - ../../build/state:/state
-    - ../../build/catapult-config/api-node-0/userconfig/resources/:/api-node-config/
-    depends_on:
-    - init-db
-    - setup-network
 
   peer-node-0-nemgen:
     build: dockerfiles/nemgen

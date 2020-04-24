@@ -1,7 +1,7 @@
 [network]
 
 identifier = {{network_identifier}}
-nodeEqualityStrategy = public-key
+nodeEqualityStrategy = host
 publicKey = {{network_public_key}}
 generationHash = {{network_generation_hash}}
 epochAdjustment = 1573430400s
