@@ -1,7 +1,7 @@
 [Japanese README](https://github.com/tech-bureau/catapult-service-bootstrap/blob/master/README.ja.md)
 
 
-# Catapult Service Bootstrap for versions 0.9.3.x
+# Catapult Service Bootstrap for versions 0.9.4.x
 
 This repo contains a set of bootstrap and setup scripts to help developers get going quickly with their own working Catapult Service.  The goal is to make it as easy and quick as possible so as a developer you only have to run this setup and within a minute or so you will have a running server ready to start receiving transactions so you can focus on your development work and not setup or configuring servers.
 
@@ -9,7 +9,7 @@ NOTE: this bootstrap setup is for learning and development purposes, it should n
 
 We use docker images as our default packaging and distribution mechanism.  These bootstrap scripts will prepare some files on disk and then leverage docker-compose to startup and run the needed set of containers so the server can function correctly.
 
-NOTE: after releases with docker image updates, or if switching between versions it is typical to need to build new images when starting the docker services, this can be done by passing the `-b` flag to any of the commands which will pass to docker-compose.  Should you run into weird behavior sometimes it helps or is required to clear out old images, this can be done with the `docker system prune -a` command, this will purge all container references and force download and build on next run.
+NOTE: for 0.9.4.x some docker networking configuration has been updated for setting up the rest gateway as a white listed client to the api server. Docker networking can sometimes result in different behavior across environments, the `--build` flag is passed automatically to the start command which seems to aleviate the networking odities in some environments.
 
 ## Evironment Dependencies
 
@@ -43,7 +43,8 @@ To stop the server simply press `Ctrl+c` to kill/stop the foreground docker proc
 
 ### Recovery Tool
 
-There is another new binary in the build for the catapult-server called the recovery tool.  This tools main job is to be run after an unclean shutdown, or after failure, of a node, particularly the api node.  When either the server.lock or broker.lock file(s) are present it typically means that there was an unclean shutdown or failure.  The recovery tool will look at the files on disk under the spool/ folder, clean up the files and sync the data to mongodb, and if all runs okay it will finally delete the lock files and shutdown.
+NOTE: recovery is run before each start. If recovery fails it typically means a network resync is needed. 
+
 
 ## Bootstrap Scripts/Commands
 
@@ -80,6 +81,10 @@ The file `raw-addresses.txt` is a set of addresses that have been generated fres
 The file `addresses.yaml` are keys from the `raw-addresses.txt` file but formatted in yaml form and assigned to different roles, such as for the Catapult nodes, the harvestor key(s), etc. This yaml file is used as an input for the Catapult config files generated during the initial run.
 
 NOTE: the keys under the yaml key 'nemesis_addresses', which are the keys that are assigned test xem funds as part of the nemesis block generation.
+
+### TLS Certificate Setup
+
+Starting in version 0.9.4.1 the server uses TLS 1.3 for peer/server communication. On start up the first time certifications are generated for each service which will set the identity key for itself. Certificate files are generated and located under the `<service>/userconfig/resource/cert` directories.
 
 ## Starting as a Background Process
 

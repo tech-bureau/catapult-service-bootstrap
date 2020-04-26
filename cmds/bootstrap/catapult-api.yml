@@ -13,7 +13,13 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-version: '2'
+version: '3'
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
 services:
 
   ###### running services ###########
@@ -28,12 +34,16 @@ services:
     - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
     - ../../bin/ash:/bin-mount
     - ../../build/state:/state
-    - ../../build/catapult-config/peer-node-0/userconfig/resources/:/api-node-config/
+    - ../../build/catapult-config/api-node-0/userconfig/resources/:/api-node-config/
+    networks:
+      default:
+        ipv4_address: 172.20.0.10
 
   api-node-0:
     build: dockerfiles/catapult
     command: bash -c "/bin-mount/wait /state/api-node-0-broker && /bin/bash /userconfig/startApiServer.sh"
     stop_signal: SIGINT
+    restart: on-failure:2
     volumes:
     - ../../build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/api-node-0:/data:rw

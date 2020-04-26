@@ -13,9 +13,33 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-version: '2'
+version: '3'
+
+networks:
+  default:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
 services:
   ######  dynamic configuration  ###########
+
+  rest-gateway:
+    build: dockerfiles/catapult-rest
+    command: ash -c "/bin-mount/wait /state/configs-generated && npm start /userconfig/rest.json"
+    stop_signal: SIGINT
+    ports:
+    - "3000:3000"
+    volumes:
+    - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
+    - ../../bin/ash:/bin-mount
+    - ../../build/state:/state
+    - ../../build/catapult-config/api-node-0/userconfig/resources/:/api-node-config/
+    depends_on:
+    - init-db
+    - setup-network
+    networks:
+      default:
+        ipv4_address: 172.20.0.10
 
   generate-raw-addresses:
     build: dockerfiles/tools
@@ -64,21 +88,6 @@ services:
     depends_on:
     - db
 
-  rest-gateway:
-    build: dockerfiles/catapult-rest
-    command: ash -c "/bin-mount/wait /state/configs-generated && npm start /userconfig/rest.json"
-    stop_signal: SIGINT
-    ports:
-    - "3000:3000"
-    volumes:
-    - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
-    - ../../bin/ash:/bin-mount
-    - ../../build/state:/state
-    - ../../build/catapult-config/peer-node-0/userconfig/resources/:/api-node-config/
-    depends_on:
-    - init-db
-    - setup-network
-
   peer-node-0-nemgen:
     build: dockerfiles/nemgen
     command: bash -c "/bin-mount/wait /state/configs-generated && /bin/bash /userconfig/nemgen.sh && touch /state/peer-node-0-nemgen"
@@ -94,8 +103,9 @@ services:
 
   peer-node-0:
     build: dockerfiles/catapult
-    command: bash -c "/bin-mount/wait /state/peer-node-0-nemgen && /bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /state/peer-node-0-nemgen && /bin/bash /userconfig/runServerRecover.sh && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
+    restart: on-failure:2
     volumes:
     - ../../build/catapult-config/peer-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/peer-node-0:/data:rw
@@ -120,8 +130,9 @@ services:
 
   peer-node-1:
     build: dockerfiles/catapult
-    command: bash -c "/bin-mount/wait /state/peer-node-1-nemgen && /bin/bash /userconfig/startServer.sh"
+    command: bash -c "/bin-mount/wait /state/peer-node-1-nemgen && /bin/bash /userconfig/runServerRecover.sh && /bin/bash /userconfig/startServer.sh"
     stop_signal: SIGINT
+    restart: on-failure:2
     volumes:
     - ../../build/catapult-config/peer-node-1/userconfig/resources/:/userconfig/resources/
     - ../../data/peer-node-1:/data:rw
@@ -148,6 +159,7 @@ services:
     build: dockerfiles/catapult
     command: bash -c "/bin-mount/wait /state/api-node-0-nemgen && /bin-mount/wait /state/api-node-0-broker && /bin/bash /userconfig/startApiServer.sh"
     stop_signal: SIGINT
+    restart: on-failure:2
     volumes:
     - ../../build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/api-node-0:/data:rw
@@ -160,8 +172,9 @@ services:
 
   api-node-broker-0:
     build: dockerfiles/catapult
-    command: bash -c "/bin-mount/wait /state/api-node-0-nemgen && /bin/bash /userconfig/startBroker.sh"
+    command: bash -c "/bin-mount/wait /state/api-node-0-nemgen && /bin/bash /userconfig/runServerRecover.sh && /bin/bash /userconfig/startBroker.sh"
     stop_signal: SIGINT
+    restart: on-failure:2
     volumes:
     - ../../build/catapult-config/api-node-0/userconfig/resources/:/userconfig/resources/
     - ../../data/api-node-0:/data:rw

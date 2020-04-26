@@ -1,6 +1,6 @@
 #!/bin/bash
 
-build_flag=
+build_flag="--build"
 daemon_flag=
 
 while [ "$1" != "" ]; do

@@ -1,1 +1,1 @@
-FROM nemfoundation/symbol-rest-beta:commit-cefb14e
+FROM nemfoundation/symbol-rest-beta:commit-7366605
