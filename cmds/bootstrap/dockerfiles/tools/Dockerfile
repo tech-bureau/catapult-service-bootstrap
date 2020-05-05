@@ -1,1 +1,0 @@
-FROM techbureau/catapult-tools:gcc-0.9.4.1

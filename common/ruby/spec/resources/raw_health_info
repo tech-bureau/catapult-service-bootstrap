@@ -1,0 +1,23 @@
+2020-04-11 20:51:20.350227 0x00007fa57d33f580: <info> (thread::IoThreadPool.cpp@104) spawned 1 workers
+2020-04-11 20:51:20.350302 0x00007fa57d33f580: <debug> (tools::NetworkCensusTool.h@73) preparing to get stats from node Local @ 172.17.1.172:7900
+2020-04-11 20:51:20.351830 0x00007fa57aed9700: <info> (ionet::PacketSocket.cpp@593) connected to 172.17.1.172 [172.17.1.172:7900] (0000000000000001)
+2020-04-11 20:51:20.396508 0x00007fa57aed9700: <debug> (net::VerifyPeer.cpp@188) VerifyServer completed with Success
+2020-04-11 20:51:20.440366 0x00007fa57aed9700: <info> (health::main.cpp@174) --- COUNTERS for known peers ---
+2020-04-11 20:51:20.440521 0x00007fa57aed9700: <info> (health::main.cpp@170) Local @ 172.17.1.172:7900
+   ACCTREST C : 0       |      ACNTST C : 88'023  |  ACNTST C HVA : 38      |  ACTIVE PINGS : 0       |
+      BAN ACT : 0       |       BAN ALL : 0       |  BLK ELEM ACT : 0       |  BLK ELEM TOT : 39'929  |
+     BLKDIF C : 1'775   |        HASH C : 0       |    HASHLOCK C : 0       |   MEM CUR RSS : 698     |
+ MEM CUR VIRT : 1'691   |   MEM MAX RSS : 739     |   MEM SHR RSS : 10      |    METADATA C : 0       |
+     MOSAIC C : 1       |  MOSAICREST C : 0       |    MULTISIG C : 0       |         NODES : 7       |
+         NS C : 1       |       NS C AS : 2       |       NS C DS : 2       | RB COMMIT ALL : 0       |
+RB COMMIT RCT : 0       | RB IGNORE ALL : 0       | RB IGNORE RCT : 0       |       READERS : 6       |
+ SECRETLOCK C : 0       | SUCCESS PINGS : 2'223   |         TASKS : 11      | TOT CONF TXES : 145'064 |
+  TOTAL PINGS : 2'223   |   TS NODE AGE : 40      | TS OFFSET ABS : 0       | TS OFFSET DIR : 0       |
+ TS TOTAL REQ : 40      |   TX ELEM ACT : 0       |   TX ELEM TOT : 0       |  UNLKED ACCTS : 0       |
+     UT CACHE : 0       |       WRITERS : 3       |
+2020-04-11 20:51:20.440550 0x00007fa57aed9700: <info> (health::main.cpp@178) --- SUMMARY for known peers ---
+2020-04-11 20:51:20.440560 0x00007fa57aed9700: <info> (health::main.cpp@137)    Local @ 172.17.1.172:7900 [P2P] at height 86681 with score 868184169851369291
+2020-04-11 20:51:20.440586 0x00007fa57aed9700: <debug> (ionet::PacketSocket.cpp@373) socket close triggered by destruction (0000000000000001), 90ms elapsed
+2020-04-11 20:51:20.441625 0x00007fa57d33f580: <debug> (thread::IoThreadPool.cpp@111) waiting for 1 thread pool threads to exit
+2020-04-11 20:51:20.441781 0x00007fa57d33f580: <info> (thread::IoThreadPool.cpp@113) all thread pool threads exited
+.

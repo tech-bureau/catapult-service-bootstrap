@@ -42,7 +42,7 @@ services:
         ipv4_address: 172.20.0.10
 
   generate-raw-addresses:
-    build: dockerfiles/tools
+    image: techbureau/catapult-tools-private:gcc-master-ac5add6c2c
     command: bash -c "/bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ../../bin/bash:/bin-mount

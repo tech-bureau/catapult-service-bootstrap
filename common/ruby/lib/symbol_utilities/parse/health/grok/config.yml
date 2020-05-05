@@ -1,0 +1,230 @@
+global:
+ config_version: 2
+input:
+  type: file
+  fail_on_missing_logfile: false
+  path: /data/health-check-logs/health_check.stats
+  readall: true # Read from the beginning of the file? False means we start at the end of the file and read only new lines.
+server:
+  port: 9144
+grok:
+  patterns_dir: ./patterns
+  additional_patterns:
+  - "CATAPULT_VALUE %{NUMBER}|%{INT}"
+metrics:
+  - type: gauge
+    name: peer_node_ACNTST_C
+    help: peer_node_ACNTST_C
+    match: 'peer-node_ACNTST_C:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_ACNTST_C_HVA
+    help: peer_node_ACNTST_C_HVA
+    match: 'peer-node_ACNTST_C_HVA:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_ACTIVE_PINGS
+    help: peer_node_ACTIVE_PINGS
+    match: 'peer-node_ACTIVE_PINGS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_B_WRITERS
+    help: peer_node_B_WRITERS
+    match: 'peer-node_B_WRITERS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_BLK_ELEM_ACT
+    help: peer_node_BLK_ELEM_ACT
+    match: 'peer-node_BLK_ELEM_ACT:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_BLK_ELEM_TOT
+    help: peer_node_BLK_ELEM_TOT
+    match: 'peer-node_BLK_ELEM_TOT:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_BLKDIF_C
+    help: peer_node_BLKDIF_C
+    match: 'peer-node_BLKDIF_C:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_HASH_C
+    help: peer_node_HASH_C
+    match: 'peer-node_HASH_C:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_HASHLOCK_C
+    help: peer_node_HASHLOCK_C
+    match: 'peer-node_HASHLOCK_C:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_MEM_CUR_RSS
+    help: peer_node_MEM_CUR_RSS
+    match: 'peer-node_MEM_CUR_RSS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_MEM_CUR_VIRT
+    help: peer_node_MEM_CUR_VIRT
+    match: 'peer-node_MEM_CUR_VIRT:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_MEM_MAX_RSS
+    help: peer_node_MEM_MAX_RSS
+    match: 'peer-node_MEM_MAX_RSS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_MEM_SHR_RSS
+    help: peer_node_MEM_SHR_RSS
+    match: 'peer-node_MEM_SHR_RSS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_MOSAIC_C
+    help: peer_node_MOSAIC_C
+    match: 'peer-node_MOSAIC_C:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_MOSAIC_C_DS
+    help: peer_node_MOSAIC_C_DS
+    match: 'peer-node_MOSAIC_C_DS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_NS_C
+    help: peer_node_NS_C
+    match: 'peer-node_NS_C:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_NS_C_AS
+    help: peer_node_NS_C_AS
+    match: 'peer-node_NS_C_AS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_RB_COMMIT_ALL
+    help: peer_node_RB_COMMIT_ALL
+    match: 'peer-node_RB_COMMIT_ALL:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_RB_COMMIT_RCT
+    help: peer_node_RB_COMMIT_RCT
+    match: 'peer-node_RB_COMMIT_RCT:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_RB_IGNORE_ALL
+    help: peer_node_RB_IGNORE_ALL
+    match: 'peer-node_RB_IGNORE_ALL:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_RB_IGNORE_RCT
+    help: peer_node_RB_IGNORE_RCT
+    match: 'peer-node_RB_IGNORE_RCT:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_READERS
+    help: peer_node_READERS
+    match: 'peer-node_READERS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_SECRETLOCK_C
+    help: peer_node_SECRETLOCK_C
+    match: 'peer-node_SECRETLOCK_C:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_SUCCESS_PINGS
+    help: peer_node_SUCCESS_PINGS
+    match: 'peer-node_SUCCESS_PINGS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_TASKS
+    help: peer_node_TASKS
+    match: 'peer-node_TASKS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_TOTAL_PINGS
+    help: peer_node_TOTAL_PINGS
+    match: 'peer-node_TOTAL_PINGS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_TS_NODE_AGE
+    help: peer_node_TS_NODE_AGE
+    match: 'peer-node_TS_NODE_AGE:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_TS_OFFSET_ABS
+    help: peer_node_TS_OFFSET_ABS
+    match: 'peer-node_TS_OFFSET_ABS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_TS_OFFSET_DIR
+    help: peer_node_TS_OFFSET_DIR
+    match: 'peer-node_TS_OFFSET_DIR:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_TS_TOTAL_REQ
+    help: peer_node_TS_TOTAL_REQ
+    match: 'peer-node_TS_TOTAL_REQ:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_TX_ELEM_ACT
+    help: peer_node_TX_ELEM_ACT
+    match: 'peer-node_TX_ELEM_ACT:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_TX_ELEM_TOT
+    help: peer_node_TX_ELEM_TOT
+    match: 'peer-node_TX_ELEM_TOT:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_UNLKED_ACCTS
+    help: peer_node_UNLKED_ACCTS
+    match: 'peer-node_UNLKED_ACCTS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_UT_CACHE
+    help: peer_node_UT_CACHE
+    match: 'peer-node_UT_CACHE:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_WRITERS
+    help: peer_node_WRITERS
+    match: 'peer-node_WRITERS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}'
+
+  - type: gauge
+    name: peer_node_PT_WRITERS
+    help: peer_node_PT_WRITERS
+    match: 'peer-node_PT_WRITERS:%{SPACE}%{CATAPULT_VALUE:data}%{GREEDYDATA}'
+    value: '{{.data}}
+'

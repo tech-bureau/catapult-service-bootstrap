@@ -1,2 +1,2 @@
-FROM techbureau/catapult-tools:gcc-0.9.4.1
+FROM techbureau/catapult-tools-private:gcc-master-ac5add6c2c
 ADD ./userconfig /userconfig

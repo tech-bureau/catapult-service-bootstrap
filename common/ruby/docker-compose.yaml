@@ -1,0 +1,15 @@
+# temp
+version: '3'
+
+services:
+  health-check:
+    build:
+      context: ./
+      dockerfile: Dockerfile-dev
+    command: bash -c "mkdir -p /userconfig/ && cp -r /tmp/resources /userconfig/resources && /usr/app/bin/set_health_check_peer_config.rb && sleep infinity"
+    volumes:
+    - ../../peer-assembly/peer-node/userconfig/resources:/tmp/resources/:ro
+    - ../../peer-assembly/peer-node/config-input.yaml:/config-data/config-input.yaml:ro
+    - ./:/usr/app
+
+    
