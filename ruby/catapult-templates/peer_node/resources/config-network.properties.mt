@@ -3,7 +3,7 @@
 identifier = {{network_identifier}}
 nodeEqualityStrategy = host
 publicKey = {{network_public_key}}
-generationHash = {{network_generation_hash}}
+generationHashSeed = {{network_generation_hash}}
 epochAdjustment = 1573430400s
 
 [chain]

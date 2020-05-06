@@ -1,7 +1,7 @@
 [nemesis]
 
 networkIdentifier = {{network_identifier}}
-nemesisGenerationHash = {{nemesis_generation_hash}}
+nemesisGenerationHashSeed = {{nemesis_generation_hash}}
 nemesisSignerPrivateKey = {{nemesis_signer_private_key}}
 
 [cpp]
