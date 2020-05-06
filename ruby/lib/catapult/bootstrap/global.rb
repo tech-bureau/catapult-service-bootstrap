@@ -44,26 +44,19 @@ module Catapult::Bootstrap
     end
 
     module ParseKey
-      def self.peer_nodes
-        :peer_nodes
-      end
-      def self.api_nodes
-        :api_nodes
-      end
-      def self.rest_gateways
+      ARRAY = [
+        :nemesis_addresses,
+        :nemesis_addresses_harvesting,
+        :nemesis_addresses_harvesting_vrf,
+        :nemesis_generation_hash,
+        :nemesis_signer_private_key,
+        # TODO: below wil be removed
+        :peer_nodes,
+        :api_nodes,
         :rest_gateways
-      end
-      def self.nemesis_addresses
-        :nemesis_addresses
-      end
-      def self.nemesis_addresses_harvesting
-        :nemesis_addresses_harvesting
-      end
-      def self.nemesis_generation_hash
-         :nemesis_generation_hash
-      end
-      def self.nemesis_signer_private_key
-        :nemesis_signer_private_key
+      ]
+      class << self
+        ARRAY.each { |el| define_method(el, lambda { el }) }
       end
     end      
 

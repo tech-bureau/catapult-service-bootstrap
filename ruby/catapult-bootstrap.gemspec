@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.license     = "Apache-2.0."
   s.required_ruby_version = ">= 2.5"
   s.add_dependency 'mustache', '~> 1.1', '>= 1.1.1'
+  s.add_dependency 'frontkick', '~> 0.5', '>= 0.5.7'
   s.add_development_dependency 'rspec', '~> 3.6', '>= 3.6.0'
 
   s.files         = `find *`.split("\n").uniq.sort.select { |f| !f.empty? }.reject { |f| f =~ /gem$/ or f =~ /gemspec$/ }

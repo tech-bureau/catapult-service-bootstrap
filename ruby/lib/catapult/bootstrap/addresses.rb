@@ -12,82 +12,58 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 module Catapult::Bootstrap
-  module Addresses
-    SECTION_SIZES = {
-      Global::ParseKey.peer_nodes                   => 5,
-      Global::ParseKey.api_nodes                    => 2,
-      Global::ParseKey.rest_gateways                => 2,
-      Global::ParseKey.nemesis_addresses_harvesting => 3,
-      Global::ParseKey.nemesis_generation_hash      => 1,
-      Global::ParseKey.nemesis_signer_private_key   => 1
-      # Global::ParseKey.nemesis_addresses => * # dyanmically calculated using left over address
+  class Addresses
+    require_relative('addresses/parse')
+    include Global
+
+    DEFAULT_SECTION_SIZES = {
+      ParseKey.peer_nodes                   => 5,
+      ParseKey.api_nodes                    => 2,
+      ParseKey.rest_gateways                => 2,
+      ParseKey.nemesis_addresses_harvesting => 3,
+      ParseKey.nemesis_generation_hash      => 1,
+      ParseKey.nemesis_signer_private_key   => 1
     }
 
-    # returns ruby object
-    def self.parse(input_file_path)
-      parsed_flat_form = parse_into_flat_form(input_file_path)
-      break_into_sections(parsed_flat_form)
-    end
-
-    private
-
-    def self.parse_into_flat_form(input_file_path)
-      parsed_form = []
-      next_state   = :private # states can be :private, :public, :address
-      next_element = {}
-      File.open(input_file_path).read.each_line do |line|
-        next unless line =~ Regexp.new("#{next_state}")
-        add_to_element!(next_element, next_state, line)
-        case next_state
-        when :private 
-        next_state = :public
-        when :public
-          next_state = :address
-        when :address
-          parsed_form << next_element
-          next_element = {}
-          next_state = :private
-        end
-      end
-      parsed_form
-    end
-
-
-    def self.break_into_sections(parsed_flat_form)
-      num_nemesis_addresses = parsed_flat_form.size - SECTION_SIZES.values.inject(0, :+) - 2
-      unless num_nemesis_addresses > 0
-        fail "Not enough addresses"
-      end
-      parsed_form = {}
-      index       = 0
-      SECTION_SIZES.each_pair do |component_type, size|
-        parsed_form[component_type.to_s] = parsed_flat_form[index..index+size-1]
-        index = index+size
-      end
-      parsed_form['nemesis_addresses'] = parsed_flat_form[index..index+num_nemesis_addresses-1]
-      parsed_form
+    def initialize(input_file_path, address_total)
+      @input_file_path  = input_file_path
+      @address_total    = address_total
     end
     
-    def self.add_to_element!(element, state, line)
-      value = 
-        case state
-        when :private 
-        value(state, line, /private key: ([0-9A-Z]+)/)
-        when :public
-          value(state, line, /public key: ([0-9A-Z]+)/)
-        when :address
-          value(state, line, Regexp.new("address \\(#{Global.catapult_nework_identifier}\\): ([0-9A-Z]+)"))
-        end
-      element.merge!(state.to_s => value)
+    def self.parse(input_file_path, address_total, output_form: nil)
+      new(input_file_path, address_total).parse(output_form: output_form)
+    end
+    def parse(output_form: nil)
+      Parse.parse(self.raw_address_info, self.section_sizes, break_into_sections: true, output_form: output_form)
     end
 
-    def self.value(state, line, regexp)
-      unless line =~ regexp
-        fail "Cannot find #{state} data"
-      end
-      $1
+    protected
+
+    attr_reader :input_file_path, :address_total
+
+    def raw_address_info
+      @raw_address_info ||= ::File.open(self.input_file_path).read
+    end
+
+    def section_sizes
+      @section_sizes ||= ret_section_sizes
+    end
+
+    def num_harvesting_keys
+      @num_harvesting_keys ||= 
+        DEFAULT_SECTION_SIZES[ParseKey.nemesis_addresses_harvesting] || 
+        fail("Unexpected that ParseKey.nemesis_addresses_harvesting is nil")
+    end
+    
+    private
+    
+    def ret_section_sizes
+      # Rules are that nemesis_addresses_harvesting_vrf has same size as nemesis_addresses_harvesting and
+      # remaining addresses used in nemesis_addresses
+      ret = DEFAULT_SECTION_SIZES.merge(ParseKey.nemesis_addresses_harvesting_vrf => self.num_harvesting_keys)
+      num_nemesis_addresses = self.address_total - ret.values.sum
+      fail "Not enough total addresses to generate nemesis addresses" if num_nemesis_addresses < 1
+      ret.merge(ParseKey.nemesis_addresses => num_nemesis_addresses)
     end
   end
 end
-  
-

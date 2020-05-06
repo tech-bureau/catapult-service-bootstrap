@@ -19,7 +19,7 @@ services:
   ######  dynamic configuration  ###########
   generate-raw-addresses:
     image: techbureau/catapult-tools-private:gcc-master-ac5add6c2c
-    command: bash -c "/bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
+    command: bash -c "/bin-mount/generate-raw-addresses-if-needed 53 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ./bin/bash:/bin-mount
     - ./build/generated-addresses:/addresses:rw
@@ -29,7 +29,8 @@ services:
     build:
       context: ./ruby
       dockerfile: Dockerfile-dev
-    command: bash -c "/bin-mount/wait /addresses/raw-addresses.txt && /usr/app/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /addresses/addresses.yaml"
+    command: bash -c "sleep infinity"
+#    command: bash -c "/bin-mount/wait /addresses/raw-addresses.txt && /usr/app/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /addresses/addresses.yaml 53"
     volumes:
     - ./bin/bash:/bin-mount
     - ./ruby:/usr/app
@@ -39,8 +40,8 @@ services:
     build:
       context: ./ruby
       dockerfile: Dockerfile-dev
-#    command: bash -c "sleep infinity"
-    command: bash -c "/bin-mount/wait /addresses/addresses.yaml && /usr/app/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
+    command: bash -c "sleep infinity"
+#    command: bash -c "/bin-mount/wait /addresses/addresses.yaml && /usr/app/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
     volumes:
     - ./bin/bash:/bin-mount
     - ./ruby:/usr/app

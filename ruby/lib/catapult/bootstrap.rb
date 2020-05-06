@@ -18,6 +18,7 @@ module Catapult
     # global must go first
     require_relative('bootstrap/addresses')
     require_relative('bootstrap/config')
+    require_relative('bootstrap/tools')
     
     BASE_CONFIG_SOURCE_DIR  = File.expand_path('../../catapult-templates', File.dirname(__FILE__))
     
