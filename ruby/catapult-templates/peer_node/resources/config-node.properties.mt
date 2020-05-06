@@ -1,32 +1,31 @@
 [node]
 
 port = {{port}}
-apiPort = {{api_port}}
-maxIncomingConnectionsPerIdentity = 6
+maxIncomingConnectionsPerIdentity = 3
 
 enableAddressReuse = false
-enableSingleThreadPool = true
+enableSingleThreadPool = false
 enableCacheDatabaseStorage = {{enable_cache_database_storage}}
 enableAutoSyncCleanup = {{enable_auto_sync_cleanup}}
 
 enableTransactionSpamThrottling = true
 transactionSpamThrottlingMaxBoostFee = 10'000'000
 
-maxBlocksPerSyncAttempt = 1435
+maxBlocksPerSyncAttempt = 42
 maxChainBytesPerSyncAttempt = 100MB
 
 shortLivedCacheTransactionDuration = 10m
 shortLivedCacheBlockDuration = 100m
 shortLivedCachePruneInterval = 90s
-shortLivedCacheMaxSize = 200'000
+shortLivedCacheMaxSize = 10'000'000
 
-minFeeMultiplier = 100
-transactionSelectionStrategy = maximize-fee
+minFeeMultiplier = 0
+transactionSelectionStrategy = oldest
 unconfirmedTransactionsCacheMaxResponseSize = 20MB
-unconfirmedTransactionsCacheMaxSize = 50'000
+unconfirmedTransactionsCacheMaxSize = 1'000'000
 
-connectTimeout = 15s
-syncTimeout = 120s
+connectTimeout = 10s
+syncTimeout = 60s
 
 socketWorkingBufferSize = 512KB
 socketWorkingBufferSensitivity = 100
@@ -37,7 +36,7 @@ blockElementTraceInterval = 1
 transactionDisruptorSize = 16384
 transactionElementTraceInterval = 10
 
-enableDispatcherAbortWhenFull = false
+enableDispatcherAbortWhenFull = true
 enableDispatcherInputAuditing = true
 
 maxCacheDatabaseWriteBatchSize = 5MB
