@@ -12,60 +12,49 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 module Catapult::Bootstrap
-  class Config
-    class NemesisPropertiesFile
-      require_relative('nemesis_properties_file/template_bindings')
-
+  class Config::Nemesis
+    class BlockPropertiesFile < self
+      require_relative('block_properties_file/template_bindings')
+      
       CONFIG_FILENAME = 'block-properties-file.properties'
-
-      def initialize(keys_handle, nemesis_dir)
-        @keys_handle = keys_handle
-        @nemesis_dir = nemesis_dir
+      
+      def generate_and_write
+        write_config_file(self.config_content)
       end
-
-      private :initialize
-
-      def self.generate_and_write_nemesis_properties_file(keys_handle, nemesis_dir)
-        new(keys_handle, nemesis_dir).generate_file
-      end
-      def generate_file
-        config_file = ret_nemesis_config
-        write_config_file(config_file)
-      end      
-
+      
       def self.config_filename
         CONFIG_FILENAME
       end
-
+      
       protected
+      
+      def config_content
+        @config_content ||= Catapult::Bootstrap.bind_mustache_variables(self.template, self.template_bindings)
+      end
 
-      attr_reader :keys_handle, :nemesis_dir
+      def template_bindings
+        TemplateBindings.template_bindings(self.nemesis_keys_info, self.harvest_vrf_directory)
+      end
 
       def template
         @template ||= File.open(self.template_file).read
       end
-
+      
       def template_file
         "#{Config.base_config_source_dir}/nemesis/#{self.config_filename}.mt"
       end
-
+      
       def config_filename
         self.class.config_filename
       end
       
       private
-
-      def ret_nemesis_config
-        nemesis_keys_info = Keys::Nemesis.get_nemesis_keys_info(self.keys_handle)
-        template_bindings = TemplateBindings.template_bindings(nemesis_keys_info)
-        Catapult::Bootstrap.bind_mustache_variables(self.template, template_bindings)
-      end
-
+      
       def write_config_file(config_file)
         nemesis_file_path = "#{self.nemesis_dir}/#{config_filename}"
         File.open(nemesis_file_path, 'w') { |f| f << config_file }
       end
-      
+
     end
   end
 end

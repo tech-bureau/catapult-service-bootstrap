@@ -13,7 +13,7 @@
 #    limitations under the License.
 module Catapult::Bootstrap
   class Config
-    require_relative('config/nemesis_properties_file')
+    require_relative('config/nemesis')
     require_relative('config/keys')
     require_relative('config/paths')
     require_relative('config/source_target_pair')
@@ -55,8 +55,8 @@ module Catapult::Bootstrap
       keys_handle.update_with_cert_info!(indexed_node_objects)
 
       generate_and_write_component_configurations!(keys_handle, indexed_node_objects)
-      # above goes first because it updates key handle
-      NemesisPropertiesFile.generate_and_write_nemesis_properties_file(keys_handle, nemesis_dir)
+      # above goes first because it updates key handle and generates the node config, which is neeed by nemesis linker
+      Nemesis.generate_and_write_files(keys_handle, nemesis_dir)
     end
 
     def self.cardinality(type)
@@ -79,6 +79,11 @@ module Catapult::Bootstrap
       @component_indexes ||= self.class.component_indexes(self.cardinality)
     end
 
+    def self.node_resource_parent_dir(base_config_target_dir = nil, node: 'peer-node-0')
+      base_config_target_dir ||= self.base_config_target_dir
+      "#{base_config_target_dir}/#{node}/userconfig"
+    end
+
     protected
     
     attr_reader :type, :config_info_dir, :template_attributes, :ndx_config_files
@@ -90,7 +95,7 @@ module Catapult::Bootstrap
     def self.base_config_target_dir
       @@base_config_target_dir || fail("@@base_config_target_dir is not set")
     end
-    
+
     def cardinality
       # This might be called before self.type is set
       @cardinality ||= self.class.cardinality(self.type || self.class.type)
@@ -100,7 +105,9 @@ module Catapult::Bootstrap
 
     def self.configs_generated_already?(base_config_target_dir)
       # just choosing one sample file that will be there
-      File.exists?("#{base_config_target_dir}/api-node-0/userconfig/resources/config-network.properties")
+      node_resource_parent_dir = node_resource_parent_dir(base_config_target_dir, node: 'peer-node-0')
+      sample_config_file = "#{node_resource_parent_dir}/resources/config-network.properties"
+      File.exists?(sample_config_file)
     end
 
     def self.generate_and_write_component_configurations!(keys_handle, indexed_node_objects)

@@ -15,6 +15,8 @@ module Catapult::Bootstrap
   class Config
     class Keys
       class ParsedContent
+        include Global
+
         KeyInfo = Struct.new(:private, :public, :address, :index) # :index starts at 0
         
         def initialize(raw_hash)
@@ -46,30 +48,17 @@ module Catapult::Bootstrap
           key_info_array(parse_key).find { |key_info| key_info.index == index }
         end
         
-        module KeyType
-          def self.for_accounts
-            :accounts
-          end
-          def self.for_harvesting
-            :harvesting
-          end
-          def self.for_generation_hash
-            :generation_hash
-          end
-          def self.for_signer_private_key
-            :signer_private_key
-          end
-        end
 
         # Mapping from parse name to componenttype
         LEGAL_PARSE_KEYS_MAPPING = {
-          Global::ParseKey.peer_nodes                    => :peer_node,
-          Global::ParseKey.api_nodes                    => :api_node,
-          Global::ParseKey.rest_gateways                => :rest_gateway,
-          Global::ParseKey.nemesis_addresses            => KeyType.for_accounts,
-          Global::ParseKey.nemesis_addresses_harvesting => KeyType.for_harvesting,
-          Global::ParseKey.nemesis_generation_hash      => KeyType.for_generation_hash,
-          Global::ParseKey.nemesis_signer_private_key   => KeyType.for_signer_private_key
+          ParseKey.peer_nodes                       => :peer_node,
+          ParseKey.api_nodes                        => :api_node,
+          ParseKey.rest_gateways                    => :rest_gateway,
+          ParseKey.nemesis_addresses                => Nemesis::KeyType.accounts,
+          ParseKey.nemesis_addresses_harvesting     => Nemesis::KeyType.harvesting,
+          ParseKey.nemesis_addresses_harvesting_vrf => Nemesis::KeyType.harvesting_vrf,
+          ParseKey.nemesis_generation_hash          => Nemesis::KeyType.generation_hash,
+          ParseKey.nemesis_signer_private_key       => Nemesis::KeyType.signer_private_key
         }
         LEGAL_PARSE_KEYS = LEGAL_PARSE_KEYS_MAPPING.keys
         

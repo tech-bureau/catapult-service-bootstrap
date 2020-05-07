@@ -28,26 +28,26 @@ module Catapult::Bootstrap
       end
       
       def harvest_keys
-        @harvest_keys ||= Config::Keys::Nemesis.get_keys_info_array_for_harvesting(self.keys_handle).map(&:private)
+        @harvest_keys ||= self.nemesis_key_info.harvesting_vrf_pairs_array.map(&:base).map(&:private)
       end
 
       def network_public_key
-        @network_public_key ||= Config::Keys::Nemesis.key_info_signer_private_key(self.keys_handle).public
+        self.nemesis_key_info.network_public_key
       end
 
       def network_generation_hash
-        @network_generation_hash ||= Config::Keys::Nemesis.key_info_generation_hash(self.keys_handle).public
+        self.nemesis_key_info.generation_hash
       end
 
       protected
 
       attr_reader :keys_handle
 
+      def nemesis_key_info
+        @nemesis_key_info ||= Config::Keys::Nemesis.new(self.keys_handle)
+      end
+
     end        
   end
 end
-
-
-
- 
 

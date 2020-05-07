@@ -13,6 +13,9 @@ cppFileHeader =
 cppFile =
 binDirectory = ../seed/public-test
 
+[transactions]
+transactionsDirectory = {{transactions_directory}}
+
 [namespaces]
 
 cat = true
@@ -55,3 +58,4 @@ isRestrictable = false
 {{#cat_harvest_distribution}}
 {{address}} = {{amount}}
 {{/cat_harvest_distribution}}
+

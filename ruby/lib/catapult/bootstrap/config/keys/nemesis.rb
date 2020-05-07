@@ -15,64 +15,72 @@ module Catapult::Bootstrap
   class Config
     class Keys
       class Nemesis < self
+        module KeyType
+          ARRAY = [
+            :accounts,
+            :harvesting,
+            :harvesting_vrf,
+            :generation_hash,
+            :signer_private_key,
+          ]
+          class << self
+            ARRAY.each { |el| define_method(el, lambda { el }) }
+          end
+        end
+
         GenerationInfo =  Struct.new(:network_identifier, :generation_hash, :signer_private_key)
-        Info           =  Struct.new(:key_info_array, :generation_info)
         
-        def self.get_nemesis_keys_info(keys_handle)
-          new(keys_handle).get_nemesis_keys_info
+        def account_keys_array
+          @account_keys_array ||= get_keys_info_array(KeyType.accounts)
+        end
+
+        HarvestingPair = Struct.new(:base, :vrf)
+        def harvesting_vrf_pairs_array
+          @harvesting_vrf_pairs_array ||= 
+            begin
+              array = []
+              self.harvesting_keys_array.each_with_index do |base_key, i|
+                array << HarvestingPair.new(base_key, self.harvesting_vrf_keys_array[i])
+              end 
+              array
+            end
         end
         
-        def self.get_keys_info_array_for_harvesting(keys_handle)
-          new(keys_handle).get_keys_info_array_for_harvesting
-        end
-        def get_keys_info_array_for_harvesting
-          self.keys_info_array_for_harvesting
+        def harvesting_vrf_keys_array
+          @harvesting_vrf_keys_array ||= get_keys_info_array(KeyType.harvesting_vrf)
         end
 
-        def get_nemesis_keys_info
-          # Important that keys_info_array_for_harvesting goes first because picking keys up to limit from front of array
-          keys_info_array = self.keys_info_array_for_harvesting + self.keys_info_array_for_accounts 
-          Info.new(keys_info_array, get_generation_info)
+        def harvesting_keys_array
+          @harvesting_keys_array ||= get_keys_info_array(KeyType.harvesting)
         end
 
-        def self.key_info_signer_private_key(keys_handle)
-          get_key_info(ParsedContent::KeyType.for_signer_private_key, keys_handle)
+        # TODO: this wil be deprecated
+        def key_info_array
+          # Important that harvesting goes first because picking keys up to limit from front of array
+          @key_info_array ||= self.harvesting_keys_array + self.account_keys_array 
+        end
+        
+        def generation_info
+          @generation_info ||= GenerationInfo.new(Global.catapult_nework_identifier, self.generation_hash, self.signer_private_key)
         end
 
-        def self.key_info_generation_hash(keys_handle)
-          get_key_info(ParsedContent::KeyType.for_generation_hash, keys_handle)
+        def signer_private_key
+          get_key_info(KeyType.signer_private_key).private
+        end
+
+        def network_public_key
+          get_key_info(KeyType.signer_private_key).public
+        end
+
+        def generation_hash
+          @generation_hash ||= get_key_info(KeyType.generation_hash).public
         end
 
         protected
         
         attr_reader :keys_handle
-        
-        def keys_info_array_for_accounts
-          @keys_info_array_for_accounts ||= get_keys_info_array(ParsedContent::KeyType.for_accounts)
-        end
-        
-        def keys_info_array_for_harvesting
-          @keys_info_array_for_harvesting ||= get_keys_info_array(ParsedContent::KeyType.for_harvesting)
-        end
 
-        def generation_hash
-          get_key_info(ParsedContent::KeyType.for_generation_hash).public
-        end
-
-        def signer_private_key
-          get_key_info(ParsedContent::KeyType.for_signer_private_key).private
-        end
-
-        private
-
-        def get_generation_info
-          GenerationInfo.new(Global.catapult_nework_identifier, self.generation_hash, self.signer_private_key)
-        end
-              
       end
     end
   end
 end
-
- 
-

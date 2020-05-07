@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 #    Copyright 2018 Tech Bureau, Corp
 # 
 #    Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,16 +11,16 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-require_relative('../lib/catapult.rb')
-unless ARGV.size == 3
-  STDERR << "Usage #{$0} KEYS_FILE_PATH BASE_CONFIG_DIR NEMESIS_DIR\n"
-  exit 1
+module Catapult::Bootstrap
+  class Config::Nemesis
+    class HarvestVrfFiles < self
+      def generate_and_write 
+        nemsis_linker_tool = Tools::Nemesis::Link.new(self.harvest_vrf_directory)
+        nemesis_keys_info.harvesting_vrf_pairs_array.each do |harvesting_pair|
+          nemsis_linker_tool.link_harvesting_pair(harvesting_pair)
+        end
+      end
+      
+    end
+  end
 end
-
-keys_file_path         = ARGV[0]
-base_config_target_dir = ARGV[1]
-nemesis_dir            = ARGV[2]
-
-keys = YAML.load(File.open(keys_file_path).read)
-Catapult::Bootstrap::Config.generate_and_write_configurations(keys, base_config_target_dir, nemesis_dir, overwrite: false)
-

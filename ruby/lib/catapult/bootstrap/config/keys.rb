@@ -17,6 +17,7 @@ module Catapult::Bootstrap
       require_relative('keys/component')
       require_relative('keys/handle')
       require_relative('keys/nemesis')
+      # nemesis needs to go before parsed_content
       require_relative('keys/parsed_content')
       
       def initialize(keys_handle)
