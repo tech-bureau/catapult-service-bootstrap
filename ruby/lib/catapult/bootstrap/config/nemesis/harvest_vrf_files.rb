@@ -15,7 +15,7 @@ module Catapult::Bootstrap
   class Config::Nemesis
     class HarvestVrfFiles < self
       def generate_and_write 
-        nemsis_linker_tool = Tools::Nemesis::Link.new(self.harvest_vrf_directory)
+        nemsis_linker_tool = Tools::Nemesis::Linker.new(self.harvest_vrf_directory)
         nemesis_keys_info.harvesting_vrf_pairs_array.each do |harvesting_pair|
           nemsis_linker_tool.link_harvesting_pair(harvesting_pair)
         end

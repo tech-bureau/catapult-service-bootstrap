@@ -1,6 +1,6 @@
 module Catapult::Bootstrap
   class Tools::Nemesis
-    class Link < self
+    class Linker < self
       def initialize(harvest_vrf_directory)
         @harvest_vrf_directory = harvest_vrf_directory
       end
