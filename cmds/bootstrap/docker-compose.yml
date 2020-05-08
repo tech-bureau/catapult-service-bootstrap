@@ -42,7 +42,7 @@ services:
         ipv4_address: 172.20.0.10
 
   generate-raw-addresses:
-    image: techbureau/catapult-tools-private:gcc-master-8ff8de46c0
+    image: techbureau/catapult-tools-private:gcc-master-6b1a810a33
     command: bash -c "/bin-mount/generate-raw-addresses-if-needed 53 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ../../bin/bash:/bin-mount
@@ -64,8 +64,8 @@ services:
     build:
       context: ../../ruby
       dockerfile: Dockerfile-dev
-#    command: bash -c "sleep infinity"
-    command: bash -c "/bin-mount/wait /addresses/addresses.yaml && /usr/app/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
+    command: bash -c "sleep infinity"
+#    command: bash -c "/bin-mount/wait /addresses/addresses.yaml && /usr/app/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
     volumes:
     - ../../bin/bash:/bin-mount
     - ../../ruby:/usr/app

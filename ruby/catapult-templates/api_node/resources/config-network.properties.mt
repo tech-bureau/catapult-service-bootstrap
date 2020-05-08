@@ -32,7 +32,10 @@ maxMosaicAtomicUnits = 9'000'000'000'000'000
 totalChainImportance = {{total_chain_importance}}
 minHarvesterBalance = 500
 maxHarvesterBalance = 50'000'000'000'000
+
 harvestBeneficiaryPercentage = 10
+harvestNetworkPercentage = 5
+harvestNetworkFeeSinkPublicKey = FF5563F1C5824EE0CD868799FBE8744B46D5549973FDA499939C952D951494E4
 
 blockPruneInterval = 360
 maxTransactionsPerBlock = 6'000

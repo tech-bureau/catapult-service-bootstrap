@@ -1,4 +1,4 @@
-FROM techbureau/catapult-tools-private:gcc-master-8ff8de46c0
+FROM techbureau/catapult-tools-private:gcc-master-6b1a810a33
 RUN apt update
 RUN apt install -y ruby
 # for debug
@@ -18,9 +18,5 @@ RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)
 RUN bundle install
 # when dbugging this will be mounted
 RUN rm -rf /usr/app/*
-
-# TEMP
-COPY catapult.tools.linker /usr/catapult/bin/catapult.tools.linker
-RUN chmod 755 /usr/catapult/bin/catapult.tools.linker
 
 
