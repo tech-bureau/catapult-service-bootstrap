@@ -34,9 +34,9 @@ module Catapult::Bootstrap
           @account_keys_array ||= get_keys_info_array(KeyType.accounts)
         end
 
-        HarvestingPair = Struct.new(:base, :vrf)
-        def harvesting_vrf_pairs_array
-          @harvesting_vrf_pairs_array ||= 
+        HarvestingPair = Struct.new(:signing, :vrf)
+        def harvesting_pairs_array
+          @harvesting_pairs_array ||= 
             begin
               array = []
               self.harvesting_keys_array.each_with_index do |base_key, i|
@@ -46,14 +46,6 @@ module Catapult::Bootstrap
             end
         end
         
-        def harvesting_vrf_keys_array
-          @harvesting_vrf_keys_array ||= get_keys_info_array(KeyType.harvesting_vrf)
-        end
-
-        def harvesting_keys_array
-          @harvesting_keys_array ||= get_keys_info_array(KeyType.harvesting)
-        end
-
         # TODO: this wil be deprecated
         def key_info_array
           # Important that harvesting goes first because picking keys up to limit from front of array
@@ -79,6 +71,15 @@ module Catapult::Bootstrap
         protected
         
         attr_reader :keys_handle
+
+        def harvesting_vrf_keys_array
+          @harvesting_vrf_keys_array ||= get_keys_info_array(KeyType.harvesting_vrf)
+        end
+
+        def harvesting_keys_array
+          @harvesting_keys_array ||= get_keys_info_array(KeyType.harvesting)
+        end
+
 
       end
     end

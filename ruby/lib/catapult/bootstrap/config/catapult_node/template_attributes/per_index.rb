@@ -54,7 +54,8 @@ module Catapult::Bootstrap
             network_generation_hash: self.parent.network_generation_hash,
 
             harvesting_is_on: self.harvesting_is_on?,
-            harvest_key: self.harvest_key?,
+            harvester_vrf_private_key: self.harvester_vrf_private_key?,
+            harvester_signing_private_key: self.harvester_signing_private_key?,
             harvesting_beneficiary: HARVESTING_BENEFICIARY,
 
             mongo_host: self.mongo_host_for_api_node, # just used when there is an api host
@@ -79,21 +80,22 @@ module Catapult::Bootstrap
           self.type == :peer_node and self.index  == 0
         end
         
-        def harvest_key?
-          harvest_key if harvesting_is_on? 
+        def harvester_vrf_private_key?
+          self.harvesting_pairs.vrf.private if harvesting_is_on? 
         end
-        
+
+        def harvester_signing_private_key?
+          self.harvesting_pairs.signing.private if harvesting_is_on? 
+        end
+
         def private_key
           self.parent.component_keys.get_key(:private, self.type, self.index)
         end
 
-        private
-        
-        def harvest_key
-          fail "Only should have harvesting on peer_node" unless self.type  == :peer_node 
-          self.parent.harvest_keys[self.index] || fail("Do not have a harvest key for index #{self.index}")
+        def harvesting_pairs
+          @harvesting_pairs ||= self.parent.harvesting_pairs_array[self.index] || fail("Do not have a harvest key for index #{self.index}")
         end
-        
+
       end
     end
   end        

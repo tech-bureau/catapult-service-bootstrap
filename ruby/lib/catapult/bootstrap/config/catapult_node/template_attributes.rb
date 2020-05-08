@@ -27,8 +27,8 @@ module Catapult::Bootstrap
         PerIndex.new(self, index).hash
       end
       
-      def harvest_keys
-        @harvest_keys ||= self.nemesis_key_info.harvesting_vrf_pairs_array.map(&:base).map(&:private)
+      def harvesting_pairs_array
+        @harvesting_pairs_array ||= self.nemesis_key_info.harvesting_pairs_array
       end
 
       def network_public_key

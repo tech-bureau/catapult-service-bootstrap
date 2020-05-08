@@ -9,6 +9,7 @@ if [ ! -d /data ]; then
   exit 1
 fi
 if [ ! -d /data/00000 ]; then
+  set -e
   echo "running nemgen"
   cd /tmp
   mkdir settings
