@@ -49,7 +49,6 @@ services:
     - ./build/catapult-config:/config-build
     - ./build/nemesis:/nemesis:rw
     - ./build/state:/state:rw
-    - ./catapult.tools.linker:/usr/catapult/bin/catapult.tools.linker
 
   peer-node-0-nemgen:
     build: cmds/bootstrap/dockerfiles/nemgen
