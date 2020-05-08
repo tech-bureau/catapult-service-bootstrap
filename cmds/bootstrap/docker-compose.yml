@@ -64,8 +64,8 @@ services:
     build:
       context: ../../ruby
       dockerfile: Dockerfile-dev
-    command: bash -c "sleep infinity"
-#    command: bash -c "/bin-mount/wait /addresses/addresses.yaml && /usr/app/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
+#    command: bash -c "sleep infinity"
+    command: bash -c "/bin-mount/wait /addresses/addresses.yaml && /usr/app/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
     volumes:
     - ../../bin/bash:/bin-mount
     - ../../ruby:/usr/app
