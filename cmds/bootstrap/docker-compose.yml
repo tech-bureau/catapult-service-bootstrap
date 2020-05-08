@@ -42,27 +42,33 @@ services:
         ipv4_address: 172.20.0.10
 
   generate-raw-addresses:
-    image: techbureau/catapult-tools-private:gcc-master-ac5add6c2c
-    command: bash -c "/bin-mount/generate-raw-addresses-if-needed 50 /addresses/raw-addresses.txt /addresses/addresses.yaml"
+    image: techbureau/catapult-tools-private:gcc-master-8ff8de46c0
+    command: bash -c "/bin-mount/generate-raw-addresses-if-needed 53 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
     - ../../bin/bash:/bin-mount
     - ../../build/generated-addresses:/addresses:rw
     - ../../build/state:/state:rw
 
   store-addresses:
-    build: dockerfiles/ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/raw-addresses.txt && /ruby/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /addresses/addresses.yaml"
+    build:
+      context: ../../ruby
+      dockerfile: Dockerfile-dev
+#    command: bash -c "sleep infinity"
+    command: bash -c "/bin-mount/wait /addresses/raw-addresses.txt && /usr/app/bin/store-addresses-if-needed.rb /addresses/raw-addresses.txt /addresses/addresses.yaml 53"
     volumes:
-    - ../../bin/ash:/bin-mount
-    - ../../ruby:/ruby
+    - ../../bin/bash:/bin-mount
+    - ../../ruby:/usr/app
     - ../../build/generated-addresses:/addresses:rw
 
   setup-network:
-    build: dockerfiles/ruby-alpine
-    command: ash -c "/bin-mount/wait /addresses/addresses.yaml && /ruby/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
+    build:
+      context: ../../ruby
+      dockerfile: Dockerfile-dev
+#    command: bash -c "sleep infinity"
+    command: bash -c "/bin-mount/wait /addresses/addresses.yaml && /usr/app/bin/generate-and-write-configurations.rb /addresses/addresses.yaml /config-build /nemesis && touch /state/configs-generated"
     volumes:
-    - ../../bin/ash:/bin-mount
-    - ../../ruby:/ruby
+    - ../../bin/bash:/bin-mount
+    - ../../ruby:/usr/app
     - ../../build/generated-addresses:/addresses
     - ../../build/catapult-config:/config-build
     - ../../build/nemesis:/nemesis:rw
