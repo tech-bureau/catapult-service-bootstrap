@@ -1,4 +1,4 @@
-FROM techbureau/catapult-tools-private:gcc-master-6b1a810a33
+FROM techbureau/catapult-tools-private:gcc-master-4fc3caeeec
 RUN apt update
 RUN apt install -y ruby
 # for debug
