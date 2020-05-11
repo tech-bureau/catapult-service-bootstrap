@@ -1,1 +1,1 @@
-FROM nemfoundation/symbol-rest-beta:commit-7366605
+FROM techbureau/catapult-rest-server-nightly:commit-2911c86
