@@ -13,7 +13,6 @@
 #    limitations under the License.
 
 require 'fileutils'
-require 'mustache'
 require 'yaml'
 module Catapult
   require_relative('catapult/bootstrap')

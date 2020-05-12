@@ -14,8 +14,9 @@
 
 module Catapult
   module Bootstrap
+    require_relative('bootstrap/mixin')
     require_relative('bootstrap/global')
-    # global must go first
+    # mixin and global must go first
     require_relative('bootstrap/addresses')
     require_relative('bootstrap/config')
     require_relative('bootstrap/tools')
@@ -26,10 +27,7 @@ module Catapult
       BASE_CONFIG_SOURCE_DIR
     end
     
-    def self.bind_mustache_variables(template, template_attributes_hash)
-      ret = ::Mustache.render(template, template_attributes_hash)
-      ret.gsub('&#39;',"'") # protection around ::Mustache.render "'" to '&#39;'
-    end
+
   end
 end
 

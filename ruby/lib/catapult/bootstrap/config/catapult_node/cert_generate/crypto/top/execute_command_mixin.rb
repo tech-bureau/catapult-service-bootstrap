@@ -11,12 +11,11 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-require 'tempfile'
-require 'open3'
 module Catapult::Bootstrap
   class Config::CatapultNode::CertGenerate
     class Crypto::Top
       module ExecuteCommandMixin
+        include Mixin::ExecuteCommand
 
         private
 
@@ -30,32 +29,7 @@ module Catapult::Bootstrap
             end
           end
         end
-        
-        def create_tempfile(content = nil, &block)
-          begin 
-            is_closed = false
-            temp_file = ::Tempfile.new
-            if content
-              temp_file << content
-              temp_file.close
-              is_closed = true
-            end
-            block.call(temp_file)
-          ensure
-            temp_file.close unless is_closed
-            temp_file.unlink
-          end
-        end
-        
-        def execute_command(command_string)
-          stdout, stderr, status = ::Open3.capture3(command_string)
-          if status.exitstatus == 0
-            stdout
-          else
-            fail "Error on #{command_string}: #{stderr}"
-          end
-        end
-        
+
       end
     end
   end

@@ -15,7 +15,7 @@ module Catapult::Bootstrap
   class Config::Nemesis
     class BlockPropertiesFile < self
       require_relative('block_properties_file/template_bindings')
-      
+
       CONFIG_FILENAME = 'block-properties-file.properties'
       
       def generate_and_write
@@ -29,7 +29,7 @@ module Catapult::Bootstrap
       protected
       
       def config_content
-        @config_content ||= Catapult::Bootstrap.bind_mustache_variables(self.template, self.template_bindings)
+        @config_content ||= bind_mustache_variables(self.template, self.template_bindings)
       end
 
       def template_bindings

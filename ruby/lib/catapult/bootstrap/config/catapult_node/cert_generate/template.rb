@@ -15,6 +15,8 @@ module Catapult::Bootstrap
   class Config::CatapultNode
     class CertGenerate
       class Template
+        include Mixin::Mustache
+
         def initialize(type, component_index, indexed_templates)
           @type              = type
           @component_index   = component_index
@@ -50,7 +52,7 @@ module Catapult::Bootstrap
         private
         
         def instantiate_template(template)
-          Catapult::Bootstrap.bind_mustache_variables(template, self.template_attributes)
+          bind_mustache_variables(template, self.template_attributes)
         end
         
         def config_relative_path(target_file_name)

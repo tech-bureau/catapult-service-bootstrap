@@ -13,7 +13,7 @@
 #    limitations under the License.
 module Catapult::Bootstrap
   class Config
-    class Nemesis
+    class Nemesis < self
       require_relative('nemesis/block_properties_file')
       require_relative('nemesis/harvest_vrf_files')
 

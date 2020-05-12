@@ -24,6 +24,8 @@ module Catapult::Bootstrap
     
     include Paths::Mixin
     extend Paths::ClassMixin
+
+    include Mixin::Mustache
     
     def initialize(type, template_attributes)
       @type                  = type
@@ -144,7 +146,7 @@ module Catapult::Bootstrap
         template_path = pair.source_path
         template      = File.open(template_path).read
         self.component_indexes.each do |index| 
-          instantiated_template = Catapult::Bootstrap.bind_mustache_variables(template, self.template_attributes.hash(index))
+          instantiated_template = bind_mustache_variables(template, self.template_attributes.hash(index))
           path = relative_path(:config_file, pair.filename)
           add_config_file!(index, path, instantiated_template)
         end 

@@ -20,7 +20,7 @@ module Catapult::Bootstrap
       private
       
       def command(harvesting_pair)
-        "#{self.executable} -r  #{resource_parent_directory} --secret=#{harvesting_pair.signing.private} --linkedPublicKey=#{harvesting_pair.vrf.public} --output #{output_file(harvesting_pair)}"
+        "#{self.executable} -r  #{self.resource_parent_directory} --secret=#{harvesting_pair.signing.private} --linkedPublicKey=#{harvesting_pair.vrf.public} --output #{output_file(harvesting_pair)}"
       end
 
       def output_file(harvesting_pair)

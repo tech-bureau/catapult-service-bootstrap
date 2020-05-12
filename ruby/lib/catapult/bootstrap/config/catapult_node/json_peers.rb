@@ -14,6 +14,8 @@
 module Catapult::Bootstrap
   class Config::CatapultNode
     class JsonPeers
+      include Mixin::Mustache
+
       def initialize(component_keys, all_peers)
         @component_keys = component_keys
         @all_peers      = all_peers
@@ -63,7 +65,7 @@ module Catapult::Bootstrap
       end
       
       def instantiate_known_peer(peer_info_hash)
-        Catapult::Bootstrap.bind_mustache_variables(self.known_peer_template, peer_info_hash)
+        bind_mustache_variables(self.known_peer_template, peer_info_hash)
       end
       
       def peer_info_array(peer_type)

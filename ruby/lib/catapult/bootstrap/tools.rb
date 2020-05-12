@@ -1,4 +1,3 @@
-require 'frontkick'
 module Catapult::Bootstrap
   class Tools
     require_relative('tools/address')
@@ -7,6 +6,8 @@ module Catapult::Bootstrap
     DEFAULT_RESOURCE_DIR = '/userconfig'
     DEFAULT_BIN_DIR      = '/usr/catapult/bin'
     DEFAULT_ADDRESSES_DIR  = '/addresses'
+
+    include Mixin::ExecuteCommand
 
     protected
     
@@ -36,22 +37,6 @@ module Catapult::Bootstrap
     COMMAND_NAME_PREFIX = 'catapult.tools'
     def executable
       @executable ||= "#{self.bin_dir}/#{COMMAND_NAME_PREFIX}.#{self.type}"
-    end
-
-    # returns stdout if no error
-    def execute_command(command_string, timeout: nil)
-      execute_command_all_info(command_string, timeout: timeout).stdout
-    end
-
-    ExecuteInfo = Struct.new(:stdout, :stderr, :status)
-    def execute_command_all_info(command_string, timeout: nil)
-      # Using Frontkick for timeout capability
-      result = ::Frontkick.exec(command_string, timeout: timeout)
-      if result.status == 0
-        ExecuteInfo.new(result.stdout, result.stderr, result.status)
-      else
-        fail "Error on #{command_string}: #{result.stderr}"
-      end
     end
 
     private
