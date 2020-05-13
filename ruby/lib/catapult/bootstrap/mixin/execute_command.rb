@@ -19,7 +19,7 @@ module Catapult::Bootstrap
           fail "Error on #{command_string}: #{result.stderr}"
         end
       end
-      
+
       def create_tempfile(content = nil, &block)
         begin 
           is_closed = false

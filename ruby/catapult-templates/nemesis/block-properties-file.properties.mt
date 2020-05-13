@@ -11,27 +11,27 @@ cppFileHeader =
 [output]
 
 cppFile =
-binDirectory = ../seed/public-test
+binDirectory = {{bin_directory}}
 
 [transactions]
 transactionsDirectory = {{transactions_directory}}
 
 [namespaces]
 
-cat = true
-cat.currency = true
-cat.harvest = true
+{{base_namespace}} = true
+{{base_namespace}}.{{mosaic_name.currency}} = true
+{{base_namespace}}.{{mosaic_name.harvesting}} = true
 
-[namespace>cat]
+[namespace>{{base_namespace}}]
 
 duration = 0
 
 [mosaics]
 
-cat:currency = true
-cat:harvest = true
+{{base_namespace}}:{{mosaic_name.currency}} = true
+{{base_namespace}}:{{mosaic_name.harvesting}} = true
 
-[mosaic>cat:currency]
+[mosaic>{{base_namespace}}:{{mosaic_name.currency}}]
 
 divisibility = 6
 duration = 0
@@ -40,12 +40,12 @@ isTransferable = true
 isSupplyMutable = false
 isRestrictable = false
 
-[distribution>cat:currency]
-{{#cat_currency_distribution}}
+[distribution>{{base_namespace}}:{{mosaic_name.currency}}]
+{{#currency_distribution}}
 {{address}} = {{amount}}
-{{/cat_currency_distribution}}
+{{/currency_distribution}}
 
-[mosaic>cat:harvest]
+[mosaic>{{base_namespace}}:{{mosaic_name.harvesting}}]
 
 divisibility = 3
 duration = 0
@@ -54,8 +54,8 @@ isTransferable = true
 isSupplyMutable = true
 isRestrictable = false
 
-[distribution>cat:harvest]
-{{#cat_harvest_distribution}}
+[distribution>{{base_namespace}}:{{mosaic_name.harvesting}}]
+{{#harvesting_distribution}}
 {{address}} = {{amount}}
-{{/cat_harvest_distribution}}
+{{/harvesting_distribution}}
 

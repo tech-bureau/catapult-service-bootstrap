@@ -3,8 +3,11 @@ module Catapult::Bootstrap
     require_relative('tools/address')
     require_relative('tools/nemesis')
 
+    # TODO: THis should be cleaned up in directory globals
+
     DEFAULT_RESOURCE_DIR = '/userconfig'
     DEFAULT_BIN_DIR      = '/usr/catapult/bin'
+
     DEFAULT_ADDRESSES_DIR  = '/addresses'
 
     include Mixin::ExecuteCommand
@@ -36,10 +39,14 @@ module Catapult::Bootstrap
 
     COMMAND_NAME_PREFIX = 'catapult.tools'
     def executable
-      @executable ||= "#{self.bin_dir}/#{COMMAND_NAME_PREFIX}.#{self.type}"
+      @executable ||= ret_executable(self.type)
     end
 
     private
+
+    def ret_executable(tool_name)
+      "#{self.bin_dir}/#{COMMAND_NAME_PREFIX}.#{tool_name}"
+    end
 
     def mkdir_p(dir)
       ::FileUtils.mkdir_p(dir)

@@ -21,7 +21,13 @@ end
 keys_file_path         = ARGV[0]
 base_config_target_dir = ARGV[1]
 nemesis_dir            = ARGV[2]
+keys = ::YAML.load(::File.open(keys_file_path).read)
 
-keys = YAML.load(File.open(keys_file_path).read)
-Catapult::Bootstrap::Config.generate_and_write_configurations(keys, base_config_target_dir, nemesis_dir, overwrite: false)
+include Catapult::Bootstrap
+Directory::Nemesis.set!(nemesis_dir)
+Directory::BaseConfig.set!(base_config_target_dir)
+
+# TODO: remove base_config_target_dir
+Catapult::Bootstrap::Config.generate_and_write(keys, base_config_target_dir, overwrite: false)
+Tools::Nemesis::Nemgen.generate_and_write
 

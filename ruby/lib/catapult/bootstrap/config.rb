@@ -43,7 +43,7 @@ module Catapult::Bootstrap
       rest_gateway: 1
     }
     @base_config_target_dir = nil
-    def self.generate_and_write_configurations(raw_keys_input, base_config_target_dir, nemesis_dir, overwrite: false)
+    def self.generate_and_write(raw_keys_input, base_config_target_dir, overwrite: false)
       unless overwrite 
         return if configs_generated_already?(base_config_target_dir)
       end
@@ -58,7 +58,7 @@ module Catapult::Bootstrap
 
       generate_and_write_component_configurations!(keys_handle, indexed_node_objects)
       # above goes first because it updates key handle and generates the node config, which is neeed by nemesis linker
-      Nemesis.generate_and_write_files(keys_handle, nemesis_dir)
+      Nemesis.generate_and_write_files(keys_handle)
     end
 
     def self.cardinality(type)

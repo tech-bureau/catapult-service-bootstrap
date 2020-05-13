@@ -22,10 +22,27 @@ module Catapult::Bootstrap
         write_config_file(self.config_content)
       end
       
-      def self.config_filename
-        CONFIG_FILENAME
+      def self.full_path 
+        "#{Directory::Nemesis.full_path}/#{CONFIG_FILENAME}"
       end
-      
+
+      BIN_DIRECTORY = 'seed'
+      def self.bin_directory
+        BIN_DIRECTORY
+      end
+
+      BASE_NAMESPACE = 'cat'
+      def self.base_namespace
+        BASE_NAMESPACE
+      end
+
+      CURRENCY_MOSAIC_NAME   = 'currency'
+      HARVESTING_MOSAIC_NAME = 'harvest'
+      MosaicNameStruct = Struct.new(:currency, :harvesting)
+      def self.mosaic_name
+        MosaicNameStruct.new(CURRENCY_MOSAIC_NAME, HARVESTING_MOSAIC_NAME)
+      end
+
       protected
       
       def config_content
@@ -41,18 +58,13 @@ module Catapult::Bootstrap
       end
       
       def template_file
-        "#{Config.base_config_source_dir}/nemesis/#{self.config_filename}.mt"
-      end
-      
-      def config_filename
-        self.class.config_filename
+        "#{Config.base_config_source_dir}/nemesis/#{CONFIG_FILENAME}.mt"
       end
       
       private
       
       def write_config_file(config_file)
-        nemesis_file_path = "#{self.nemesis_dir}/#{config_filename}"
-        File.open(nemesis_file_path, 'w') { |f| f << config_file }
+        File.open(self.class.full_path, 'w') { |f| f << config_file }
       end
 
     end
