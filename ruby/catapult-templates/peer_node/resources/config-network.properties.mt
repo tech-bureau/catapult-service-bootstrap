@@ -16,6 +16,7 @@ harvestingMosaicId = {{{harvesting_mosaic_id}}}
 
 blockGenerationTargetTime = 15s
 blockTimeSmoothingFactor = 3000
+blockFinalizationInterval = 30
 
 importanceGrouping = 1433
 importanceActivityPercentage = 5
@@ -32,6 +33,7 @@ maxMosaicAtomicUnits = 9'000'000'000'000'000
 totalChainImportance = {{{total_chain_importance}}}
 minHarvesterBalance = 500
 maxHarvesterBalance = 50'000'000'000'000
+minVoterBalance = 50'000
 
 harvestBeneficiaryPercentage = 10
 harvestNetworkPercentage = 5
