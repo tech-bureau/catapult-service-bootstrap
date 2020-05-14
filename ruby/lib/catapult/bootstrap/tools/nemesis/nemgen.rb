@@ -13,7 +13,9 @@ module Catapult::Bootstrap
         nemgen_helper = new
         begin
           nemgen_helper.generate_nemesis_in_temp_dir?
-        # TODO: iterate over all the nodes using opy_to_node_data_dir(node_data_dir)
+        # TODO: iterate over all the nodes using copy_to_node_data_dir(node_data_dir)
+          require 'byebug'; byebug
+          :stub
         ensure
           nemgen_helper.remove_temp_dir
         end

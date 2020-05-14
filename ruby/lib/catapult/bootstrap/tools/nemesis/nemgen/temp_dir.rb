@@ -36,9 +36,10 @@ module Catapult::Bootstrap
       def execute_nemgen(temp_dir_path)
         ::Dir.chdir(temp_dir_path) do 
           execute_info = execute_command_all_info(self.nemgen_command)
-          require 'byebug'; byebug
+          require 'byebug'
           @mosaics = Mosaics.parse(execute_info.stderr)
-          # TODO: use mosaics to update network config and then rerurn 
+          @mosaics.update_config_network_file(self.node_resource_parent_dir)
+          execute_command(self.nemgen_command)
         end
       end
       private :execute_nemgen
