@@ -22,7 +22,7 @@ module Catapult::Bootstrap
         end
         
         def component_data_dir(type:, index:)
-          "#{Directory::BaseData.full_dir}/#{component_sub_dir(type, index)}"
+          "#{Directory::BaseData.full_path}/#{component_sub_dir(type, index)}"
         end
         
         # This method could be overwritten

@@ -36,31 +36,29 @@ module Catapult::Bootstrap
       def execute_nemgen(temp_dir_path)
         ::Dir.chdir(temp_dir_path) do 
           execute_info = execute_command_all_info(self.nemgen_command)
-          require 'byebug'
           @mosaics = Mosaics.parse(execute_info.stderr)
           @mosaics.update_config_network_file(self.component_userconfig_dir)
           execute_command(self.nemgen_command)
         end
       end
       private :execute_nemgen
-      
-      protected
 
-      attr_reader :temp_dir_path
+      def seed_dir
+        @seed_dir ||= "#{self.temp_dir_path}/#{Config::Nemesis::BlockPropertiesFile.bin_directory}"
+      end
 
       def mosaics
         @mosaics || fail("@mosaics is nil")
       end
+      
+      protected
 
       def temp_dir_path
         self.temp_dir_path? || fail("temp_dir_path should be set")
       end
+
       def temp_dir_path?
         @temp_dir_path 
-      end
-
-      def seed_dir
-        @seed_dir ||= "#{self.temp_dir_path}/#{Config::Nemesis::BlockPropertiesFile.bin_directory}"
       end
 
       def data_dir_00000

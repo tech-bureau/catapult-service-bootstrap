@@ -1,8 +1,9 @@
 module Catapult::Bootstrap
   class Tools::Nemesis
     class Nemgen < self
-      require_relative('nemgen/temp_dir')
+      require_relative('nemgen/process_node')
       require_relative('nemgen/mosaics')
+      require_relative('nemgen/temp_dir')
 
       def initialize
         @nemesis_temp_dir = TempDir.new
@@ -10,14 +11,14 @@ module Catapult::Bootstrap
       private :initialize
 
       def self.generate_and_write
-        nemgen_helper = new
+        new.generate_and_write
+      end
+      def generate_and_write
         begin
-          nemgen_helper.generate_nemesis_in_temp_dir?
-        # TODO: iterate over all the nodes using copy_to_node_data_dir(node_data_dir)
-          require 'byebug'; byebug
-          :stub
+          generate_nemesis_in_temp_dir?
+          self.all_node_refs.each { |node_ref| ProcessNode.process?(node_ref, self) }
         ensure
-          nemgen_helper.remove_temp_dir
+          remove_temp_dir
         end
       end
 
@@ -29,13 +30,28 @@ module Catapult::Bootstrap
         self.nemesis_temp_dir.remove_temp_dir
       end
 
-      def copy_to_node_data_dir(node_data_dir)
+      def temp_data_dir
+        @temp_data_dir ||= self.nemesis_temp_dir.seed_dir
+      end
+
+      def mosaics
+        @mosaics ||= self.nemesis_temp_dir.mosaics
       end
 
       protected
 
       attr_reader :nemesis_temp_dir
-      
+
+      NODE_COMPONENT_TYPES = [:peer_node, :api_node]
+      NodeRef = Struct.new(:type, :index)
+      def all_node_refs
+        @all_node_refs ||= NODE_COMPONENT_TYPES.map do |type| 
+          cardinality = Global::ComponentCardinaity.send(type)
+          (0...cardinality).to_a.map { |index| NodeRef.new(type, index) }
+        end.flatten
+      end
+
+
       # component_userconfig_dir can pick any of the nodes userconfig dirs
       def component_userconfig_dir
         Config.sample_component_userconfig_dir
@@ -44,6 +60,9 @@ module Catapult::Bootstrap
       def block_properties_path
         Config::Nemesis::BlockPropertiesFile.full_path
       end
+
+
+      private
 
     end
   end

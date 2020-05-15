@@ -13,7 +13,7 @@
 #    limitations under the License.
 module Catapult::Bootstrap
   module Global
-    module NodeCardinaity
+    module ComponentCardinaity
       HASH = { 
         api_node: 1,
         peer_node: 2,

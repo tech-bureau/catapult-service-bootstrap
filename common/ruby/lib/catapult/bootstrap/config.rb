@@ -54,7 +54,7 @@ module Catapult::Bootstrap
     end
 
     def self.cardinality(type)
-      Global::NodeCardinaity::HASH[type] || fail("Unexpected type '#{type}'")
+      Global::ComponentCardinaity::HASH[type] || fail("Unexpected type '#{type}'")
     end
     
     def self.type
