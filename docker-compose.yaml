@@ -1,0 +1,45 @@
+
+#    Copyright 2018 Tech Bureau, Corp
+# 
+#    Licensed under the Apache License, Version 2.0 (the "License");
+#    you may not use this file except in compliance with the License.
+#    You may obtain a copy of the License at
+# 
+#        http:#www.apache.org/licenses/LICENSE-2.0
+# 
+#    Unless required by applicable law or agreed to in writing, software
+#    distributed under the License is distributed on an "AS IS" BASIS,
+#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#    See the License for the specific language governing permissions and
+#    limitations under the License.
+
+version: '3'
+
+services:
+  generate-raw-addresses:
+    build:
+      context: ./common/ruby
+      dockerfile: Dockerfile-dev
+    command: bash -c "/bin-mount/generate-raw-addresses-if-needed 53 /addresses/raw-addresses.txt /addresses/addresses.yaml"
+    volumes:
+    - ./bin/bash:/bin-mount
+    - ./build/generated-addresses:/addresses:rw
+    - ./build/state:/state:rw
+
+  setup-network:
+    build:
+      context: ./common/ruby
+      dockerfile: Dockerfile-dev
+    command: bash -c "sleep infinity"
+#    command: bash -c "/usr/app/bin/setup-network.rb && touch /state/configs-generated"
+    environment:
+    - NUMBER_OF_ADDRESSES=53
+    - ADDRESSES_DIR=/addresses
+    - BASE_CONFIG_DIR=/config-build 
+    - NEMESIS_DIR=/nemesis
+    volumes:
+    - ./common/ruby:/usr/app
+    - ./build/generated-addresses:/addresses
+    - ./build/catapult-config:/config-build
+    - ./build/nemesis:/nemesis:rw
+    - ./build/state:/state:rw
