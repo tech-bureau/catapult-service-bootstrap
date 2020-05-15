@@ -25,24 +25,29 @@ module Catapult::Bootstrap
       ParseKey.nemesis_signer_private_key   => 1
     }
 
-    def initialize(input_file_path, address_total)
-      @input_file_path  = input_file_path
-      @address_total    = address_total
+    def initialize(address_total, raw_addresses_path: nil )
+      @address_total      = address_total
+      @raw_addresses_path = raw_addresses_path
     end
-    
-    def self.parse(input_file_path, address_total, output_form: nil)
-      new(input_file_path, address_total).parse(output_form: output_form)
+
+    def self.generate_and_parse(address_total)
+      new(address_total).generate_and_parse
+    end
+
+    # TODO: these can be deprecated
+    def self.parse(raw_addresses_path, address_total, output_form: nil)
+      new(address_total, raw_addresses_path:  raw_addresses_path).parse(output_form: output_form)
     end
     def parse(output_form: nil)
-      Parse.parse(self.raw_address_info, self.section_sizes, break_into_sections: true, output_form: output_form)
+      Parse.parse(raw_address_info_from_file, self.section_sizes, break_into_sections: true, output_form: output_form)
     end
 
     protected
 
-    attr_reader :input_file_path, :address_total
+    attr_reader :address_total
 
-    def raw_address_info
-      @raw_address_info ||= ::File.open(self.input_file_path).read
+    def raw_addresses_path
+      @raw_addresses_path || fail("@raw_addresses_path is nil")
     end
 
     def section_sizes
@@ -56,6 +61,10 @@ module Catapult::Bootstrap
     end
     
     private
+
+    def raw_address_info_from_file
+      ::File.open(self.raw_addresses_path).read
+    end
     
     def ret_section_sizes
       # Rules are that nemesis_addresses_harvesting_vrf has same size as nemesis_addresses_harvesting and

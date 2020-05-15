@@ -18,17 +18,17 @@ version: '3'
 services:
   generate-raw-addresses:
     build:
-      context: ./common/ruby
+      context: ./
       dockerfile: Dockerfile-dev
     command: bash -c "/bin-mount/generate-raw-addresses-if-needed 53 /addresses/raw-addresses.txt /addresses/addresses.yaml"
     volumes:
-    - ./bin/bash:/bin-mount
-    - ./build/generated-addresses:/addresses:rw
-    - ./build/state:/state:rw
+    - ../../bin/bash:/bin-mount
+    - ../../build/generated-addresses:/addresses:rw
+    - ../../build/state:/state:rw
 
   setup-network:
     build:
-      context: ./common/ruby
+      context: ./
       dockerfile: Dockerfile-dev
     command: bash -c "sleep infinity"
 #    command: bash -c "/usr/app/bin/setup-network.rb && touch /state/configs-generated"
@@ -38,8 +38,8 @@ services:
     - BASE_CONFIG_DIR=/config-build 
     - NEMESIS_DIR=/nemesis
     volumes:
-    - ./common/ruby:/usr/app
-    - ./build/generated-addresses:/addresses
-    - ./build/catapult-config:/config-build
-    - ./build/nemesis:/nemesis:rw
-    - ./build/state:/state:rw
+    - ./:/usr/app
+    - ../../build/generated-addresses:/addresses
+    - ../../build/catapult-config:/config-build
+    - ../../build/nemesis:/nemesis:rw
+    - ../../build/state:/state:rw
