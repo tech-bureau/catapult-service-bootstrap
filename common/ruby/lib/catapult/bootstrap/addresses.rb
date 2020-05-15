@@ -30,8 +30,12 @@ module Catapult::Bootstrap
       @raw_addresses_path = raw_addresses_path
     end
 
-    def self.generate_and_parse(address_total)
-      new(address_total).generate_and_parse
+    def self.generate_and_parse(address_total, output_form:)
+      new(address_total).generate_and_parse(output_form: output_form)
+    end
+    def generate_and_parse(output_form:)
+      raw_address_info = Tools::Address.generate_raw_addresses(self.address_total)
+      Parse.parse(raw_address_info, self.section_sizes, break_into_sections: true, output_form: output_form)
     end
 
     # TODO: these can be deprecated

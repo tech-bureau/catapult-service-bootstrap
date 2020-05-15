@@ -16,16 +16,6 @@
 version: '3'
 
 services:
-  generate-raw-addresses:
-    build:
-      context: ./
-      dockerfile: Dockerfile-dev
-    command: bash -c "/bin-mount/generate-raw-addresses-if-needed 53 /addresses/raw-addresses.txt /addresses/addresses.yaml"
-    volumes:
-    - ../../bin/bash:/bin-mount
-    - ../../build/generated-addresses:/addresses:rw
-    - ../../build/state:/state:rw
-
   setup-network:
     build:
       context: ./

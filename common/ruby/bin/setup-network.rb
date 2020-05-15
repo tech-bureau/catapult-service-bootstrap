@@ -25,21 +25,18 @@ number_of_addressses   = (ENV['NUMBER_OF_ADDRESSES'] || fail("Missing env var NU
 include Catapult::Bootstrap
 
 ######### generate addresses
-## TODO: this wil be cleaned up
-raw_addresses    = "#{addresses_dir}/raw-addresses.txt"
-parsed_addresses = "#{addresses_dir}/addresses.yaml"
-fail "No file exists at path '#{raw_addresses}'" unless File.file?(raw_addresses)
-
+parsed_addresses_path = "#{addresses_dir}/addresses.yaml"
 keys = 
-  unless File.file?(parsed_addresses)
-    ruby_obj = Addresses.parse(raw_addresses, number_of_addressses, output_form: :hash_for_yaml)
-    ::File.open(parsed_addresses, 'w') { |f| f << ::YAML.dump(ruby_obj) }
+  unless ::File.file?(parsed_addresses_path)
+    ruby_obj = Addresses.generate_and_parse(number_of_addressses, output_form: :hash_for_yaml)
+    ::File.open(parsed_addresses_path, 'w') { |f| f << ::YAML.dump(ruby_obj) }
     ruby_obj
   else
-    ::YAML.load(::File.open(parsed_addresses).read)
+    ::YAML.load(::File.open(parsed_addresses_path).read)
   end
 
 ######### end: generate addresses
+
 Directory::Nemesis.set!(nemesis_dir)
 Directory::BaseConfig.set!(base_config_target_dir)
 
