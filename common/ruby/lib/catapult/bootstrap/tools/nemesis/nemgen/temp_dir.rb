@@ -38,7 +38,7 @@ module Catapult::Bootstrap
           execute_info = execute_command_all_info(self.nemgen_command)
           require 'byebug'
           @mosaics = Mosaics.parse(execute_info.stderr)
-          @mosaics.update_config_network_file(self.node_resource_parent_dir)
+          @mosaics.update_config_network_file(self.component_userconfig_dir)
           execute_command(self.nemgen_command)
         end
       end
@@ -68,7 +68,7 @@ module Catapult::Bootstrap
       end
 
       def nemgen_command
-        @nemgen_command ||= "#{ret_executable(:nemgen)} -r  #{self.node_resource_parent_dir} --nemesisProperties #{self.block_properties_path}"
+        @nemgen_command ||= "#{ret_executable(:nemgen)} -r  #{self.component_userconfig_dir} --nemesisProperties #{self.block_properties_path}"
       end
 
       private

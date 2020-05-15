@@ -19,8 +19,8 @@ unless ARGV.size == 0
 end
 addresses_dir          = ENV['ADDRESSES_DIR'] || fail("Missing env var ADDRESSES_DIR")
 base_config_target_dir = ENV['BASE_CONFIG_DIR'] || fail("Missing env var BASE_CONFIG_DIR")
+base_data_dir          = ENV['BASE_DATA_DIR'] || fail("Missing env var BASE_DATA_DIR")
 nemesis_dir            = ENV['NEMESIS_DIR'] || fail("Missing env var NEMESIS_DIR")
-number_of_addressses   = (ENV['NUMBER_OF_ADDRESSES'] || fail("Missing env var NUMBER_OF_ADDRESSES")).to_i
 
 include Catapult::Bootstrap
 
@@ -28,7 +28,7 @@ include Catapult::Bootstrap
 parsed_addresses_path = "#{addresses_dir}/addresses.yaml"
 keys = 
   unless ::File.file?(parsed_addresses_path)
-    ruby_obj = Addresses.generate_and_parse(number_of_addressses, output_form: :hash_for_yaml)
+    ruby_obj = Addresses.generate_and_parse(Global.num_generated_addresses, output_form: :hash_for_yaml)
     ::File.open(parsed_addresses_path, 'w') { |f| f << ::YAML.dump(ruby_obj) }
     ruby_obj
   else
@@ -39,8 +39,8 @@ keys =
 
 Directory::Nemesis.set!(nemesis_dir)
 Directory::BaseConfig.set!(base_config_target_dir)
+Directory::BaseData.set!(base_data_dir)
 
-# TODO: remove base_config_target_dir
-Catapult::Bootstrap::Config.generate_and_write(keys, base_config_target_dir, overwrite: false)
+Config.generate_and_write(keys, overwrite: false)
 Tools::Nemesis::Nemgen.generate_and_write
 

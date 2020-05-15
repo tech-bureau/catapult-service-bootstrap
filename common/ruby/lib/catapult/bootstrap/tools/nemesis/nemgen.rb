@@ -36,10 +36,9 @@ module Catapult::Bootstrap
 
       attr_reader :nemesis_temp_dir
       
-      # node_resource_parent_dir can pick any of the nodes userconfig dirs
-      SAMPLE_NODE = 'peer-node-0'
-      def node_resource_parent_dir
-        @node_resource_parent_dir ||=  "#{Directory::BaseConfig.full_path}/#{SAMPLE_NODE}/userconfig/"
+      # component_userconfig_dir can pick any of the nodes userconfig dirs
+      def component_userconfig_dir
+        Config.sample_component_userconfig_dir
       end
       
       def block_properties_path

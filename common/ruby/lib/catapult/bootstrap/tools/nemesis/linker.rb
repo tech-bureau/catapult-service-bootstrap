@@ -14,7 +14,7 @@ module Catapult::Bootstrap
       attr_reader :harvest_vrf_directory
       
       def resource_parent_directory
-        Catapult::Bootstrap::Config.node_resource_parent_dir
+        Catapult::Bootstrap::Config.component_userconfig_dir
       end
       
       private

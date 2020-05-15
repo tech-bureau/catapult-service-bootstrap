@@ -37,18 +37,10 @@ module Catapult::Bootstrap
     
     private :initialize
 
-    CARDINALITY = {
-      api_node: 1,
-      peer_node: 2,
-      rest_gateway: 1
-    }
-    @base_config_target_dir = nil
-    def self.generate_and_write(raw_keys_input, base_config_target_dir, overwrite: false)
+    def self.generate_and_write(raw_keys_input, overwrite: false)
       unless overwrite 
-        return if configs_generated_already?(base_config_target_dir)
+        return if configs_generated_already?
       end
-      @@base_config_target_dir = base_config_target_dir
-
       keys_handle  = Keys::Handle.new(raw_keys_input)
       indexed_node_objects = {
         peer_node: CatapultNode::PeerNode.new(keys_handle),
@@ -62,7 +54,7 @@ module Catapult::Bootstrap
     end
 
     def self.cardinality(type)
-      CARDINALITY[type] || fail("Unexpected type '#{type}'")
+      Global::NodeCardinaity::HASH[type] || fail("Unexpected type '#{type}'")
     end
     
     def self.type
@@ -81,9 +73,8 @@ module Catapult::Bootstrap
       @component_indexes ||= self.class.component_indexes(self.cardinality)
     end
 
-    def self.node_resource_parent_dir(base_config_target_dir = nil, node: 'peer-node-0')
-      base_config_target_dir ||= self.base_config_target_dir
-      "#{base_config_target_dir}/#{node}/userconfig"
+    def self.sample_component_userconfig_dir
+      @sample_component_userconfig_dir ||= self.component_userconfig_dir
     end
 
     protected
@@ -95,7 +86,7 @@ module Catapult::Bootstrap
     end
 
     def self.base_config_target_dir
-      @@base_config_target_dir || fail("@@base_config_target_dir is not set")
+      Directory::BaseConfig.full_path
     end
 
     def cardinality
@@ -105,10 +96,9 @@ module Catapult::Bootstrap
 
     private
 
-    def self.configs_generated_already?(base_config_target_dir)
-      # just choosing one sample file that will be there
-      node_resource_parent_dir = node_resource_parent_dir(base_config_target_dir, node: 'peer-node-0')
-      sample_config_file = "#{node_resource_parent_dir}/resources/config-network.properties"
+    def self.configs_generated_already?
+      # Testing just one sample file in one sample node dir
+      sample_config_file = "#{self.sample_component_userconfig_dir}/resources/config-network.properties"
       File.exists?(sample_config_file)
     end
 

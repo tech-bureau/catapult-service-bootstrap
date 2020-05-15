@@ -13,8 +13,8 @@ module Catapult::Bootstrap
         new(nemgen_log)
       end
 
-      def update_config_network_file(node_resource_parent_dir)
-        ConfigNetwork.update_file(node_resource_parent_dir, self)
+      def update_config_network_file(component_userconfig_dir)
+        ConfigNetwork.update_file(component_userconfig_dir, self)
       end
 
       attr_reader :currency_mosaic_id, :harvesting_mosaic_id

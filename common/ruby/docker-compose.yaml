@@ -23,13 +23,14 @@ services:
     command: bash -c "sleep infinity"
 #    command: bash -c "/usr/app/bin/setup-network.rb && touch /state/configs-generated"
     environment:
-    - NUMBER_OF_ADDRESSES=53
     - ADDRESSES_DIR=/addresses
     - BASE_CONFIG_DIR=/config-build 
+    - BASE_DATA_DIR=/data
     - NEMESIS_DIR=/nemesis
     volumes:
     - ./:/usr/app
     - ../../build/generated-addresses:/addresses
     - ../../build/catapult-config:/config-build
-    - ../../build/nemesis:/nemesis:rw
-    - ../../build/state:/state:rw
+    - ../../build/nemesis:/nemesis
+    - ../../data:/data
+    - ../../build/state:/state

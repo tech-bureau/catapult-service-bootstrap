@@ -1,13 +1,13 @@
 module Catapult::Bootstrap
   class Tools::Nemesis::Nemgen::Mosaics
     class ConfigNetwork
-      def initialize(node_resource_parent_dir, mosaics)
-        @node_resource_parent_dir = node_resource_parent_dir
+      def initialize(component_userconfig_dir, mosaics)
+        @component_userconfig_dir = component_userconfig_dir
         @mosaics                  = mosaics
       end
       
-      def self.update_file(node_resource_parent_dir, mosaics)
-        new(node_resource_parent_dir, mosaics).update_file
+      def self.update_file(component_userconfig_dir, mosaics)
+        new(component_userconfig_dir, mosaics).update_file
       end
 
       def update_file
@@ -24,12 +24,12 @@ module Catapult::Bootstrap
 
       protected
 
-      attr_reader :mosaics, :node_resource_parent_dir
+      attr_reader :mosaics, :component_userconfig_dir
 
       RESOURCES_DIR           = 'resources'
       CONFIG_NETWORK_FILENAME = 'config-network.properties'
       def config_network_file_path
-        @config_network_file_path ||= "#{self.node_resource_parent_dir}/#{RESOURCES_DIR}/#{CONFIG_NETWORK_FILENAME}"
+        @config_network_file_path ||= "#{self.component_userconfig_dir}/#{RESOURCES_DIR}/#{CONFIG_NETWORK_FILENAME}"
       end
 
       private

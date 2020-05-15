@@ -13,6 +13,17 @@
 #    limitations under the License.
 module Catapult::Bootstrap
   module Global
+    module NodeCardinaity
+      HASH = { 
+        api_node: 1,
+        peer_node: 2,
+        rest_gateway: 1
+      }
+      class << self
+        HASH.each_pair { |k, v| define_method(k, lambda { v }) }
+      end
+    end
+
     module CertInfo
       HASH = {
         ca_cnf: 'ca.cnf',
@@ -41,6 +52,11 @@ module Catapult::Bootstrap
 
     def self.catapult_nework_identifier
       CATAPULT_NETWORK_IDENTIFIER 
+    end
+
+    NUM_GENERATED_ADDRESSES = 53
+    def self.num_generated_addresses
+      NUM_GENERATED_ADDRESSES
     end
 
     module ParseKey
