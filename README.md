@@ -1,7 +1,7 @@
 [Japanese README](https://github.com/tech-bureau/catapult-service-bootstrap/blob/master/README.ja.md)
 
 
-# Catapult Service Bootstrap for versions 0.9.4.x
+# Catapult Service Bootstrap for versions 0.9.5.x
 
 This repo contains a set of bootstrap and setup scripts to help developers get going quickly with their own working Catapult Service.  The goal is to make it as easy and quick as possible so as a developer you only have to run this setup and within a minute or so you will have a running server ready to start receiving transactions so you can focus on your development work and not setup or configuring servers.
 
@@ -9,7 +9,7 @@ NOTE: this bootstrap setup is for learning and development purposes, it should n
 
 We use docker images as our default packaging and distribution mechanism.  These bootstrap scripts will prepare some files on disk and then leverage docker-compose to startup and run the needed set of containers so the server can function correctly.
 
-NOTE: for 0.9.4.x some docker networking configuration has been updated for setting up the rest gateway as a white listed client to the api server. Docker networking can sometimes result in different behavior across environments, the `--build` flag is passed automatically to the start command which seems to aleviate the networking odities in some environments.
+NOTE: for versions 0.9.4.x+ some docker networking configuration has been updated for setting up the rest gateway as a white listed client to the api server. Docker networking can sometimes result in different behavior across environments, the `--build` flag is passed automatically to the start command which seems to aleviate the networking odities in some environments.
 
 ## Evironment Dependencies
 

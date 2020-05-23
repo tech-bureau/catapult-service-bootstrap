@@ -21,6 +21,24 @@ networks:
       config:
         - subnet: 172.20.0.0/24
 services:
+  rest-gateway:
+    build: dockerfiles/catapult-rest
+    command: ash -c "/bin-mount/wait /state/network-is-setup && npm start /userconfig/rest.json"
+    stop_signal: SIGINT
+    ports:
+    - "3000:3000"
+    volumes:
+    - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
+    - ../../bin/ash:/bin-mount
+    - ../../build/state:/state
+    - ../../build/catapult-config/api-node-0/userconfig/resources/:/api-node-config/
+    depends_on:
+    - init-db
+    - setup-network
+    networks:
+      default:
+        ipv4_address: 172.20.0.10
+
   setup-network:
     build:
       context: ../../common/ruby
@@ -58,25 +76,6 @@ services:
     - ../../bin/bash:/bin-mount
     depends_on:
     - db
-
-  rest-gateway:
-    build: dockerfiles/catapult-rest
-    command: ash -c "/bin-mount/wait /state/network-is-setup && npm start /userconfig/rest.json"
-    stop_signal: SIGINT
-    ports:
-    - "3000:3000"
-    volumes:
-    - ../../build/catapult-config/rest-gateway-0/userconfig/:/userconfig/
-    - ../../bin/ash:/bin-mount
-    - ../../build/state:/state
-    - ../../build/catapult-config/api-node-0/userconfig/resources/:/api-node-config/
-    depends_on:
-    - init-db
-    - setup-network
-    networks:
-      default:
-        ipv4_address: 172.20.0.10
-
 
   peer-node-0:
     build: dockerfiles/catapult
