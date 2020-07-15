@@ -1,1 +1,1 @@
-FROM techbureau/catapult-rest-server-nightly:commit-1aeac3f
+FROM symbolplatform/symbol-rest-nightly:commit-5eb7eac
